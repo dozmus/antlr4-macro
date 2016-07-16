@@ -14,10 +14,12 @@ public final class FileHelper {
 
     /**
      * Gets all files recursively in target directory, with given file extension.
+     * @param ext The file extension to look for, e.g. '.g4'.
+     * @return List of full file names.
      */
     public static List<String> getFileNames(List<String> fileNames, Path dir, String ext) {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-
+            // Iterate over paths
             for (Path path : stream) {
                 if (path.toFile().isDirectory()) {
                     getFileNames(fileNames, path, ext);

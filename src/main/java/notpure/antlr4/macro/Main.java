@@ -8,7 +8,7 @@ import notpure.antlr4.macro.processor.MacroFileProcessor;
 public final class Main {
 
     public static void main(String[] args) {
-        // Check arguments
+        // Check argument count
         if (args.length == 0) {
             printUsage();
             return;
@@ -24,11 +24,11 @@ public final class Main {
                     printUsage();
                     return;
                 } else {
-                    // Get file names
-                    String in = args[1];
+                    // Get file name
+                    String inFileName = args[1];
 
                     // Process files
-                    MacroFileProcessor.processFile(in);
+                    MacroFileProcessor.processFile(inFileName);
                 }
                 break;
             default:

@@ -129,7 +129,7 @@ public final class LexerTest {
         // Tokenize file input
         List<Token> actualOutput = new ArrayList<>();
 
-        try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\processor\\lexer-sample-input-1.mg4")) {
+        try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\processor\\lexer-input-1.mg4")) {
             actualOutput = Lexer.tokenize(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
