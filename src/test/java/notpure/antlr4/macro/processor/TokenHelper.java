@@ -16,7 +16,7 @@ public final class TokenHelper {
 
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            tokens.add(new Token(def.name(), def.isLiteral() ? def.getRegex().substring(1) : c + ""));
+            tokens.add(new Token(def.name(), def.isLiteral() ? def.getGroup() : c + ""));
         }
         return tokens;
     }
@@ -25,19 +25,15 @@ public final class TokenHelper {
         List<Token> tokens = new ArrayList<>();
 
         for (TokenDefinition def : defs) {
-            tokens.add(getLiteralToken(def));
+            tokens.add(new Token(def));
         }
         return tokens;
     }
 
-    public static Token getLiteralToken(TokenDefinition def) {
-        return def.isLiteral() ? new Token(def.name(), def.getRegex().substring(1)) : null;
-    }
-
     public static List<Token> getLineTerminator() {
         List<Token> tokens = new ArrayList<>();
-        tokens.add(getLiteralToken(TokenDefinition.CARRIAGE_RETURN));
-        tokens.add(getLiteralToken(TokenDefinition.NEW_LINE));
+        tokens.add(new Token(TokenDefinition.CARRIAGE_RETURN));
+        tokens.add(new Token(TokenDefinition.NEW_LINE));
         return tokens;
     }
 }

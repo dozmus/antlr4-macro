@@ -21,7 +21,7 @@ public final class SimpleParserTest {
     public void parserTestOfMacroDefinitions() {
         // Create array
         List<Token> tokens = new ArrayList<>();
-        tokens.add(getLiteralToken(TokenDefinition.HASH));
+        tokens.add(new Token(TokenDefinition.HASH));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "HELLO"));
         tokens.addAll(getTokens(TokenDefinition.DIGIT, "290"));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "woRld"));
@@ -37,7 +37,7 @@ public final class SimpleParserTest {
 
         // Create array
         tokens = new ArrayList<>();
-        tokens.add(getLiteralToken(TokenDefinition.HASH));
+        tokens.add(new Token(TokenDefinition.HASH));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "HELLO"));
         tokens.addAll(getTokens(TokenDefinition.DIGIT, "290"));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "woRld"));
@@ -55,16 +55,16 @@ public final class SimpleParserTest {
 
         // Create array
         tokens = new ArrayList<>();
-        tokens.add(getLiteralToken(TokenDefinition.HASH));
+        tokens.add(new Token(TokenDefinition.HASH));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "HELLO"));
         tokens.addAll(getTokens(TokenDefinition.DIGIT, "290"));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "woRld"));
-        tokens.add(getLiteralToken(TokenDefinition.SPACE));
-        tokens.add(getLiteralToken(TokenDefinition.SPACE));
+        tokens.add(new Token(TokenDefinition.SPACE));
+        tokens.add(new Token(TokenDefinition.SPACE));
         tokens.addAll(getLiteralTokens(TokenDefinition.COLON, TokenDefinition.SINGLE_QUOTE));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "HELLO"));
         tokens.addAll(getLiteralTokens(TokenDefinition.CARRIAGE_RETURN, TokenDefinition.NEW_LINE));
-        tokens.add(getLiteralToken(TokenDefinition.VERTICAL_LINE));
+        tokens.add(new Token(TokenDefinition.VERTICAL_LINE));
         tokens.addAll(getTokens(TokenDefinition.LETTER, "WORLD"));
         tokens.addAll(getLiteralTokens(TokenDefinition.SINGLE_QUOTE, TokenDefinition.SEMICOLON));
 

@@ -10,7 +10,7 @@ public final class Token {
 
     public Token(TokenDefinition def) {
         if (!def.isLiteral()) {
-            // TODO throw exception
+            throw new IllegalArgumentException("TokenDefinition passed to Token constructor is not a literal and hence invalid.");
         }
         this.name = def.name();
         this.value = def.getRegex().substring(1);

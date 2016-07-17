@@ -4,8 +4,6 @@ import notpure.antlr4.macro.processor.impl.SimpleLexer;
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -19,11 +17,6 @@ import static org.junit.Assert.assertEquals;
  * A set of tests for {@link SimpleLexer}.
  */
 public final class SimpleLexerTest {
-
-    /**
-     * Logger instance.
-     */
-    private final static Logger LOGGER = LoggerFactory.getLogger(SimpleLexerTest.class);
 
     /**
      * Tests each lexer token definition once.
@@ -44,8 +37,8 @@ public final class SimpleLexerTest {
                 inputString += "B";
                 expectedOutput.add(new Token(def.name(), "a"));
                 expectedOutput.add(new Token(def.name(), "B"));
-            } else { // general definitions
-                String letter = def.getRegex().substring(1); // substring literal escape
+            } else if (def.isLiteral()) { // general definitions
+                String letter = def.getGroup();
                 inputString += letter;
                 expectedOutput.add(new Token(def.name(), letter));
             }
@@ -74,15 +67,15 @@ public final class SimpleLexerTest {
         // Store expected tokens
         List<Token> eo = new ArrayList<>();
         eo.addAll(getTokens(TokenDefinition.LETTER, "grammar"));
-        eo.add(getLiteralToken(TokenDefinition.SPACE));
+        eo.add(new Token(TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "Hello"));
-        eo.add(getLiteralToken(TokenDefinition.SEMICOLON));
+        eo.add(new Token(TokenDefinition.SEMICOLON));
         eo.addAll(getLineTerminator());
         eo.addAll(getLineTerminator());
 
         eo.addAll(getLiteralTokens(TokenDefinition.FORWARD_SLASH, TokenDefinition.FORWARD_SLASH, TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "parser"));
-        eo.add(getLiteralToken(TokenDefinition.SPACE));
+        eo.add(new Token(TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "rules"));
         eo.addAll(getLineTerminator());
 
@@ -91,13 +84,13 @@ public final class SimpleLexerTest {
         eo.addAll(getTokens(TokenDefinition.LETTER, "hello"));
         eo.addAll(getLiteralTokens(TokenDefinition.SINGLE_QUOTE, TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "ID"));
-        eo.add(getLiteralToken(TokenDefinition.SEMICOLON));
+        eo.add(new Token(TokenDefinition.SEMICOLON));
         eo.addAll(getLineTerminator());
         eo.addAll(getLineTerminator());
 
         eo.addAll(getLiteralTokens(TokenDefinition.FORWARD_SLASH, TokenDefinition.FORWARD_SLASH, TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "lexer"));
-        eo.add(getLiteralToken(TokenDefinition.SPACE));
+        eo.add(new Token(TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "rules"));
         eo.addAll(getLineTerminator());
 
@@ -105,7 +98,7 @@ public final class SimpleLexerTest {
         eo.addAll(getLiteralTokens(TokenDefinition.SPACE, TokenDefinition.COLON, TokenDefinition.SPACE,
                 TokenDefinition.LEFT_SQUARE_BRACKET));
         eo.addAll(getTokens(TokenDefinition.LETTER, "a"));
-        eo.add(getLiteralToken(TokenDefinition.HYPHEN));
+        eo.add(new Token(TokenDefinition.HYPHEN));
         eo.addAll(getTokens(TokenDefinition.LETTER, "z"));
         eo.addAll(getLiteralTokens(TokenDefinition.RIGHT_SQUARE_BRACKET, TokenDefinition.PLUS, TokenDefinition.SEMICOLON));
         eo.addAll(getLineTerminator());
@@ -113,16 +106,16 @@ public final class SimpleLexerTest {
         eo.addAll(getTokens(TokenDefinition.LETTER, "WS"));
         eo.addAll(getLiteralTokens(TokenDefinition.SPACE, TokenDefinition.COLON, TokenDefinition.SPACE,
                 TokenDefinition.LEFT_SQUARE_BRACKET, TokenDefinition.SPACE));
-        eo.add(getLiteralToken(TokenDefinition.BACK_SLASH));
+        eo.add(new Token(TokenDefinition.BACK_SLASH));
         eo.addAll(getTokens(TokenDefinition.LETTER, "t"));
-        eo.add(getLiteralToken(TokenDefinition.BACK_SLASH));
+        eo.add(new Token(TokenDefinition.BACK_SLASH));
         eo.addAll(getTokens(TokenDefinition.LETTER, "r"));
-        eo.add(getLiteralToken(TokenDefinition.BACK_SLASH));
+        eo.add(new Token(TokenDefinition.BACK_SLASH));
         eo.addAll(getTokens(TokenDefinition.LETTER, "n"));
         eo.addAll(getLiteralTokens(TokenDefinition.RIGHT_SQUARE_BRACKET, TokenDefinition.PLUS, TokenDefinition.SPACE,
                 TokenDefinition.HYPHEN, TokenDefinition.GREATER_THAN, TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "skip"));
-        eo.add(getLiteralToken(TokenDefinition.SEMICOLON));
+        eo.add(new Token(TokenDefinition.SEMICOLON));
 
         // Tokenize file input
         List<Token> actualOutput = new ArrayList<>();
