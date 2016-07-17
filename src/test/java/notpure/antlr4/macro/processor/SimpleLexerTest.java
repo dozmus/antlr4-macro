@@ -11,17 +11,18 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static notpure.antlr4.macro.processor.TokenHelper.*;
 import static org.junit.Assert.assertEquals;
 
 /**
- * A set of tests for the lexer.
+ * A set of tests for {@link SimpleLexer}.
  */
-public final class LexerTest {
+public final class SimpleLexerTest {
 
     /**
      * Logger instance.
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(LexerTest.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(SimpleLexerTest.class);
 
     /**
      * Tests each lexer token definition once.
@@ -55,10 +56,10 @@ public final class LexerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
 
         // Tokenize input
-        List<Token> actualOutput = Lexer.tokenize(inputStream);
+        List<Token> actualOutput = SimpleLexer.tokenize(inputStream);
 
         // Compare outputs
-        assertEquals("actualOutput#size() != expectedOutput#size()", actualOutput.size(), expectedOutput.size());
+        assertEquals("actualOutput#size() != expectedOutput#size()", expectedOutput.size(), actualOutput.size());
 
         // Iterate over generated tokens
         for (int i = 0; i < expectedOutput.size(); i++) {
@@ -105,24 +106,24 @@ public final class LexerTest {
 
         eo.addAll(getTokens(TokenDefinition.LETTER, "ID"));
         eo.addAll(getLiteralTokens(TokenDefinition.SPACE, TokenDefinition.COLON, TokenDefinition.SPACE,
-                TokenDefinition.LSQPAREN));
+                TokenDefinition.LEFT_SQUARE_BRACKET));
         eo.addAll(getTokens(TokenDefinition.LETTER, "a"));
         eo.add(getLiteralToken(TokenDefinition.HYPHEN));
         eo.addAll(getTokens(TokenDefinition.LETTER, "z"));
-        eo.addAll(getLiteralTokens(TokenDefinition.RSQPAREN, TokenDefinition.PLUS, TokenDefinition.SEMICOLON));
+        eo.addAll(getLiteralTokens(TokenDefinition.RIGHT_SQUARE_BRACKET, TokenDefinition.PLUS, TokenDefinition.SEMICOLON));
         eo.addAll(getLineTerminator());
 
         eo.addAll(getTokens(TokenDefinition.LETTER, "WS"));
         eo.addAll(getLiteralTokens(TokenDefinition.SPACE, TokenDefinition.COLON, TokenDefinition.SPACE,
-                TokenDefinition.LSQPAREN, TokenDefinition.SPACE));
+                TokenDefinition.LEFT_SQUARE_BRACKET, TokenDefinition.SPACE));
         eo.add(getLiteralToken(TokenDefinition.BACK_SLASH));
         eo.addAll(getTokens(TokenDefinition.LETTER, "t"));
         eo.add(getLiteralToken(TokenDefinition.BACK_SLASH));
         eo.addAll(getTokens(TokenDefinition.LETTER, "r"));
         eo.add(getLiteralToken(TokenDefinition.BACK_SLASH));
         eo.addAll(getTokens(TokenDefinition.LETTER, "n"));
-        eo.addAll(getLiteralTokens(TokenDefinition.RSQPAREN, TokenDefinition.PLUS, TokenDefinition.SPACE,
-                TokenDefinition.HYPHEN, TokenDefinition.GT, TokenDefinition.SPACE));
+        eo.addAll(getLiteralTokens(TokenDefinition.RIGHT_SQUARE_BRACKET, TokenDefinition.PLUS, TokenDefinition.SPACE,
+                TokenDefinition.HYPHEN, TokenDefinition.GREATER_THAN, TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "skip"));
         eo.add(getLiteralToken(TokenDefinition.SEMICOLON));
 
@@ -130,13 +131,13 @@ public final class LexerTest {
         List<Token> actualOutput = new ArrayList<>();
 
         try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\processor\\lexer-input-1.mg4")) {
-            actualOutput = Lexer.tokenize(inputStream);
+            actualOutput = SimpleLexer.tokenize(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Compare outputs
-        assertEquals("actualOutput#size() != expectedOutput#size()", actualOutput.size(), eo.size());
+        assertEquals("actualOutput#size() != expectedOutput#size()", eo.size(), actualOutput.size());
 
         // Iterate over generated tokens
         for (int i = 0; i < eo.size(); i++) {
@@ -148,33 +149,4 @@ public final class LexerTest {
     }
 
 
-    private static List<Token> getTokens(TokenDefinition def, String input) {
-        List<Token> tokens = new ArrayList<>();
-
-        for (int i = 0; i < input.length(); i++) {
-            char c = input.charAt(i);
-            tokens.add(new Token(def.name(), def.isLiteral() ? def.getRegex().substring(1) : c + ""));
-        }
-        return tokens;
-    }
-
-    private static List<Token> getLiteralTokens(TokenDefinition... defs) {
-        List<Token> tokens = new ArrayList<>();
-
-        for (TokenDefinition def : defs) {
-            tokens.add(getLiteralToken(def));
-        }
-        return tokens;
-    }
-
-    private static Token getLiteralToken(TokenDefinition def) {
-        return def.isLiteral() ? new Token(def.name(), def.getRegex().substring(1)) : null;
-    }
-
-    private static List<Token> getLineTerminator() {
-        List<Token> tokens = new ArrayList<>();
-        tokens.add(getLiteralToken(TokenDefinition.CARRIAGE_RETURN));
-        tokens.add(getLiteralToken(TokenDefinition.NEW_LINE));
-        return tokens;
-    }
 }

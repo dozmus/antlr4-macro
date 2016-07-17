@@ -13,12 +13,12 @@ import java.util.Scanner;
 /**
  * A simple lexer.
  */
-public final class Lexer {
+public final class SimpleLexer {
 
     /**
      * Logger instance.
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(Lexer.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
 
     /**
      * Tokenizes the input stream into simple tokens.

@@ -1,9 +1,11 @@
 package notpure.antlr4.macro.processor.token;
 
+import notpure.antlr4.macro.processor.SimpleLexer;
+
 import java.util.regex.Pattern;
 
 /**
- * Definitions for the {@link notpure.antlr4.macro.processor.Lexer}.
+ * Definitions for the {@link SimpleLexer}.
  */
 public enum TokenDefinition {
     LETTER("[A-Za-z]", false),
@@ -14,20 +16,20 @@ public enum TokenDefinition {
     SINGLE_QUOTE("'"),
     DOUBLE_QUOTE("\""),
     UNDERSCORE("_"),
-    LPAREN("("),
-    RPAREN(")"),
-    ALTERNATOR("|"),
+    LEFT_BRACKET("("),
+    RIGHT_BRACKET(")"),
+    VERTICAL_LINE("|"),
     QUESTION_MARK("?"),
-    ASTERISKS("*"),
+    ASTERISK("*"),
     PLUS("+"),
     EQUALS("="),
     BACK_SLASH("\\"),
     FORWARD_SLASH("/"),
     HYPHEN("-"),
-    LT("<"),
-    GT(">"),
-    LSQPAREN("["),
-    RSQPAREN("]"),
+    LESS_THAN("<"),
+    GREATER_THAN(">"),
+    LEFT_SQUARE_BRACKET("["),
+    RIGHT_SQUARE_BRACKET("]"),
     SPACE(" "),
     CARRIAGE_RETURN("\r"),
     NEW_LINE("\n");

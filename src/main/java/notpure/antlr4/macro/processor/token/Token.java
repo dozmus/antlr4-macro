@@ -6,7 +6,7 @@ package notpure.antlr4.macro.processor.token;
 public final class Token {
 
     private final String name;
-    private String value;
+    private final String value;
 
     public Token(String name, String value) {
         this.name = name;
