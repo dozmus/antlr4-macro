@@ -34,14 +34,14 @@ public final class SimpleParser implements Parser {
             if (token.getValue().equals("#")) { // macro rule
                 // Parse identifier
                 ParsedToken pair1 = seekToken(tokens, idx + 1,
-                        new Token(TokenDefinition.COLON), "MacroIdentifier", true);
+                        new Token(TokenDefinition.COLON), "MacroRuleIdentifier", true);
                 LOGGER.info("Parsed identifier for macro def: {} (nextIdx={})", pair1.getToken(), pair1.getNextIdx());
                 idx = pair1.getNextIdx();
 
                 // Parse value
                 ParsedToken pair2 = seekToken(tokens, idx, new Token[] {
                         new Token(TokenDefinition.SEMICOLON)
-                }, "MacroValue", true);
+                }, "MacroRuleValue", true);
                 LOGGER.info("Parsed identifier for macro value: {} (nextIdx={})", pair2.getToken(), pair2.getNextIdx());
                 idx = pair2.getNextIdx();
 
@@ -53,9 +53,9 @@ public final class SimpleParser implements Parser {
                 char c = token.getValue().charAt(0);
 
                 if (Character.isLowerCase(c)) { // parser rule
-
+                    // ...
                 } else if (Character.isUpperCase(c)) { // lexer rule
-
+                    // ...
                 }
             }
         }
@@ -78,7 +78,7 @@ public final class SimpleParser implements Parser {
             Token token = tokens.get(i);
 
             if (!tokenArrayContainsTarget(targets, token)) {
-                outputValue += token.getValue();
+                outputValue += token.getValue().equals("\n") || token.getValue().equals("\r") ? "" : token.getValue();
             } else {
                 return new ParsedToken(i + 1, new Token(tokenName, trimOutput ? outputValue.trim() : outputValue));
             }
