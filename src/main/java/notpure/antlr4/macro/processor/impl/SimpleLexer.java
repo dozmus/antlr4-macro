@@ -1,7 +1,8 @@
-package notpure.antlr4.macro.processor;
+package notpure.antlr4.macro.processor.impl;
 
-import notpure.antlr4.macro.processor.token.Token;
-import notpure.antlr4.macro.processor.token.TokenDefinition;
+import notpure.antlr4.macro.processor.model.Lexer;
+import notpure.antlr4.macro.processor.model.token.Token;
+import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,18 +14,19 @@ import java.util.Scanner;
 /**
  * A simple lexer.
  */
-public final class SimpleLexer {
+public final class SimpleLexer implements Lexer {
 
     /**
      * Logger instance.
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
+    private final List<Token> tokens = new ArrayList<>();
 
     /**
      * Tokenizes the input stream into simple tokens.
      */
-    public static List<Token> tokenize(InputStream inputStream) {
-        ArrayList<Token> tokens = new ArrayList<>();
+    @Override
+    public Lexer tokenize(InputStream inputStream) {
         Scanner in = new Scanner(inputStream);
         in.useDelimiter(""); // to get 1 character at a time
 
@@ -34,12 +36,22 @@ public final class SimpleLexer {
             String value = in.next();
 
             // Try to map it to a definition
-            tryTokenize(value, tokens);
+            tryTokenize(value);
         }
+        return this;
+    }
+
+    @Override
+    public List<Token> getTokens() {
         return tokens;
     }
 
-    private static void tryTokenize(String value, List<Token> tokens) {
+    /**
+     * Attempts to match the provided value with a {@link TokenDefinition}, if this is successful the new token
+     * is added to {@link SimpleLexer#tokens}.
+     * @param value
+     */
+    private void tryTokenize(String value) {
         for (TokenDefinition def : TokenDefinition.values()) {
             if (def.matches(value)) {
                 LOGGER.info("Current value: '{}' has been mapped to '{}'", value.trim(), def.name());

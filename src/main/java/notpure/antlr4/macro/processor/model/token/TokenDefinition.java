@@ -1,6 +1,6 @@
-package notpure.antlr4.macro.processor.token;
+package notpure.antlr4.macro.processor.model.token;
 
-import notpure.antlr4.macro.processor.SimpleLexer;
+import notpure.antlr4.macro.processor.impl.SimpleLexer;
 
 import java.util.regex.Pattern;
 
@@ -36,10 +36,12 @@ public enum TokenDefinition {
 
     private final boolean literal;
     private final Pattern pattern;
+    private final String group;
 
-    TokenDefinition(String regex, boolean literal) {
+    TokenDefinition(String group, boolean literal) {
         this.literal = literal;
-        this.pattern = Pattern.compile(literal ? "\\" + regex : regex);
+        this.group = group;
+        this.pattern = Pattern.compile(literal ? "\\" + group : group);
     }
 
     TokenDefinition(String regex) {
@@ -47,11 +49,15 @@ public enum TokenDefinition {
     }
 
     public boolean matches(String input) {
-        return pattern.matcher(input).matches();
+        return pattern.matcher(input).matches(); // XXX optimisation: use equals() if tokendef is a literal
     }
 
     public String getRegex() {
         return pattern.pattern();
+    }
+
+    public String getGroup() {
+        return group;
     }
 
     public boolean isLiteral() {

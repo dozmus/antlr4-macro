@@ -1,7 +1,9 @@
 package notpure.antlr4.macro.processor;
 
-import notpure.antlr4.macro.processor.statement.Statement;
-import notpure.antlr4.macro.processor.token.Token;
+import notpure.antlr4.macro.processor.impl.SimpleLexer;
+import notpure.antlr4.macro.processor.impl.SimpleParser;
+import notpure.antlr4.macro.processor.model.statement.Statement;
+import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +54,7 @@ public final class MacroFileProcessor {
         List<Token> tokens;
 
         try (InputStream inputStream = new FileInputStream(inFileName)) {
-            tokens = SimpleLexer.tokenize(inputStream);
+            tokens = new SimpleLexer().tokenize(inputStream).getTokens();
         } catch (FileNotFoundException e) {
             LOGGER.warn("File not found: '{}'", inFileName);
             return;
@@ -62,7 +64,7 @@ public final class MacroFileProcessor {
         }
 
         // Parser
-        List<Statement> statements = SimpleParser.parse(tokens);
+        List<Statement> statements = new SimpleParser().parse(tokens).getStatements();
 
         // Write to file
         // TODO impl

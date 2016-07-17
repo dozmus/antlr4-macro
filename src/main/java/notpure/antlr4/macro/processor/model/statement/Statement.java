@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.processor.statement;
+package notpure.antlr4.macro.processor.model.statement;
 
 /**
  * A parsed statement.

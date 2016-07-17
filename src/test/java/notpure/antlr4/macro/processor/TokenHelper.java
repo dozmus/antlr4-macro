@@ -1,7 +1,7 @@
 package notpure.antlr4.macro.processor;
 
-import notpure.antlr4.macro.processor.token.Token;
-import notpure.antlr4.macro.processor.token.TokenDefinition;
+import notpure.antlr4.macro.processor.model.token.Token;
+import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Helper methods for {@link Token} to be used in tests.
  */
-public class TokenHelper {
+public final class TokenHelper {
 
     public static List<Token> getTokens(TokenDefinition def, String input) {
         List<Token> tokens = new ArrayList<>();

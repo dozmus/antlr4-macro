@@ -1,7 +1,8 @@
 package notpure.antlr4.macro.processor;
 
-import notpure.antlr4.macro.processor.token.Token;
-import notpure.antlr4.macro.processor.token.TokenDefinition;
+import notpure.antlr4.macro.processor.impl.SimpleLexer;
+import notpure.antlr4.macro.processor.model.token.Token;
+import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +30,6 @@ public final class SimpleLexerTest {
      */
     @Test
     public void generalLexerTestOfAllTokenDefinitions() {
-        LOGGER.info("Now running: generalLexerTestOfAllTokenDefinitions()");
-
         List<Token> expectedOutput = new ArrayList<>();
 
         // Generate sample input
@@ -56,24 +55,22 @@ public final class SimpleLexerTest {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
 
         // Tokenize input
-        List<Token> actualOutput = SimpleLexer.tokenize(inputStream);
+        List<Token> actualOutput = new SimpleLexer().tokenize(inputStream).getTokens();
 
         // Compare outputs
-        assertEquals("actualOutput#size() != expectedOutput#size()", expectedOutput.size(), actualOutput.size());
+        assertEquals(expectedOutput.size(), actualOutput.size());
 
         // Iterate over generated tokens
         for (int i = 0; i < expectedOutput.size(); i++) {
             Token eToken = expectedOutput.get(i);
             Token aToken = actualOutput.get(i);
 
-            assertEquals("eToken != aToken", eToken, aToken);
+            assertEquals(eToken, aToken);
         }
     }
 
     @Test
     public void lexerTestOfSampleInputFile1() {
-        LOGGER.info("Now running: lexerTestOfSampleInputFile1()");
-
         // Store expected tokens
         List<Token> eo = new ArrayList<>();
         eo.addAll(getTokens(TokenDefinition.LETTER, "grammar"));
@@ -131,22 +128,21 @@ public final class SimpleLexerTest {
         List<Token> actualOutput = new ArrayList<>();
 
         try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\processor\\lexer-input-1.mg4")) {
-            actualOutput = SimpleLexer.tokenize(inputStream);
+            actualOutput = new SimpleLexer().tokenize(inputStream).getTokens();
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Compare outputs
-        assertEquals("actualOutput#size() != expectedOutput#size()", eo.size(), actualOutput.size());
+        assertEquals(eo.size(), actualOutput.size());
 
         // Iterate over generated tokens
         for (int i = 0; i < eo.size(); i++) {
             Token eToken = eo.get(i);
             Token aToken = actualOutput.get(i);
 
-            assertEquals("eToken != aToken", eToken, aToken);
+            assertEquals(eToken, aToken);
         }
     }
-
 
 }

@@ -1,8 +1,9 @@
 package notpure.antlr4.macro.processor;
 
-import notpure.antlr4.macro.processor.statement.Statement;
-import notpure.antlr4.macro.processor.token.Token;
-import notpure.antlr4.macro.processor.token.TokenDefinition;
+import notpure.antlr4.macro.processor.impl.SimpleParser;
+import notpure.antlr4.macro.processor.model.statement.Statement;
+import notpure.antlr4.macro.processor.model.token.Token;
+import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -17,39 +18,6 @@ import static org.junit.Assert.assertEquals;
 public final class SimpleParserTest {
 
     @Test
-    public void parserTestOfStringLiterals() {
-        /*
-        // Create array
-        List<Token> tokens = new ArrayList<>();
-        tokens.add(getLiteralToken(TokenDefinition.SINGLE_QUOTE));
-        tokens.addAll(getTokens(TokenDefinition.LETTER, "hello"));
-        tokens.addAll(getTokens(TokenDefinition.DIGIT, "23390"));
-        tokens.addAll(getTokens(TokenDefinition.LETTER, "world"));
-        tokens.add(getLiteralToken(TokenDefinition.SINGLE_QUOTE));
-
-        // Try parse and compare
-        List<Token> output = Parser.parse(tokens);
-        assertEquals("output#size() != 1", output.size(), 1);
-        assertEquals("output#get(0)#getName() != \"String\"", output.get(0).getName(), "String");
-        assertEquals("output#get(0)#getValue() != \"hello23390world\"", output.get(0).getValue(), "\"hello23390world\"");
-
-        // Create array
-        tokens = new ArrayList<>();
-        tokens.add(getLiteralToken(TokenDefinition.DOUBLE_QUOTE));
-        tokens.addAll(getTokens(TokenDefinition.LETTER, "hello"));
-        tokens.addAll(getTokens(TokenDefinition.DIGIT, "23390"));
-        tokens.addAll(getTokens(TokenDefinition.LETTER, "world"));
-        tokens.add(getLiteralToken(TokenDefinition.DOUBLE_QUOTE));
-
-        // Try parse and compare
-        output = Parser.parse(tokens);
-        assertEquals("output#size() != 1", output.size(), 1);
-        assertEquals("output#get(0)#getName() != \"String\"", output.get(0).getName(), "String");
-        assertEquals("output#get(0)#getValue() != \"hello23390world\"", output.get(0).getValue(), "\"hello23390world\"");
-        */
-    }
-
-    @Test
     public void parserTestOfMacroDefinitions() {
         // Create array
         List<Token> tokens = new ArrayList<>();
@@ -62,10 +30,10 @@ public final class SimpleParserTest {
         tokens.addAll(getLiteralTokens(TokenDefinition.SINGLE_QUOTE, TokenDefinition.SEMICOLON));
 
         // Try parse and compare
-        List<Statement> output = SimpleParser.parse(tokens);
-        assertEquals("output#size() != 1", 1, output.size());
-        assertEquals("'MacroStatement' != output.get(0).getName()", "MacroStatement", output.get(0).getName());
-        assertEquals("'MacroStatement' != output.get(0).getValue()", "HELLO290woRld='HELLO'", output.get(0).getValue());
+        List<Statement> output = new SimpleParser().parse(tokens).getStatements();
+        assertEquals(1, output.size());
+        assertEquals("MacroStatement", output.get(0).getName());
+        assertEquals("HELLO290woRld='HELLO'", output.get(0).getValue());
 
         // Create array
         tokens = new ArrayList<>();
@@ -80,9 +48,9 @@ public final class SimpleParserTest {
         tokens.addAll(getLiteralTokens(TokenDefinition.SINGLE_QUOTE, TokenDefinition.SEMICOLON));
 
         // Try parse and compare
-        output = SimpleParser.parse(tokens);
-        assertEquals("output#size() != 1", 1, output.size());
-        assertEquals("'MacroStatement' != output.get(0).getName()", "MacroStatement", output.get(0).getName());
-        assertEquals("'MacroStatement' != output.get(0).getValue()", "HELLO290woRld='HELLO'", output.get(0).getValue());
+        output = new SimpleParser().parse(tokens).getStatements();
+        assertEquals(1, output.size());
+        assertEquals("MacroStatement", output.get(0).getName());
+        assertEquals("HELLO290woRld='HELLO'", output.get(0).getValue());
     }
 }

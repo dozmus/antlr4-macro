@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.processor.token;
+package notpure.antlr4.macro.processor.model.token;
 
 /**
  * A token.
@@ -7,6 +7,14 @@ public final class Token {
 
     private final String name;
     private final String value;
+
+    public Token(TokenDefinition def) {
+        if (!def.isLiteral()) {
+            // TODO throw exception
+        }
+        this.name = def.name();
+        this.value = def.getRegex().substring(1);
+    }
 
     public Token(String name, String value) {
         this.name = name;
