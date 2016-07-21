@@ -50,6 +50,7 @@ public final class SimpleParser implements Parser {
                     idx = parseFileHeaderStatement(tokens, idx);
                 } else {
                     idx = parseStatement(tokens, idx, -4, "ParserRule"); // parser rule
+                    // TODO fix this, something is wrong!
                 }
             } else if (Character.isUpperCase(c)) { // lexer rule
                 idx = parseStatement(tokens, idx, -1, "LexerRule");

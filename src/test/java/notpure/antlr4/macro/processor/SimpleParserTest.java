@@ -22,8 +22,12 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
+        assertStatement("#P:w;", "P:w");
         assertStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'");
+        assertStatement("#HELLO:HELLO;", "HELLO:HELLO");
         assertStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'");
+        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'");
+        assertStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'");
         assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'");
         assertStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'");
     }
