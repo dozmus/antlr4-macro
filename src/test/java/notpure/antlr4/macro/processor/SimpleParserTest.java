@@ -23,32 +23,20 @@ public final class SimpleParserTest {
     @Test
     public void parserTestOfMacroRuleDefinitions() {
         // Create array, try parse and compare
-        List<Token> tokens = new SimpleLexer().tokenize(FileHelper.stringString("#HELLO290woRld:'HELLO';")).getTokens();
-        List<Statement> output = new SimpleParser().parse(tokens).getStatements();
-        assertEquals(1, output.size());
-        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
-        assertEquals("HELLO290woRld:'HELLO'", output.get(0).getValue());
+        List<Token> tokens = new SimpleLexer().tokenize("#HELLO290woRld:'HELLO';").getTokens();
+        assertStatement(tokens, "HELLO290woRld:'HELLO'");
 
         // Create array, try parse and compare
-        tokens = new SimpleLexer().tokenize(FileHelper.stringString("#HELLO290woRld  :'HELLO';")).getTokens();
-        output = new SimpleParser().parse(tokens).getStatements();
-        assertEquals(1, output.size());
-        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
-        assertEquals("HELLO290woRld:'HELLO'", output.get(0).getValue());
+        tokens = new SimpleLexer().tokenize("#HELLO290woRld  :'HELLO';").getTokens();
+        assertStatement(tokens, "HELLO290woRld:'HELLO'");
 
         // Create array, try parse and compare
-        tokens = new SimpleLexer().tokenize(FileHelper.stringString("#HELLO290woRld  : 'HELLO' ;")).getTokens();
-        output = new SimpleParser().parse(tokens).getStatements();
-        assertEquals(1, output.size());
-        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
-        assertEquals("HELLO290woRld:'HELLO'", output.get(0).getValue());
+        tokens = new SimpleLexer().tokenize("#HELLO290woRld  : 'HELLO' ;").getTokens();
+        assertStatement(tokens, "HELLO290woRld:'HELLO'");
 
         // Create array, try parse and compare
-        tokens = new SimpleLexer().tokenize(FileHelper.stringString("#HELLO290woRld  :'HELLO\r\n|WORLD';")).getTokens();
-        output = new SimpleParser().parse(tokens).getStatements();
-        assertEquals(1, output.size());
-        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
-        assertEquals("HELLO290woRld:'HELLO|WORLD'", output.get(0).getValue());
+        tokens = new SimpleLexer().tokenize("#HELLO290woRld  :'HELLO\r\n|WORLD';").getTokens();
+        assertStatement(tokens, "HELLO290woRld:'HELLO|WORLD'");
     }
 
     @Test
@@ -64,5 +52,12 @@ public final class SimpleParserTest {
     @Test
     public void parserTestOfFileHeaderDefinitions() {
         // TODO add
+    }
+
+    private static void assertStatement(List<Token> tokens, String value) {
+        List<Statement> output = new SimpleParser().parse(tokens).getStatements();;
+        assertEquals(1, output.size());
+        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
+        assertEquals(value, output.get(0).getValue());
     }
 }

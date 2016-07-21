@@ -42,14 +42,15 @@ public final class FileHelper {
     /**
      * Parses the file name, out of a fully qualified file name.
      * e.g. 'my/dir/file.txt' -> 'my/dir/file'.
-     * @param in
-     * @return
      */
     public static String parseFileName(String in) {
         int lastDot = in.lastIndexOf('.');
         return in.substring(0, lastDot);
     }
 
+    /**
+     * Gives an {@link InputStream} for the provided {@link String}.
+     */
     public static InputStream stringString(String s) {
         return new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
     }

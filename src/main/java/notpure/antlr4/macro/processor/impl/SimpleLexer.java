@@ -3,6 +3,7 @@ package notpure.antlr4.macro.processor.impl;
 import notpure.antlr4.macro.processor.model.Lexer;
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
+import notpure.antlr4.macro.processor.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,10 @@ public final class SimpleLexer implements Lexer {
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
     private final List<Token> tokens = new ArrayList<>();
+
+    public Lexer tokenize(String input) {
+        return tokenize(FileHelper.stringString(input));
+    }
 
     /**
      * Tokenizes the input stream into simple tokens.
