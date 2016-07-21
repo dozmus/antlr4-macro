@@ -1,6 +1,9 @@
 package notpure.antlr4.macro.processor.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -45,5 +48,9 @@ public final class FileHelper {
     public static String parseFileName(String in) {
         int lastDot = in.lastIndexOf('.');
         return in.substring(0, lastDot);
+    }
+
+    public static InputStream stringString(String s) {
+        return new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
     }
 }
