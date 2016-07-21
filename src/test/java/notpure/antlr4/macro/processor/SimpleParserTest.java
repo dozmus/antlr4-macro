@@ -23,7 +23,7 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
-        StatementType t = StatementType.MACRO_RULE;
+        final StatementType t = StatementType.MACRO_RULE;
         assertStatement("#P:w;", "P:w", t);
         assertStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", t);
         assertStatement("#HELLO:HELLO;", "HELLO:HELLO", t);
@@ -41,7 +41,15 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfLexerRuleDefinitions() {
-        // TODO add
+        final StatementType t = StatementType.LEXER_RULE;
+        assertStatement("P:w;", "P:w", t);
+        assertStatement("HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", t);
+        assertStatement("HELLO:HELLO;", "HELLO:HELLO", t);
+        assertStatement("HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", t);
+        assertStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", t);
     }
 
     @Test

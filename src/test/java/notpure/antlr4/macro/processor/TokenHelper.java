@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper methods for {@link Token} to be used in tests.
+ * Helper methods for {@link Token}, to be used in tests.
  */
 public final class TokenHelper {
 

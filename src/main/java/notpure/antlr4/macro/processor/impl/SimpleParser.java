@@ -54,7 +54,7 @@ public final class SimpleParser implements Parser {
                     // TODO fix this, something is wrong!
                 }
             } else if (Character.isUpperCase(c)) { // lexer rule
-                idx = parseStatement(tokens, idx, -1, StatementType.LEXER_RULE);
+                idx = parseStatement(tokens, idx, (idx > 1 ? -1 : 0), StatementType.LEXER_RULE);
             }
         }
         return this;

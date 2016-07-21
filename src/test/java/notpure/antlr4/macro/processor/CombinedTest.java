@@ -116,9 +116,9 @@ public final class CombinedTest {
 
         // Iterate over generated statements
         for (int i = 0; i < expectedStatements.size(); i++) {
-            Statement eStatement = expectedStatements.get(i);
-            Statement aStatement = actualStatements.get(i);
-            assertEquals(eStatement, aStatement);
+            Statement expectedStatement = expectedStatements.get(i);
+            Statement actualStatement = actualStatements.get(i);
+            assertEquals(expectedStatement, actualStatement);
         }
     }
 }
