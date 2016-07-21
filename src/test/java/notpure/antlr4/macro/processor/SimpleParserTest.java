@@ -22,21 +22,10 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
-        // Create array, try parse and compare
-        List<Token> tokens = new SimpleLexer().tokenize("#HELLO290woRld:'HELLO';").getTokens();
-        assertStatement(tokens, "HELLO290woRld:'HELLO'");
-
-        // Create array, try parse and compare
-        tokens = new SimpleLexer().tokenize("#HELLO290woRld  :'HELLO';").getTokens();
-        assertStatement(tokens, "HELLO290woRld:'HELLO'");
-
-        // Create array, try parse and compare
-        tokens = new SimpleLexer().tokenize("#HELLO290woRld  : 'HELLO' ;").getTokens();
-        assertStatement(tokens, "HELLO290woRld:'HELLO'");
-
-        // Create array, try parse and compare
-        tokens = new SimpleLexer().tokenize("#HELLO290woRld  :'HELLO\r\n|WORLD';").getTokens();
-        assertStatement(tokens, "HELLO290woRld:'HELLO|WORLD'");
+        assertStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'");
+        assertStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'");
+        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'");
+        assertStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'");
     }
 
     @Test
@@ -54,10 +43,14 @@ public final class SimpleParserTest {
         // TODO add
     }
 
-    private static void assertStatement(List<Token> tokens, String value) {
-        List<Statement> output = new SimpleParser().parse(tokens).getStatements();;
+    private static void assertStatement(String input, String outputValue) {
+        // Generate
+        List<Token> tokens = new SimpleLexer().tokenize(input).getTokens();
+        List<Statement> output = new SimpleParser().parse(tokens).getStatements();
+
+        // Assert
         assertEquals(1, output.size());
         assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
-        assertEquals(value, output.get(0).getValue());
+        assertEquals(outputValue, output.get(0).getValue());
     }
 }
