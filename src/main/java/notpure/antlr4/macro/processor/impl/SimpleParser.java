@@ -3,6 +3,7 @@ package notpure.antlr4.macro.processor.impl;
 import notpure.antlr4.macro.processor.model.Parser;
 import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
+import notpure.antlr4.macro.processor.model.statement.StatementType;
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import org.slf4j.Logger;
@@ -43,17 +44,17 @@ public final class SimpleParser implements Parser {
                 idx += 2; // skip '//'
                 idx = parseSingleLineComment(tokens, idx);
             } else if (c == '#') { // macro rule
-                idx = parseStatement(tokens, idx, 1, "MacroRule");
+                idx = parseStatement(tokens, idx, 1, StatementType.MACRO_RULE);
             } else if (Character.isLowerCase(c)) {
                 if (seekString(tokens, idx, "grammar")) { // grammar header file
                     idx += "grammar".length(); // skip header text
                     idx = parseFileHeaderStatement(tokens, idx);
                 } else {
-                    idx = parseStatement(tokens, idx, -4, "ParserRule"); // parser rule
+                    idx = parseStatement(tokens, idx, -4, StatementType.PARSER_RULE); // parser rule
                     // TODO fix this, something is wrong!
                 }
             } else if (Character.isUpperCase(c)) { // lexer rule
-                idx = parseStatement(tokens, idx, -1, "LexerRule");
+                idx = parseStatement(tokens, idx, -1, StatementType.LEXER_RULE);
             }
         }
         return this;
@@ -74,7 +75,9 @@ public final class SimpleParser implements Parser {
         return pair.getNextIdx();
     }
 
-    private int parseStatement(List<Token> tokens, int idx, int offset, String statementName) {
+    private int parseStatement(List<Token> tokens, int idx, int offset, StatementType type) {
+        String statementName = type.toString();
+
         // Parse identifier
         ParsedToken pair1 = seekToken(tokens, idx + offset,
                 new Token(TokenDefinition.COLON), statementName + "Identifier", true);
@@ -87,10 +90,14 @@ public final class SimpleParser implements Parser {
         idx = pair2.getNextIdx();
 
         // Add to statements list and continue
-        GenericStatement statement = new GenericStatement(pair1.getToken().getValue(), pair2.getToken().getValue());
+        GenericStatement statement = fromParsedToken(pair1, pair2, type);
         statements.add(statement);
         LOGGER.info("Parsed statement {}: {}={}", statementName, statement.getIdentifierName(), statement.getIdentifierValue());
         return idx;
+    }
+
+    private static GenericStatement fromParsedToken(ParsedToken pair1, ParsedToken pair2, StatementType type) {
+        return new GenericStatement(pair1.getToken().getValue(), pair2.getToken().getValue(), type);
     }
 
     @Override

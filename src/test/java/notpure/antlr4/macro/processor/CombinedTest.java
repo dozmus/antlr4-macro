@@ -3,6 +3,7 @@ package notpure.antlr4.macro.processor;
 import notpure.antlr4.macro.processor.impl.*;
 import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
+import notpure.antlr4.macro.processor.model.statement.StatementType;
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import org.junit.Test;
@@ -102,10 +103,10 @@ public final class CombinedTest {
         List<Statement> expectedStatements = new ArrayList<>();
         expectedStatements.add(new Statement("FileHeader", "Hello"));
         expectedStatements.add(new Statement("SingleLineComment", "parser rules"));
-        expectedStatements.add(new GenericStatement("r", "'hello' ID"));
+        expectedStatements.add(new GenericStatement("r", "'hello' ID", StatementType.PARSER_RULE));
         expectedStatements.add(new Statement("SingleLineComment", "lexer rules"));
-        expectedStatements.add(new GenericStatement("ID", "[a-z]+"));
-        expectedStatements.add(new GenericStatement("WS", "[ \\t\\r\\n]+ -> skip"));
+        expectedStatements.add(new GenericStatement("ID", "[a-z]+", StatementType.LEXER_RULE));
+        expectedStatements.add(new GenericStatement("WS", "[ \\t\\r\\n]+ -> skip", StatementType.LEXER_RULE));
 
         // Store actual statements
         List<Statement> actualStatements = new SimpleParser().parse(actualOutput).getStatements();
@@ -117,7 +118,6 @@ public final class CombinedTest {
         for (int i = 0; i < expectedStatements.size(); i++) {
             Statement eStatement = expectedStatements.get(i);
             Statement aStatement = actualStatements.get(i);
-
             assertEquals(eStatement, aStatement);
         }
     }

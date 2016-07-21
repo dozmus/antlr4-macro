@@ -7,11 +7,13 @@ public final class GenericStatement extends Statement {
 
     private final String identifierName;
     private final String identifierValue;
+    private final StatementType statementType;
 
-    public GenericStatement(String identifierName, String identifierValue) {
+    public GenericStatement(String identifierName, String identifierValue, StatementType statementType) {
         super(GenericStatement.class.getSimpleName(), identifierName + ":" + identifierValue);
         this.identifierName = identifierName;
         this.identifierValue = identifierValue;
+        this.statementType = statementType;
     }
 
     public String getIdentifierName() {
@@ -22,6 +24,10 @@ public final class GenericStatement extends Statement {
         return identifierValue;
     }
 
+    public StatementType getStatementType() {
+        return statementType;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof GenericStatement))
@@ -29,6 +35,7 @@ public final class GenericStatement extends Statement {
         GenericStatement other = (GenericStatement)obj;
         return other.getIdentifierName().equals(identifierName)
                 && other.getIdentifierValue().equals(identifierValue)
-                && other.getName().equals(getName());
+                && other.getName().equals(getName())
+                && other.getStatementType().equals(statementType);
     }
 }

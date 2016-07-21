@@ -4,6 +4,7 @@ import notpure.antlr4.macro.processor.impl.SimpleLexer;
 import notpure.antlr4.macro.processor.impl.SimpleParser;
 import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
+import notpure.antlr4.macro.processor.model.statement.StatementType;
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import notpure.antlr4.macro.processor.util.FileHelper;
@@ -22,14 +23,15 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
-        assertStatement("#P:w;", "P:w");
-        assertStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'");
-        assertStatement("#HELLO:HELLO;", "HELLO:HELLO");
-        assertStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'");
-        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'");
-        assertStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'");
-        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'");
-        assertStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'");
+        StatementType t = StatementType.MACRO_RULE;
+        assertStatement("#P:w;", "P:w", t);
+        assertStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#HELLO:HELLO;", "HELLO:HELLO", t);
+        assertStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", t);
     }
 
     @Test
@@ -47,7 +49,7 @@ public final class SimpleParserTest {
         // TODO add
     }
 
-    private static void assertStatement(String input, String outputValue) {
+    private static void assertStatement(String input, String outputValue, StatementType type) {
         // Generate
         List<Token> tokens = new SimpleLexer().tokenize(input).getTokens();
         List<Statement> output = new SimpleParser().parse(tokens).getStatements();
@@ -55,6 +57,7 @@ public final class SimpleParserTest {
         // Assert
         assertEquals(1, output.size());
         assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
+        assertEquals(type, ((GenericStatement)output.get(0)).getStatementType());
         assertEquals(outputValue, output.get(0).getValue());
     }
 }
