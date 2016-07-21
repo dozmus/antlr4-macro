@@ -43,21 +43,17 @@ public final class SimpleLexerTest {
             }
         }
 
-        // Wrap string in stream
-        InputStream inputStream = new ByteArrayInputStream(inputString.getBytes(StandardCharsets.UTF_8));
-
         // Tokenize input
-        List<Token> actualOutput = new SimpleLexer().tokenize(inputStream).getTokens();
+        List<Token> actualOutput = new SimpleLexer().tokenize(inputString).getTokens();
 
         // Compare outputs
         assertEquals(expectedOutput.size(), actualOutput.size());
 
         // Iterate over generated tokens
         for (int i = 0; i < expectedOutput.size(); i++) {
-            Token eToken = expectedOutput.get(i);
-            Token aToken = actualOutput.get(i);
-
-            assertEquals(eToken, aToken);
+            Token expectedToken = expectedOutput.get(i);
+            Token actualToken = actualOutput.get(i);
+            assertEquals(expectedToken, actualToken);
         }
     }
 }

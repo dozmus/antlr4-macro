@@ -15,17 +15,13 @@ import java.util.Scanner;
 /**
  * A simple lexer.
  */
-public final class SimpleLexer implements Lexer {
+public final class SimpleLexer extends Lexer {
 
     /**
      * Logger instance.
      */
     private final static Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
     private final List<Token> tokens = new ArrayList<>();
-
-    public Lexer tokenize(String input) {
-        return tokenize(FileHelper.stringString(input));
-    }
 
     /**
      * Tokenizes the input stream into simple tokens.

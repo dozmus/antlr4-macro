@@ -6,7 +6,7 @@ import notpure.antlr4.macro.processor.model.token.Token;
 import java.util.List;
 
 /**
- * Created by pure on 17/07/2016.
+ * A Parser - converts a {@link List} of {@link Token} into a {@link List} of {@link Statement}.
  */
 public interface Parser {
 
