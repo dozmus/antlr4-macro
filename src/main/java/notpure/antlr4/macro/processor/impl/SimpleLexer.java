@@ -20,7 +20,7 @@ public final class SimpleLexer extends Lexer {
     /**
      * Logger instance.
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
     private final List<Token> tokens = new ArrayList<>();
 
     /**

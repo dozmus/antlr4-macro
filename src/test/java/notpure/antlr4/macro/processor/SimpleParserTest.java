@@ -29,6 +29,10 @@ public final class SimpleParserTest {
         assertStatement("#HELLO:HELLO;", "HELLO:HELLO", t);
         assertStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", t);
         assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("#hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
+        assertStatement("#hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
         assertStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", t);
         assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
         assertStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", t);
@@ -36,7 +40,17 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfParserRuleDefinitions() {
-        // TODO add
+        final StatementType t = StatementType.PARSER_RULE;
+        assertStatement("p:w;", "p:w", t);
+        assertStatement("hELLO290woRld:'HELLO';", "hELLO290woRld:'HELLO'", t);
+        assertStatement("hELLO:HELLO;", "hELLO:HELLO", t);
+        assertStatement("hELLO290woRld  :'HELLO';", "hELLO290woRld:'HELLO'", t);
+        assertStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
+        assertStatement("hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
+        assertStatement("hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
+        assertStatement("helloWorld\r\n: \r\n'HELLO' ;", "helloWorld:'HELLO'", t);
+        assertStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
+        assertStatement("hELLO290woRld  :'HELLO\r\n|WORLD';", "hELLO290woRld:'HELLO|WORLD'", t);
     }
 
     @Test
@@ -47,6 +61,8 @@ public final class SimpleParserTest {
         assertStatement("HELLO:HELLO;", "HELLO:HELLO", t);
         assertStatement("HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", t);
         assertStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
+        assertStatement("HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
         assertStatement("HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", t);
         assertStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
         assertStatement("HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", t);

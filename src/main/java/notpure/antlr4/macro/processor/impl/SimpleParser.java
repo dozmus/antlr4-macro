@@ -20,7 +20,8 @@ public final class SimpleParser implements Parser {
     /**
      * Logger instance.
      */
-    private final static Logger LOGGER = LoggerFactory.getLogger(SimpleParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleParser.class);
+    private static final String FILE_HEADER_TEXT = "grammar";
     private final List<Statement> statements = new ArrayList<>();
 
     /**
@@ -46,12 +47,11 @@ public final class SimpleParser implements Parser {
             } else if (c == '#') { // macro rule
                 idx = parseStatement(tokens, idx, 1, StatementType.MACRO_RULE);
             } else if (Character.isLowerCase(c)) {
-                if (seekString(tokens, idx, "grammar")) { // grammar header file
-                    idx += "grammar".length(); // skip header text
+                if (seekString(tokens, idx, FILE_HEADER_TEXT)) { // grammar header file
+                    idx += FILE_HEADER_TEXT.length(); // skip header text
                     idx = parseFileHeaderStatement(tokens, idx);
-                } else {
-                    idx = parseStatement(tokens, idx, -4, StatementType.PARSER_RULE); // parser rule
-                    // TODO fix this, something is wrong!
+                } else { // parser rule
+                    idx = parseStatement(tokens, idx, (idx > 4 ? -4 : 0), StatementType.PARSER_RULE);
                 }
             } else if (Character.isUpperCase(c)) { // lexer rule
                 idx = parseStatement(tokens, idx, (idx > 1 ? -1 : 0), StatementType.LEXER_RULE);
@@ -80,12 +80,12 @@ public final class SimpleParser implements Parser {
 
         // Parse identifier
         ParsedToken pair1 = seekToken(tokens, idx + offset,
-                new Token(TokenDefinition.COLON), statementName + "Identifier", true);
+                new Token(TokenDefinition.COLON), statementName + "_Identifier", true);
         LOGGER.info("Parsed identifier for {}: {} [nextIdx={}]", statementName, pair1.getToken(), pair1.getNextIdx());
         idx = pair1.getNextIdx();
 
         // Parse value
-        ParsedToken pair2 = seekToken(tokens, idx, new Token(TokenDefinition.SEMICOLON), statementName + "Value", true);
+        ParsedToken pair2 = seekToken(tokens, idx, new Token(TokenDefinition.SEMICOLON), statementName + "_Value", true);
         LOGGER.info("Parsed value for {}: {} [nextIdx={}]", statementName, pair2.getToken(), pair2.getNextIdx());
         idx = pair2.getNextIdx();
 
