@@ -1,6 +1,7 @@
 package notpure.antlr4.macro.processor;
 
 import notpure.antlr4.macro.processor.impl.SimpleParser;
+import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
@@ -18,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 public final class SimpleParserTest {
 
     @Test
-    public void parserTestOfMacroDefinitions() {
+    public void parserTestOfMacroRuleDefinitions() {
         // Create array
         List<Token> tokens = new ArrayList<>();
         tokens.add(new Token(TokenDefinition.HASH));
@@ -32,8 +33,8 @@ public final class SimpleParserTest {
         // Try parse and compare
         List<Statement> output = new SimpleParser().parse(tokens).getStatements();
         assertEquals(1, output.size());
-        assertEquals("MacroStatement", output.get(0).getName());
-        assertEquals("HELLO290woRld='HELLO'", output.get(0).getValue());
+        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
+        assertEquals("HELLO290woRld:'HELLO'", output.get(0).getValue());
 
         // Create array
         tokens = new ArrayList<>();
@@ -50,8 +51,8 @@ public final class SimpleParserTest {
         // Try parse and compare
         output = new SimpleParser().parse(tokens).getStatements();
         assertEquals(1, output.size());
-        assertEquals("MacroStatement", output.get(0).getName());
-        assertEquals("HELLO290woRld='HELLO'", output.get(0).getValue());
+        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
+        assertEquals("HELLO290woRld:'HELLO'", output.get(0).getValue());
 
         // Create array
         tokens = new ArrayList<>();
@@ -71,7 +72,22 @@ public final class SimpleParserTest {
         // Try parse and compare
         output = new SimpleParser().parse(tokens).getStatements();
         assertEquals(1, output.size());
-        assertEquals("MacroStatement", output.get(0).getName());
-        assertEquals("HELLO290woRld='HELLO|WORLD'", output.get(0).getValue());
+        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
+        assertEquals("HELLO290woRld:'HELLO|WORLD'", output.get(0).getValue());
+    }
+
+    @Test
+    public void parserTestOfParserRuleDefinitions() {
+        // TODO add
+    }
+
+    @Test
+    public void parserTestOfLexerRuleDefinitions() {
+        // TODO add
+    }
+
+    @Test
+    public void parserTestOfFileHeaderDefinitions() {
+        // TODO add
     }
 }

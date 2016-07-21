@@ -30,7 +30,7 @@ public final class TokenHelper {
         return tokens;
     }
 
-    public static List<Token> getLineTerminator() {
+    public static List<Token> getLineTerminatorTokens() {
         List<Token> tokens = new ArrayList<>();
         tokens.add(new Token(TokenDefinition.CARRIAGE_RETURN));
         tokens.add(new Token(TokenDefinition.NEW_LINE));

@@ -20,4 +20,14 @@ public class Statement {
     public String getValue() {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return name + "(" + value + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Statement && obj.toString().equals(toString());
+    }
 }
