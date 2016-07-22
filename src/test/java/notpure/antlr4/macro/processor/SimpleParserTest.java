@@ -6,14 +6,10 @@ import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
 import notpure.antlr4.macro.processor.model.statement.StatementType;
 import notpure.antlr4.macro.processor.model.token.Token;
-import notpure.antlr4.macro.processor.model.token.TokenDefinition;
-import notpure.antlr4.macro.processor.util.FileHelper;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static notpure.antlr4.macro.processor.TokenHelper.*;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -23,49 +19,49 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
-        final StatementType t = StatementType.MACRO_RULE;
-        assertStatement("#P:w;", "P:w", t);
-        assertStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", t);
-        assertStatement("#HELLO:HELLO;", "HELLO:HELLO", t);
-        assertStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", t);
-        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("#HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("#HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("#hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
-        assertStatement("#hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
-        assertStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", t);
+        final StatementType type = StatementType.MACRO_RULE;
+        assertSingleStatement("#P:w;", "P:w", type);
+        assertSingleStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#HELLO:HELLO;", "HELLO:HELLO", type);
+        assertSingleStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", type);
     }
 
     @Test
     public void parserTestOfParserRuleDefinitions() {
-        final StatementType t = StatementType.PARSER_RULE;
-        assertStatement("p:w;", "p:w", t);
-        assertStatement("hELLO290woRld:'HELLO';", "hELLO290woRld:'HELLO'", t);
-        assertStatement("hELLO:HELLO;", "hELLO:HELLO", t);
-        assertStatement("hELLO290woRld  :'HELLO';", "hELLO290woRld:'HELLO'", t);
-        assertStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
-        assertStatement("hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
-        assertStatement("hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
-        assertStatement("helloWorld\r\n: \r\n'HELLO' ;", "helloWorld:'HELLO'", t);
-        assertStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", t);
-        assertStatement("hELLO290woRld  :'HELLO\r\n|WORLD';", "hELLO290woRld:'HELLO|WORLD'", t);
+        final StatementType type = StatementType.PARSER_RULE;
+        assertSingleStatement("p:w;", "p:w", type);
+        assertSingleStatement("hELLO290woRld:'HELLO';", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("hELLO:HELLO;", "hELLO:HELLO", type);
+        assertSingleStatement("hELLO290woRld  :'HELLO';", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("helloWorld\r\n: \r\n'HELLO' ;", "helloWorld:'HELLO'", type);
+        assertSingleStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
+        assertSingleStatement("hELLO290woRld  :'HELLO\r\n|WORLD';", "hELLO290woRld:'HELLO|WORLD'", type);
     }
 
     @Test
     public void parserTestOfLexerRuleDefinitions() {
-        final StatementType t = StatementType.LEXER_RULE;
-        assertStatement("P:w;", "P:w", t);
-        assertStatement("HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", t);
-        assertStatement("HELLO:HELLO;", "HELLO:HELLO", t);
-        assertStatement("HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", t);
-        assertStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", t);
-        assertStatement("HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", t);
+        final StatementType type = StatementType.LEXER_RULE;
+        assertSingleStatement("P:w;", "P:w", type);
+        assertSingleStatement("HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("HELLO:HELLO;", "HELLO:HELLO", type);
+        assertSingleStatement("HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
+        assertSingleStatement("HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", type);
     }
 
     @Test
@@ -73,15 +69,26 @@ public final class SimpleParserTest {
         // TODO add
     }
 
-    private static void assertStatement(String input, String outputValue, StatementType type) {
-        // Generate
-        List<Token> tokens = new SimpleLexer().tokenize(input).getTokens();
-        List<Statement> output = new SimpleParser().parse(tokens).getStatements();
+    /**
+     * Parses the input value into a list of {@link Statement} and ensures that the size is 1, the name
+     * of the only element is GenericStatement, the type is as specified and the value is as specified.
+     */
+    private static void assertSingleStatement(String input, String expectedValue, StatementType expectedType) {
+        // Generate statements
+        List<Statement> output = statements(input);
 
-        // Assert
+        // Assert values
         assertEquals(1, output.size());
         assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
-        assertEquals(type, ((GenericStatement)output.get(0)).getStatementType());
-        assertEquals(outputValue, output.get(0).getValue());
+        assertEquals(expectedType, ((GenericStatement)output.get(0)).getStatementType());
+        assertEquals(expectedValue, output.get(0).getValue());
+    }
+
+    /**
+     * Generates a list of {@link Statement} from the given input.
+     */
+    private static List<Statement> statements(String input) {
+        List<Token> tokens = new SimpleLexer().tokenize(input).getTokens();
+        return new SimpleParser().parse(tokens).getStatements();
     }
 }
