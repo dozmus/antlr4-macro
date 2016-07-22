@@ -42,18 +42,22 @@ public final class FileHelper {
     /**
      * Parses the file name, out of a fully qualified file name.
      * e.g. 'my/dir/file.txt' -> 'my/dir/file'.
+     * @throws IllegalArgumentException If fileName is null or empty.
      */
-    public static String parseFileName(String in) {
-        if (in == null)
-            return null;
-        int lastDot = in.lastIndexOf('.');
-        return lastDot == -1 ? in : in.substring(0, lastDot);
+    public static String parseFileName(String fileName) {
+        if (fileName == null || fileName.isEmpty())
+            throw new IllegalArgumentException("parseFileName method invoked with null or empty input.");
+        int lastDot = fileName.lastIndexOf('.');
+        return lastDot == -1 ? fileName : fileName.substring(0, lastDot);
     }
 
     /**
-     * Gives an {@link InputStream} for the provided {@link String}.
+     * Creates a {@link InputStream} for the provided {@link String}.
+     * @throws IllegalArgumentException If input is null.
      */
-    public static InputStream stringString(String s) {
-        return new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
+    public static InputStream stringStream(String input) {
+        if (input == null)
+            throw new IllegalArgumentException("stringStream method invoked with null input.");
+        return new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 public abstract class Lexer {
 
     public Lexer tokenize(String input) {
-        return tokenize(FileHelper.stringString(input));
+        return tokenize(FileHelper.stringStream(input));
     }
 
     public abstract Lexer tokenize(InputStream inputStream);
