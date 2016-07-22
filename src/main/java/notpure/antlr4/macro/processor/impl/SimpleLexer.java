@@ -29,6 +29,9 @@ public final class SimpleLexer extends Lexer {
      */
     @Override
     public Lexer tokenize(InputStream inputStream) {
+        if (inputStream == null)
+            throw new IllegalArgumentException("InputStream is null.");
+
         CharStream in = new CharStream(inputStream);
 
         // Process input

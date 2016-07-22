@@ -29,6 +29,9 @@ public final class SimpleParser implements Parser {
      */
     @Override
     public Parser parse(List<Token> tokens) {
+        if (tokens == null)
+            throw new IllegalArgumentException("Token list is null.");
+
         int n = tokens.size();
 
         for (int idx = 0; idx < n; idx++) {
