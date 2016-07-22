@@ -71,6 +71,11 @@ public final class SimpleParserTest {
         assertSingleGrammarStatement("grammar 2;", "2");
     }
 
+    @Test
+    public void parserTestOfInlineElements() {
+        // TODO impl
+    }
+
     /**
      * Parses the input value into a list of {@link Statement} and ensures that the size is 1, the type
      * of the only element is Statement, the name is 'FileHeader' and the value is as specified.

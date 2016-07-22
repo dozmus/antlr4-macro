@@ -64,7 +64,9 @@ public final class SimpleParser implements Parser {
     }
 
     private int parseSingleLineComment(List<Token> tokens, int idx) {
-        ParsedToken pair = seekToken(tokens, idx, new Token(TokenDefinition.NEW_LINE), "SingleLineComment", true);
+        ParsedToken pair = seekToken(tokens, idx,
+                new Token[] { new Token(TokenDefinition.NEW_LINE), new Token(TokenDefinition.EOF) },
+                "SingleLineComment", true);
         LOGGER.info("Parsed single line comment: {} [nextIdx={}]", pair.getToken(), pair.getNextIdx());
         statements.add(new Statement("SingleLineComment", pair.getToken().getValue()));
         return pair.getNextIdx();

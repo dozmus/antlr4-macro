@@ -78,6 +78,7 @@ public final class CombinedTest {
                 TokenDefinition.HYPHEN, TokenDefinition.GREATER_THAN, TokenDefinition.SPACE));
         eo.addAll(getTokens(TokenDefinition.LETTER, "skip"));
         eo.add(new Token(TokenDefinition.SEMICOLON));
+        eo.add(new Token(TokenDefinition.EOF));
 
         // Tokenize file input
         List<Token> actualOutput = new ArrayList<>();

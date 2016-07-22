@@ -40,8 +40,12 @@ public final class SimpleLexer extends Lexer {
             String value = in.next();
 
             // Try to map it to a definition
-            tryTokenize(value);
+            if (value != null)
+                tryTokenize(value);
         }
+
+        // Add end of file token
+        tryTokenize(null);
         return this;
     }
 
@@ -56,11 +60,17 @@ public final class SimpleLexer extends Lexer {
      * @param value
      */
     private void tryTokenize(String value) {
-        for (TokenDefinition def : TokenDefinition.values()) {
-            if (def.matches(value)) {
-                LOGGER.info("Current value: '{}' has been mapped to '{}'", value.trim(), def.name());
-                tokens.add(new Token(def.name(), value));
-                return;
+        if (value == null) {
+            tokens.add(new Token(TokenDefinition.EOF));
+            LOGGER.info("Current value: '{}' has been mapped to '{}'", "null", TokenDefinition.EOF.name());
+            return;
+        } else {
+            for (TokenDefinition def : TokenDefinition.values()) {
+                if (def != TokenDefinition.EOF && def.matches(value)) {
+                    LOGGER.info("Current value: '{}' has been mapped to '{}'", value.trim(), def.name());
+                    tokens.add(new Token(def.name(), value));
+                    return;
+                }
             }
         }
         LOGGER.info("Current value: {}", value);

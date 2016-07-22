@@ -32,7 +32,11 @@ public enum TokenDefinition {
     RIGHT_SQUARE_BRACKET("]"),
     SPACE(" "),
     CARRIAGE_RETURN("\r"),
-    NEW_LINE("\n");
+    NEW_LINE("\n"),
+    /**
+     * End of file, unique token.
+     */
+    EOF(null);
 
     private final boolean literal;
     private final Pattern pattern;

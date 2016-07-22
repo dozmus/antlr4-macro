@@ -34,7 +34,7 @@ public final class SimpleLexerTest {
                 inputString += "B";
                 expectedOutput.add(new Token(def.name(), "a"));
                 expectedOutput.add(new Token(def.name(), "B"));
-            } else if (def.isLiteral()) { // general definitions
+            } else if (def != TokenDefinition.EOF && def.isLiteral()) { // literal definitions
                 String letter = def.getGroup();
                 inputString += letter;
                 expectedOutput.add(new Token(def.name(), letter));
@@ -45,7 +45,7 @@ public final class SimpleLexerTest {
         List<Token> actualOutput = new SimpleLexer().tokenize(inputString).getTokens();
 
         // Compare outputs
-        assertEquals(expectedOutput.size(), actualOutput.size());
+        assertEquals(expectedOutput.size() + 1, actualOutput.size());
 
         // Iterate over generated tokens
         for (int i = 0; i < expectedOutput.size(); i++) {
