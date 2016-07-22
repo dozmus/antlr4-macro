@@ -66,12 +66,29 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfFileHeaderDefinitions() {
-        // TODO add
+        assertSingleGrammarStatement("grammar myGrammar;", "myGrammar");
+        assertSingleGrammarStatement("grammar myGrammar2;", "myGrammar2");
+        assertSingleGrammarStatement("grammar 2;", "2");
     }
 
     /**
-     * Parses the input value into a list of {@link Statement} and ensures that the size is 1, the name
-     * of the only element is GenericStatement, the type is as specified and the value is as specified.
+     * Parses the input value into a list of {@link Statement} and ensures that the size is 1, the type
+     * of the only element is Statement, the name is 'FileHeader' and the value is as specified.
+     */
+    private static void assertSingleGrammarStatement(String input, String expectedValue) {
+        // Generate statements
+        List<Statement> output = statements(input);
+
+        // Assert values
+        assertEquals(1, output.size());
+        assertEquals(Statement.class, output.get(0).getClass());
+        assertEquals("FileHeader", output.get(0).getName());
+        assertEquals(expectedValue, output.get(0).getValue());
+    }
+
+    /**
+     * Parses the input value into a list of {@link Statement} and ensures that the size is 1, the type
+     * of the only element is GenericStatement, the {@link StatementType} is as specified and the value is as specified.
      */
     private static void assertSingleStatement(String input, String expectedValue, StatementType expectedType) {
         // Generate statements
@@ -79,7 +96,7 @@ public final class SimpleParserTest {
 
         // Assert values
         assertEquals(1, output.size());
-        assertEquals(GenericStatement.class.getSimpleName(), output.get(0).getName());
+        assertEquals(GenericStatement.class, output.get(0).getClass());
         assertEquals(expectedType, ((GenericStatement)output.get(0)).getStatementType());
         assertEquals(expectedValue, output.get(0).getValue());
     }
