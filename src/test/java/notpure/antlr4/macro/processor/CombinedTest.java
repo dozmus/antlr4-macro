@@ -14,9 +14,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static notpure.antlr4.macro.processor.TokenHelper.getLineTerminatorTokens;
-import static notpure.antlr4.macro.processor.TokenHelper.getLiteralTokens;
-import static notpure.antlr4.macro.processor.TokenHelper.getTokens;
+import static notpure.antlr4.macro.processor.util.TokenHelper.getLineTerminatorTokens;
+import static notpure.antlr4.macro.processor.util.TokenHelper.getLiteralTokens;
+import static notpure.antlr4.macro.processor.util.TokenHelper.getTokens;
 import static org.junit.Assert.assertEquals;
 
 /**

@@ -5,8 +5,6 @@ import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
 import org.junit.Test;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 

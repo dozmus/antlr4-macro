@@ -44,8 +44,10 @@ public final class FileHelper {
      * e.g. 'my/dir/file.txt' -> 'my/dir/file'.
      */
     public static String parseFileName(String in) {
+        if (in == null)
+            return null;
         int lastDot = in.lastIndexOf('.');
-        return in.substring(0, lastDot);
+        return lastDot == -1 ? in : in.substring(0, lastDot);
     }
 
     /**

@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.processor;
+package notpure.antlr4.macro.processor.util;
 
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
