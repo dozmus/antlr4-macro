@@ -3,6 +3,7 @@ package notpure.antlr4.macro.processor.impl;
 import notpure.antlr4.macro.processor.model.Lexer;
 import notpure.antlr4.macro.processor.model.token.Token;
 import notpure.antlr4.macro.processor.model.token.TokenDefinition;
+import notpure.antlr4.macro.processor.util.CharStream;
 import notpure.antlr4.macro.processor.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,8 +29,7 @@ public final class SimpleLexer extends Lexer {
      */
     @Override
     public Lexer tokenize(InputStream inputStream) {
-        Scanner in = new Scanner(inputStream);
-        in.useDelimiter(""); // to get 1 character at a time
+        CharStream in = new CharStream(inputStream);
 
         // Process input
         while (in.hasNext()) {
