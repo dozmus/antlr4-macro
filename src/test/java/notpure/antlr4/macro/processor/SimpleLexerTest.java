@@ -34,8 +34,8 @@ public final class SimpleLexerTest {
                 inputString += "B";
                 expectedOutput.add(new Token(def.name(), "a"));
                 expectedOutput.add(new Token(def.name(), "B"));
-            } else if (def != TokenDefinition.EOF && def.isLiteral()) { // literal definitions
-                String letter = def.getGroup();
+            } else if (def.getValueType() == TokenDefinition.ValueType.LITERAL) { // literal definitions
+                String letter = def.getValue();
                 inputString += letter;
                 expectedOutput.add(new Token(def.name(), letter));
             }

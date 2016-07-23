@@ -9,11 +9,11 @@ public final class Token {
     private final String value;
 
     public Token(TokenDefinition def) {
-        if (!def.isLiteral()) {
-            throw new IllegalArgumentException("TokenDefinition passed to Token constructor is not a literal and hence invalid.");
+        if (def.getValueType() == TokenDefinition.ValueType.REGEX) {
+            throw new IllegalArgumentException("TokenDefinition has ValueType.REGEX and hence is invalid.");
         }
         this.name = def.name();
-        this.value = def.getRegex().substring(1);
+        this.value = def.getValue();
     }
 
     public Token(String name, String value) {
@@ -59,7 +59,7 @@ public final class Token {
         if (obj instanceof Token) {
             Token other = (Token) obj;
             return other.getName().equals(name)
-                    && other.getValue().equals(value);
+                    && (value == null || other.getValue().equals(value));
         }
         return false;
     }

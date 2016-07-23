@@ -66,7 +66,7 @@ public final class SimpleLexer extends Lexer {
             return;
         } else {
             for (TokenDefinition def : TokenDefinition.values()) {
-                if (def != TokenDefinition.EOF && def.matches(value)) {
+                if (def.matches(value)) {
                     LOGGER.info("Current value: '{}' has been mapped to '{}'", value.trim(), def.name());
                     tokens.add(new Token(def.name(), value));
                     return;

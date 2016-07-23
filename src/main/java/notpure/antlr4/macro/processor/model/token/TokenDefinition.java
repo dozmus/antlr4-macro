@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
  * Definitions for the {@link SimpleLexer}.
  */
 public enum TokenDefinition {
-    LETTER("[A-Za-z]", false),
-    DIGIT("[0-9]", false),
+    LETTER("[A-Za-z]", ValueType.REGEX),
+    DIGIT("[0-9]", ValueType.REGEX),
     HASH("#"),
     SEMICOLON(";"),
     COLON(":"),
@@ -36,35 +36,64 @@ public enum TokenDefinition {
     /**
      * End of file, unique token.
      */
-    EOF(null);
+    EOF;
 
-    private final boolean literal;
-    private final Pattern pattern;
-    private final String group;
+    private final String value;
+    private final ValueType valueType;
+    private Pattern pattern;
 
-    TokenDefinition(String group, boolean literal) {
-        this.literal = literal;
-        this.group = group;
-        this.pattern = Pattern.compile(literal ? "\\" + group : group);
+    TokenDefinition(String value, ValueType valueType) {
+        this.value = value;
+        this.valueType = valueType;
+
+        if (valueType == ValueType.REGEX)
+            this.pattern = Pattern.compile(value);
     }
 
-    TokenDefinition(String regex) {
-        this(regex, true);
+    TokenDefinition(String value) {
+        this(value, ValueType.LITERAL);
+    }
+
+    TokenDefinition() {
+        this(null, ValueType.SPECIAL);
     }
 
     public boolean matches(String input) {
-        return pattern.matcher(input).matches(); // XXX optimisation: use equals() if tokendef is a literal
+        switch (valueType) {
+            case LITERAL:
+                return input.equals(value);
+            case REGEX:
+                return pattern.matcher(input).matches();
+            default:
+            case SPECIAL:
+                return false;
+        }
     }
 
-    public String getRegex() {
-        return pattern.pattern();
+    public String getValue() {
+        return value;
     }
 
-    public String getGroup() {
-        return group;
+    public ValueType getValueType() {
+        return valueType;
     }
 
-    public boolean isLiteral() {
-        return literal;
+    /**
+     * Value type for {@link TokenDefinition}.
+     */
+    public enum ValueType {
+
+        /**
+         * The value is literal.
+         */
+        LITERAL,
+        /**
+         * The value is a RegEx.
+         */
+        REGEX,
+        /**
+         * The value is special in that {@link TokenDefinition#matches(String)} will always return false for it.
+         */
+        SPECIAL
     }
 }

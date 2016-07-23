@@ -16,7 +16,7 @@ public final class TokenHelper {
 
         for (int i = 0; i < input.length(); i++) {
             char c = input.charAt(i);
-            tokens.add(new Token(def.name(), def.isLiteral() ? def.getGroup() : c + ""));
+            tokens.add(new Token(def.name(), def.getValueType() == TokenDefinition.ValueType.LITERAL ? def.getValue() : c + ""));
         }
         return tokens;
     }
