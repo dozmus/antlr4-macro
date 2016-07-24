@@ -40,8 +40,7 @@ public final class SimpleLexer extends Lexer {
             String value = in.next();
 
             // Try to map it to a definition
-            if (value != null)
-                tryTokenize(value);
+            tryTokenize(value);
         }
 
         // Add end of file token

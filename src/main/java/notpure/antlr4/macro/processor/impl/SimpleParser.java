@@ -1,7 +1,6 @@
 package notpure.antlr4.macro.processor.impl;
 
 import notpure.antlr4.macro.processor.model.Parser;
-import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
 import notpure.antlr4.macro.processor.model.statement.StatementType;
 import notpure.antlr4.macro.processor.model.token.Token;
@@ -66,43 +65,41 @@ public final class SimpleParser implements Parser {
     private int parseSingleLineComment(List<Token> tokens, int idx) {
         ParsedToken pair = seekToken(tokens, idx,
                 new Token[] { new Token(TokenDefinition.NEW_LINE), new Token(TokenDefinition.EOF) },
-                "SingleLineComment", true);
+                StatementType.SINGLE_LINE_COMMENT.name(), true);
         LOGGER.info("Parsed single line comment: {} [nextIdx={}]", pair.getToken(), pair.getNextIdx());
-        statements.add(new Statement("SingleLineComment", pair.getToken().getValue()));
+        statements.add(new Statement(StatementType.SINGLE_LINE_COMMENT, pair.getToken().getValue()));
         return pair.getNextIdx();
     }
 
     private int parseFileHeaderStatement(List<Token> tokens, int idx) {
         // Parse file header, in form 'grammar {name};'.
-        ParsedToken pair = seekToken(tokens, idx, new Token(TokenDefinition.SEMICOLON), "FileHeader", true);
-        LOGGER.info("Parsed file header: {} [nextIdx={}]", pair.getToken(), pair.getNextIdx());
-        statements.add(new Statement("FileHeader", pair.getToken().getValue()));
+        ParsedToken pair = seekToken(tokens, idx, new Token(TokenDefinition.SEMICOLON), StatementType.GRAMMAR_NAME.name(), true);
+        LOGGER.info("Parsed grammar name: {} [nextIdx={}]", pair.getToken(), pair.getNextIdx());
+        statements.add(new Statement(StatementType.GRAMMAR_NAME, pair.getToken().getValue()));
         return pair.getNextIdx();
     }
 
     private int parseStatement(List<Token> tokens, int idx, int offset, StatementType type) {
-        String statementName = type.toString();
-
         // Parse identifier
-        ParsedToken pair1 = seekToken(tokens, idx + offset,
-                new Token(TokenDefinition.COLON), statementName + "_Identifier", true);
-        LOGGER.info("Parsed identifier for {}: {} [nextIdx={}]", statementName, pair1.getToken(), pair1.getNextIdx());
-        idx = pair1.getNextIdx();
+        ParsedToken identifier = seekToken(tokens, idx + offset,
+                new Token(TokenDefinition.COLON), type.name() + "_Identifier", true);
+        LOGGER.info("Parsed identifier for {}: {} [nextIdx={}]", type, identifier.getToken(), identifier.getNextIdx());
+        idx = identifier.getNextIdx();
 
         // Parse value
-        ParsedToken pair2 = seekToken(tokens, idx, new Token(TokenDefinition.SEMICOLON), statementName + "_Value", true);
-        LOGGER.info("Parsed value for {}: {} [nextIdx={}]", statementName, pair2.getToken(), pair2.getNextIdx());
-        idx = pair2.getNextIdx();
+        ParsedToken value = seekToken(tokens, idx, new Token(TokenDefinition.SEMICOLON), type.name() + "_Value", true);
+        LOGGER.info("Parsed value for {}: {} [nextIdx={}]", type, value.getToken(), value.getNextIdx());
+        idx = value.getNextIdx();
 
         // Add to statements list and continue
-        GenericStatement statement = fromParsedToken(pair1, pair2, type);
+        Statement statement = fromParsedToken(identifier, value, type);
         statements.add(statement);
-        LOGGER.info("Parsed statement {}: {}={}", statementName, statement.getIdentifierName(), statement.getIdentifierValue());
+        LOGGER.info("Parsed statement {}: {}={}", type, statement.getIdentifier(), statement.getValue());
         return idx;
     }
 
-    private static GenericStatement fromParsedToken(ParsedToken pair1, ParsedToken pair2, StatementType type) {
-        return new GenericStatement(pair1.getToken().getValue(), pair2.getToken().getValue(), type);
+    private static Statement fromParsedToken(ParsedToken identifier, ParsedToken value, StatementType type) {
+        return new Statement(type, identifier.getToken().getValue(), value.getToken().getValue());
     }
 
     @Override

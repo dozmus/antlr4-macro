@@ -2,7 +2,6 @@ package notpure.antlr4.macro.processor;
 
 import notpure.antlr4.macro.processor.impl.SimpleLexer;
 import notpure.antlr4.macro.processor.impl.SimpleParser;
-import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
 import notpure.antlr4.macro.processor.model.statement.StatementType;
 import notpure.antlr4.macro.processor.model.token.Token;
@@ -20,55 +19,63 @@ public final class SimpleParserTest {
     @Test
     public void parserTestOfMacroRuleDefinitions() {
         final StatementType type = StatementType.MACRO_RULE;
-        assertSingleStatement("#P:w;", "P:w", type);
-        assertSingleStatement("#HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#HELLO:HELLO;", "HELLO:HELLO", type);
-        assertSingleStatement("#HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", type);
+        final Statement statement1 = new Statement(type, "HELLO_WORLD", "'HELLO'");
+        assertSingleStatement("#P:w;", new Statement(type, "P", "w"));
+        assertSingleStatement("#HELLO290woRld:'HELLO';", new Statement(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO:HELLO;", new Statement(type, "HELLO", "HELLO"));
+        assertSingleStatement("#HELLO_WORLD  :'HELLO';", statement1);
+        assertSingleStatement("#HELLO_WORLD  : 'HELLO' ;", statement1);
+        assertSingleStatement("#HELLO_WORLD : 'HELLO' ;", statement1);
+        assertSingleStatement("#HELLO_WORLD: 'HELLO' ;", statement1);
+        assertSingleStatement("#hELLO290woRld : 'HELLO' ;", new Statement(type, "hELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#hELLO290woRld: 'HELLO' ;", new Statement(type, "hELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", new Statement(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO290woRld  : 'HELLO' ;", new Statement(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", new Statement(type, "HELLO290woRld", "'HELLO|WORLD'"));
+        assertSingleStatement("#HELLO290woRld  : \r\nHELLO\r\n|WORLD;", new Statement(type, "HELLO290woRld", "HELLO|WORLD"));
     }
 
     @Test
     public void parserTestOfParserRuleDefinitions() {
         final StatementType type = StatementType.PARSER_RULE;
-        assertSingleStatement("p:w;", "p:w", type);
-        assertSingleStatement("hELLO290woRld:'HELLO';", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("hELLO:HELLO;", "hELLO:HELLO", type);
-        assertSingleStatement("hELLO290woRld  :'HELLO';", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("hELLO290woRld : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("hELLO290woRld: 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("helloWorld\r\n: \r\n'HELLO' ;", "helloWorld:'HELLO'", type);
-        assertSingleStatement("hELLO290woRld  : 'HELLO' ;", "hELLO290woRld:'HELLO'", type);
-        assertSingleStatement("hELLO290woRld  :'HELLO\r\n|WORLD';", "hELLO290woRld:'HELLO|WORLD'", type);
+        final Statement statement1 = new Statement(type, "helloWorld", "'HELLO'");
+        assertSingleStatement("p:w;", new Statement(type, "p", "w"));
+        assertSingleStatement("hello2903:'HELLO';", new Statement(type, "hello2903", "'HELLO'"));
+        assertSingleStatement("hello:HELLO;", new Statement(type, "hello", "HELLO"));
+        assertSingleStatement("helloWorld  :'HELLO';", statement1);
+        assertSingleStatement("helloWorld  : 'HELLO' ;", statement1);
+        assertSingleStatement("helloWorld : 'HELLO' ;", statement1);
+        assertSingleStatement("helloWorld: 'HELLO' ;", statement1);
+        assertSingleStatement("helloWorld\r\n: \r\n'HELLO' ;", statement1);
+        assertSingleStatement("helloWorld  : 'HELLO' ;", statement1);
+        assertSingleStatement("helloWorld  :'HELLO\r\n|WORLD';", new Statement(type, "helloWorld", "'HELLO|WORLD'"));
+        assertSingleStatement("helloWorld  :HELLO\r\n|WORLD;", new Statement(type, "helloWorld", "HELLO|WORLD"));
     }
 
     @Test
     public void parserTestOfLexerRuleDefinitions() {
         final StatementType type = StatementType.LEXER_RULE;
-        assertSingleStatement("P:w;", "P:w", type);
-        assertSingleStatement("HELLO290woRld:'HELLO';", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("HELLO:HELLO;", "HELLO:HELLO", type);
-        assertSingleStatement("HELLO290woRld  :'HELLO';", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("HELLO290woRld : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("HELLO290woRld: 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("HELLO290woRld\r\n: \r\n'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("HELLO290woRld  : 'HELLO' ;", "HELLO290woRld:'HELLO'", type);
-        assertSingleStatement("HELLO290woRld  :'HELLO\r\n|WORLD';", "HELLO290woRld:'HELLO|WORLD'", type);
+        final Statement statement1 = new Statement(type, "HELLOWORLD", "'HELLO'");
+        assertSingleStatement("P:w;", new Statement(type, "P", "w"));
+        assertSingleStatement("HELLO290woRld:'HELLO';", new Statement(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("HELLO:HELLO;", new Statement(type, "HELLO", "HELLO"));
+        assertSingleStatement("HELLOWORLD  :'HELLO';", statement1);
+        assertSingleStatement("HELLOWORLD  : 'HELLO' ;", statement1);
+        assertSingleStatement("HELLOWORLD : 'HELLO' ;",statement1);
+        assertSingleStatement("HELLOWORLD: 'HELLO' ;", statement1);
+        assertSingleStatement("HELLOWORLD\r\n: \r\n'HELLO' ;", statement1);
+        assertSingleStatement("HELLOWORLD  : 'HELLO' ;", statement1);
+        assertSingleStatement("HELLOWORLD  :'HELLO\r\n|WORLD';", new Statement(type, "HELLOWORLD", "'HELLO|WORLD'"));
+        assertSingleStatement("HELLOWORLD  :HELLO\r\n|WORLD;", new Statement(type, "HELLOWORLD", "HELLO|WORLD"));
     }
 
     @Test
     public void parserTestOfFileHeaderDefinitions() {
-        assertSingleGrammarStatement("grammar myGrammar;", "myGrammar");
-        assertSingleGrammarStatement("grammar myGrammar2;", "myGrammar2");
-        assertSingleGrammarStatement("grammar 2;", "2");
+        final StatementType type = StatementType.GRAMMAR_NAME;
+        assertSingleStatement("grammar myGrammar;", new Statement(type, "myGrammar"));
+        assertSingleStatement("grammar myGrammar2;", new Statement(type, "myGrammar2"));
+        assertSingleStatement("grammar 2;", new Statement(type, "2"));
+        assertSingleStatement("grammar m;", new Statement(type, "m"));
     }
 
     @Test
@@ -77,33 +84,16 @@ public final class SimpleParserTest {
     }
 
     /**
-     * Parses the input value into a list of {@link Statement} and ensures that the size is 1, the type
-     * of the only element is Statement, the name is 'FileHeader' and the value is as specified.
+     * Parses the input value into a list of {@link Statement} and ensures that the size is 1 and the only element
+     * matches the expectedStatement.
      */
-    private static void assertSingleGrammarStatement(String input, String expectedValue) {
+    private static void assertSingleStatement(String input, Statement expectedStatement) {
         // Generate statements
         List<Statement> output = statements(input);
 
         // Assert values
         assertEquals(1, output.size());
-        assertEquals(Statement.class, output.get(0).getClass());
-        assertEquals("FileHeader", output.get(0).getName());
-        assertEquals(expectedValue, output.get(0).getValue());
-    }
-
-    /**
-     * Parses the input value into a list of {@link Statement} and ensures that the size is 1, the type
-     * of the only element is GenericStatement, the {@link StatementType} is as specified and the value is as specified.
-     */
-    private static void assertSingleStatement(String input, String expectedValue, StatementType expectedType) {
-        // Generate statements
-        List<Statement> output = statements(input);
-
-        // Assert values
-        assertEquals(1, output.size());
-        assertEquals(GenericStatement.class, output.get(0).getClass());
-        assertEquals(expectedType, ((GenericStatement)output.get(0)).getStatementType());
-        assertEquals(expectedValue, output.get(0).getValue());
+        assertEquals(expectedStatement, output.get(0));
     }
 
     /**

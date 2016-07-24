@@ -1,7 +1,6 @@
 package notpure.antlr4.macro.processor;
 
 import notpure.antlr4.macro.processor.impl.*;
-import notpure.antlr4.macro.processor.model.statement.GenericStatement;
 import notpure.antlr4.macro.processor.model.statement.Statement;
 import notpure.antlr4.macro.processor.model.statement.StatementType;
 import notpure.antlr4.macro.processor.model.token.Token;
@@ -94,20 +93,19 @@ public final class CombinedTest {
 
         // Iterate over generated tokens
         for (int i = 0; i < eo.size(); i++) {
-            Token eToken = eo.get(i);
-            Token aToken = actualOutput.get(i);
-
-            assertEquals(eToken, aToken);
+            Token expectedToken = eo.get(i);
+            Token actualToken = actualOutput.get(i);
+            assertEquals(expectedToken, actualToken);
         }
 
         // Store expected statements
         List<Statement> expectedStatements = new ArrayList<>();
-        expectedStatements.add(new Statement("FileHeader", "Hello"));
-        expectedStatements.add(new Statement("SingleLineComment", "parser rules"));
-        expectedStatements.add(new GenericStatement("r", "'hello' ID", StatementType.PARSER_RULE));
-        expectedStatements.add(new Statement("SingleLineComment", "lexer rules"));
-        expectedStatements.add(new GenericStatement("ID", "[a-z]+", StatementType.LEXER_RULE));
-        expectedStatements.add(new GenericStatement("WS", "[ \\t\\r\\n]+ -> skip", StatementType.LEXER_RULE));
+        expectedStatements.add(new Statement(StatementType.GRAMMAR_NAME, "Hello"));
+        expectedStatements.add(new Statement(StatementType.SINGLE_LINE_COMMENT, "parser rules"));
+        expectedStatements.add(new Statement(StatementType.PARSER_RULE, "r", "'hello' ID"));
+        expectedStatements.add(new Statement(StatementType.SINGLE_LINE_COMMENT, "lexer rules"));
+        expectedStatements.add(new Statement(StatementType.LEXER_RULE, "ID", "[a-z]+"));
+        expectedStatements.add(new Statement(StatementType.LEXER_RULE, "WS", "[ \\t\\r\\n]+ -> skip"));
 
         // Store actual statements
         List<Statement> actualStatements = new SimpleParser().parse(actualOutput).getStatements();
