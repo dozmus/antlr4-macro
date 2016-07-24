@@ -67,9 +67,11 @@ public final class MacroFileProcessor {
         List<Statement> statements = new SimpleParser().parse(tokens).getStatements();
 
         // Resolve macro definitions
-        // TODO impl
+        // ...
 
         // Write to output file
-        // TODO impl
+        // ...
+
+        // TODO finish
     }
 }

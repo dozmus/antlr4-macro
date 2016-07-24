@@ -34,8 +34,6 @@ public final class FileHelperTest {
 
         in = new Scanner(FileHelper.stringStream("hello100world;!!093"));
         assertEquals("hello100world;!!093", in.next());
-
-        // TODO test all symbols which appear in TokenDefinition
     }
 
     @Test(expected = IllegalArgumentException.class)

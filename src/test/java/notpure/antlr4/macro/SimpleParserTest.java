@@ -79,6 +79,15 @@ public final class SimpleParserTest {
     }
 
     @Test
+    public void parserTestOfMultiLineComment() {
+        final StatementType type = StatementType.MULTI_LINE_COMMENT;
+        assertSingleStatement("/*my comment*/", new Statement(type, "my comment"));
+        assertSingleStatement("/* my comment */", new Statement(type, "my comment"));
+        assertSingleStatement("/*/* my comment */", new Statement(type, "/* my comment"));
+        assertSingleStatement("/*\r\nmy\r\ncomment\r\n*/", new Statement(type, "mycomment"));
+    }
+
+    @Test
     public void parserTestOfInlineElements() {
         // TODO impl
     }
