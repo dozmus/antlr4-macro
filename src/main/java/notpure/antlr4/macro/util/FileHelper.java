@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.processor.util;
+package notpure.antlr4.macro.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * File helper utility functions.
+ * File utility functions.
  */
 public final class FileHelper {
 

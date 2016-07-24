@@ -1,10 +1,10 @@
-package notpure.antlr4.macro.processor.impl;
+package notpure.antlr4.macro.processor;
 
-import notpure.antlr4.macro.processor.model.Parser;
-import notpure.antlr4.macro.processor.model.statement.Statement;
-import notpure.antlr4.macro.processor.model.statement.StatementType;
-import notpure.antlr4.macro.processor.model.token.Token;
-import notpure.antlr4.macro.processor.model.token.TokenDefinition;
+import notpure.antlr4.macro.model.Parser;
+import notpure.antlr4.macro.model.lang.Statement;
+import notpure.antlr4.macro.model.lang.StatementType;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.token.TokenDefinition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

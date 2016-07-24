@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.processor.model.token;
+package notpure.antlr4.macro.model.token;
 
 /**
  * A token.

@@ -1,10 +1,10 @@
-package notpure.antlr4.macro.processor;
+package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.processor.impl.SimpleLexer;
-import notpure.antlr4.macro.processor.impl.SimpleParser;
-import notpure.antlr4.macro.processor.model.statement.Statement;
-import notpure.antlr4.macro.processor.model.statement.StatementType;
-import notpure.antlr4.macro.processor.model.token.Token;
+import notpure.antlr4.macro.processor.SimpleLexer;
+import notpure.antlr4.macro.processor.SimpleParser;
+import notpure.antlr4.macro.model.lang.Statement;
+import notpure.antlr4.macro.model.lang.StatementType;
+import notpure.antlr4.macro.model.token.Token;
 import org.junit.Test;
 
 import java.util.List;

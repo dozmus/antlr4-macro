@@ -1,17 +1,15 @@
-package notpure.antlr4.macro.processor.impl;
+package notpure.antlr4.macro.processor;
 
-import notpure.antlr4.macro.processor.model.Lexer;
-import notpure.antlr4.macro.processor.model.token.Token;
-import notpure.antlr4.macro.processor.model.token.TokenDefinition;
-import notpure.antlr4.macro.processor.util.CharStream;
-import notpure.antlr4.macro.processor.util.FileHelper;
+import notpure.antlr4.macro.model.Lexer;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.token.TokenDefinition;
+import notpure.antlr4.macro.util.CharStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * A simple lexer.

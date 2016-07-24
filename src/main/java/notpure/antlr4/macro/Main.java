@@ -1,7 +1,5 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.processor.MacroFileProcessor;
-
 /**
  * Application entry-point.
  */

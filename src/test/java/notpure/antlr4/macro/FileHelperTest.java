@@ -1,6 +1,6 @@
-package notpure.antlr4.macro.processor;
+package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.processor.util.FileHelper;
+import notpure.antlr4.macro.util.FileHelper;
 import org.junit.Test;
 
 import java.util.Scanner;

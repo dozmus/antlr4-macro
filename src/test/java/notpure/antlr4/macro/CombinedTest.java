@@ -1,10 +1,11 @@
-package notpure.antlr4.macro.processor;
+package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.processor.impl.*;
-import notpure.antlr4.macro.processor.model.statement.Statement;
-import notpure.antlr4.macro.processor.model.statement.StatementType;
-import notpure.antlr4.macro.processor.model.token.Token;
-import notpure.antlr4.macro.processor.model.token.TokenDefinition;
+import notpure.antlr4.macro.processor.SimpleLexer;
+import notpure.antlr4.macro.processor.SimpleParser;
+import notpure.antlr4.macro.model.lang.Statement;
+import notpure.antlr4.macro.model.lang.StatementType;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.token.TokenDefinition;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -13,9 +14,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static notpure.antlr4.macro.processor.util.TokenHelper.getLineTerminatorTokens;
-import static notpure.antlr4.macro.processor.util.TokenHelper.getLiteralTokens;
-import static notpure.antlr4.macro.processor.util.TokenHelper.getTokens;
+import static notpure.antlr4.macro.util.TokenHelper.getLineTerminatorTokens;
+import static notpure.antlr4.macro.util.TokenHelper.getLiteralTokens;
+import static notpure.antlr4.macro.util.TokenHelper.getTokens;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -82,7 +83,7 @@ public final class CombinedTest {
         // Tokenize file input
         List<Token> actualOutput = new ArrayList<>();
 
-        try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\processor\\lexer-input-1.mg4")) {
+        try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\lexer-input-1.mg4")) {
             actualOutput = new SimpleLexer().tokenize(inputStream).getTokens();
         } catch (IOException e) {
             e.printStackTrace();

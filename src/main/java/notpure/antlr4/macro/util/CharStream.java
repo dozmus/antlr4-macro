@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.processor.util;
+package notpure.antlr4.macro.util;
 
 import java.io.InputStream;
 import java.util.Scanner;

@@ -1,8 +1,8 @@
-package notpure.antlr4.macro.processor;
+package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.processor.impl.SimpleLexer;
-import notpure.antlr4.macro.processor.model.token.Token;
-import notpure.antlr4.macro.processor.model.token.TokenDefinition;
+import notpure.antlr4.macro.processor.SimpleLexer;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.token.TokenDefinition;
 import org.junit.Test;
 
 import java.util.ArrayList;

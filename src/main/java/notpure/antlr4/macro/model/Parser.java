@@ -1,7 +1,7 @@
-package notpure.antlr4.macro.processor.model;
+package notpure.antlr4.macro.model;
 
-import notpure.antlr4.macro.processor.model.statement.Statement;
-import notpure.antlr4.macro.processor.model.token.Token;
+import notpure.antlr4.macro.model.lang.Statement;
+import notpure.antlr4.macro.model.token.Token;
 
 import java.util.List;
 

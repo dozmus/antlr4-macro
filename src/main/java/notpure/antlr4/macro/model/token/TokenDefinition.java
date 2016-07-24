@@ -1,6 +1,6 @@
-package notpure.antlr4.macro.processor.model.token;
+package notpure.antlr4.macro.model.token;
 
-import notpure.antlr4.macro.processor.impl.SimpleLexer;
+import notpure.antlr4.macro.processor.SimpleLexer;
 
 import java.util.regex.Pattern;
 
