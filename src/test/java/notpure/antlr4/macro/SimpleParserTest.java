@@ -83,6 +83,11 @@ public final class SimpleParserTest {
         // TODO impl
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void parserTestOfNullInput() {
+        new SimpleParser().parse(null);
+    }
+
     /**
      * Parses the input value into a list of {@link Statement} and ensures that the size is 1 and the only element
      * matches the expectedStatement.

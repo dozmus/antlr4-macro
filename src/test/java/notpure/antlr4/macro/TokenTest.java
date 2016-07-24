@@ -2,9 +2,12 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
+import org.junit.Assert;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 /**
  * A set of tests for {@link notpure.antlr4.macro.model.token.Token}.
@@ -19,27 +22,57 @@ public final class TokenTest {
     @Test
     public void testTokenConstructorForTokenDefinitionParameters() {
         // Literal type
-        Token token1 = new Token(TokenDefinition.ASTERISK);
-        assertEquals(token1.getName(), TokenDefinition.ASTERISK.name());
-        assertEquals(token1.getValue(), TokenDefinition.ASTERISK.getValue());
-
-        Token token2 = new Token(TokenDefinition.NEW_LINE);
-        assertEquals(token2.getName(), TokenDefinition.NEW_LINE.name());
-        assertEquals(token2.getValue(), TokenDefinition.NEW_LINE.getValue());
+        assertToken(TokenDefinition.ASTERISK);
+        assertToken(TokenDefinition.NEW_LINE);
 
         // Special type
-        Token token3 = new Token(TokenDefinition.EOF);
-        assertEquals(token3.getName(), TokenDefinition.EOF.name());
-        assertEquals(token3.getValue(), TokenDefinition.EOF.getValue());
+        assertToken(TokenDefinition.EOF);
     }
 
     @Test
     public void testArrayContains() {
-        // TODO add
+        Token[] tokens = new Token[] {
+                new Token(TokenDefinition.ASTERISK),
+                new Token(TokenDefinition.BACK_SLASH),
+                new Token(TokenDefinition.AND),
+                new Token(TokenDefinition.AT),
+                new Token(TokenDefinition.CARET),
+                new Token(TokenDefinition.CARRIAGE_RETURN),
+                new Token(TokenDefinition.COLON)
+        };
+
+        // Test valid values
+        for (Token token : tokens) {
+            assertTrue(Token.arrayContains(tokens, token));
+        }
+
+        // Test invalid values
+        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.SEMICOLON)));
+        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.NEW_LINE)));
+        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.EOF)));
+        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.LEFT_BRACKET)));
     }
 
     @Test
     public void testArrayToString() {
-        // TODO add
+        Token[] tokens = new Token[] {
+                new Token(TokenDefinition.ASTERISK),
+                new Token(TokenDefinition.BACK_SLASH),
+                new Token(TokenDefinition.AND),
+                new Token(TokenDefinition.AT),
+                new Token(TokenDefinition.CARET),
+                new Token(TokenDefinition.CARRIAGE_RETURN),
+                new Token(TokenDefinition.COLON)
+        };
+
+        String expectedValue = "Token[] { Token(ASTERISK='*'), Token(BACK_SLASH='\\'), Token(AND='&'), Token(AT='@'),"
+                + " Token(CARET='^'), Token(CARRIAGE_RETURN=''), Token(COLON=':') }";
+        assertEquals(expectedValue, Token.toString(tokens));
+    }
+
+    private static void assertToken(TokenDefinition def) {
+        Token token = new Token(def);
+        assertEquals(token.getName(), def.name());
+        assertEquals(token.getValue(), def.getValue());
     }
 }
