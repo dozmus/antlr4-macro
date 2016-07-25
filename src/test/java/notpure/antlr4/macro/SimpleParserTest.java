@@ -136,6 +136,32 @@ public final class SimpleParserTest {
         assertDoubleStatement("HELLO: WORLD; /* comment*/", lexerStatement, mlCommentStatement);
         assertDoubleStatement("HELLO: WORLD; /*comment */", lexerStatement, mlCommentStatement);
         assertDoubleStatement("HELLO: WORLD; /* comment */", lexerStatement, mlCommentStatement);
+
+        // TODO fix code to work for tests below.
+//        assertDoubleStatement("HELLO: WORLD; HELLO: WORLD;", lexerStatement, lexerStatement);
+//        assertDoubleStatement("HELLO:WORLD; HELLO: WORLD;", lexerStatement, lexerStatement);
+//        assertDoubleStatement("HELLO: WORLD; HELLO:WORLD;", lexerStatement, lexerStatement);
+//        assertDoubleStatement("HELLO:WORLD; HELLO:WORLD;", lexerStatement, lexerStatement);
+//        assertDoubleStatement("HELLO:WORLD;HELLO:WORLD;", lexerStatement, lexerStatement);
+//
+//        assertDoubleStatement("HELLO: WORLD; hello: WORLD;", lexerStatement, parserStatement);
+//        assertDoubleStatement("HELLO:WORLD; hello: WORLD;", lexerStatement, parserStatement);
+//        assertDoubleStatement("HELLO: WORLD; hello:WORLD;", lexerStatement, parserStatement);
+//        assertDoubleStatement("HELLO:WORLD;hello: WORLD;", lexerStatement, parserStatement);
+//        assertDoubleStatement("HELLO: WORLD;hello:WORLD;", lexerStatement, parserStatement);
+//        assertDoubleStatement("HELLO:WORLD;hello:WORLD;", lexerStatement, parserStatement);
+//
+//        assertDoubleStatement("/* comment *//* comment */", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/* comment*//*comment*/", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/*comment *//*comment*/", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/*comment*//* comment*/", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/*comment*//*comment */", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/*comment*/ /*comment*/", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/* comment */ /* comment */", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/* comment*/ /*comment*/", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/*comment */ /*comment*/", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/*comment*/ /* comment*/", mlCommentStatement, mlCommentStatement);
+//        assertDoubleStatement("/*comment*/ /*comment */", mlCommentStatement, mlCommentStatement);
     }
 
     @Test(expected = IllegalArgumentException.class)
