@@ -20,7 +20,13 @@ public final class SimpleParser implements Parser {
      * Logger instance.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleParser.class);
-    private static final String FILE_HEADER_TEXT = "grammar";
+    /**
+     * The grammar name text.
+     */
+    private static final String GRAMMAR_NAME_TEXT = "grammar";
+    /**
+     * A list containing the output statements.
+     */
     private final List<Statement> statements = new ArrayList<>();
 
     /**
@@ -31,32 +37,32 @@ public final class SimpleParser implements Parser {
         if (tokens == null)
             throw new IllegalArgumentException("Token list is null.");
 
-        int n = tokens.size();
+        final int n = tokens.size();
 
         for (int idx = 0; idx < n; idx++) {
-            Token token = tokens.get(idx);
-            int nidx = idx + 1;
-            boolean hasMoreTokens = nidx < n;
+            final Token token = tokens.get(idx);
+            final int nextIdx = idx + 1;
+            final boolean hasMoreTokens = nextIdx < n;
 
             if (token.getName().equals(TokenDefinition.EOF.name()))
                 continue;
 
             // TODO impl/finish
-            char c = token.getValue().charAt(0);
+            final char c = token.getValue().charAt(0);
 
-            if (c == '/' && hasMoreTokens && tokens.get(nidx).getValue().length() == 1
-                    && tokens.get(nidx).getValue().equals("/")) { // single-line comment
+            if (c == '/' && hasMoreTokens && tokens.get(nextIdx).getValue().length() == 1
+                    && tokens.get(nextIdx).getValue().equals("/")) { // single-line comment
                 idx += 2; // skip '//'
                 idx = parseSingleLineComment(tokens, idx);
-            } else if (c == '/' && hasMoreTokens && tokens.get(nidx).getValue().length() == 1
-                    && tokens.get(nidx).getValue().equals("*")) { // multi-line comment
+            } else if (c == '/' && hasMoreTokens && tokens.get(nextIdx).getValue().length() == 1
+                    && tokens.get(nextIdx).getValue().equals("*")) { // multi-line comment
                 idx += 2; // skip '/*'
                 idx = parseMultiLineComment(tokens, idx);
             } else if (c == '#') { // macro rule
                 idx = parseStatement(tokens, idx, 1, StatementType.MACRO_RULE);
             } else if (Character.isLowerCase(c)) {
-                if (seekString(tokens, idx, FILE_HEADER_TEXT)) { // grammar header file
-                    idx += FILE_HEADER_TEXT.length(); // skip header text
+                if (seekString(tokens, idx, GRAMMAR_NAME_TEXT)) { // grammar header file
+                    idx += GRAMMAR_NAME_TEXT.length(); // skip header text
                     idx = parseFileHeaderStatement(tokens, idx);
                 } else { // parser rule
                     idx = parseStatement(tokens, idx, (idx > 4 ? -4 : 0), StatementType.PARSER_RULE);
@@ -69,29 +75,26 @@ public final class SimpleParser implements Parser {
     }
 
     private int parseSingleLineComment(List<Token> tokens, int idx) {
-        ParsedToken pair = seekToken(tokens, idx,
-                new TokenTarget(new Token[] { new Token(TokenDefinition.NEW_LINE), new Token(TokenDefinition.EOF) }, false),
-                StatementType.SINGLE_LINE_COMMENT.name(), true);
-        LOGGER.info("Parsed single line comment: {} [nextIdx={}]", pair.getToken(), pair.getNextIdx());
-        statements.add(new Statement(StatementType.SINGLE_LINE_COMMENT, pair.getToken().getValue()));
-        return pair.getNextIdx();
+        return parseCustomStatement(tokens, idx,
+                new TokenTarget(new Token[] { new Token(TokenDefinition.NEW_LINE),
+                        new Token(TokenDefinition.EOF) }, false), StatementType.SINGLE_LINE_COMMENT);
     }
 
     private int parseMultiLineComment(List<Token> tokens, int idx) {
-        ParsedToken pair = seekToken(tokens, idx,
-                new TokenTarget(new Token[] { new Token(TokenDefinition.ASTERISK), new Token(TokenDefinition.FORWARD_SLASH) }, true),
-                StatementType.MULTI_LINE_COMMENT.name(), true);
-        LOGGER.info("Parsed multi line comment: {} [nextIdx={}]", pair.getToken(), pair.getNextIdx());
-        statements.add(new Statement(StatementType.MULTI_LINE_COMMENT, pair.getToken().getValue()));
-        return pair.getNextIdx();
+        return parseCustomStatement(tokens, idx,
+                new TokenTarget(new Token[] { new Token(TokenDefinition.ASTERISK),
+                        new Token(TokenDefinition.FORWARD_SLASH) }, true), StatementType.MULTI_LINE_COMMENT);
     }
 
     private int parseFileHeaderStatement(List<Token> tokens, int idx) {
-        // Parse file header, in form 'grammar {name};'.
-        ParsedToken pair = seekToken(tokens, idx, new TokenTarget(new Token(TokenDefinition.SEMICOLON), false),
-                StatementType.GRAMMAR_NAME.name(), true);
-        LOGGER.info("Parsed grammar name: {} [nextIdx={}]", pair.getToken(), pair.getNextIdx());
-        statements.add(new Statement(StatementType.GRAMMAR_NAME, pair.getToken().getValue()));
+        return parseCustomStatement(tokens, idx, new TokenTarget(new Token(TokenDefinition.SEMICOLON), false),
+                StatementType.GRAMMAR_NAME);
+    }
+
+    private int parseCustomStatement(List<Token> tokens, int idx, TokenTarget tokenTarget, StatementType statementType) {
+        ParsedToken pair = seekToken(tokens, idx, tokenTarget, statementType.name(), true);
+        LOGGER.info("Parsed {}: {} [nextIdx={}]", statementType, pair.getToken(), pair.getNextIdx());
+        statements.add(new Statement(statementType, pair.getToken().getValue()));
         return pair.getNextIdx();
     }
 
@@ -158,7 +161,7 @@ public final class SimpleParser implements Parser {
             } else if (target.isConsecutive() && !tokensContainsConsecutively(tokens, targets, idx)) {
                 outputValue += token.getValue().equals("\n") || token.getValue().equals("\r") ? "" : token.getValue();
             } else {
-                return new ParsedToken(idx + 1, new Token(tokenName, trimOutput ? outputValue.trim() : outputValue));
+                return new ParsedToken(new Token(tokenName, trimOutput ? outputValue.trim() : outputValue), idx + 1);
             }
         }
 
@@ -188,9 +191,9 @@ public final class SimpleParser implements Parser {
         private final int nextIdx;
         private final Token token;
 
-        public ParsedToken(int nextIdx, Token token) {
-            this.nextIdx = nextIdx;
+        public ParsedToken(Token token, int nextIdx) {
             this.token = token;
+            this.nextIdx = nextIdx;
         }
 
         public int getNextIdx() {

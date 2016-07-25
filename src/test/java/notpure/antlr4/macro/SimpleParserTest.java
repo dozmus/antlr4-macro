@@ -85,6 +85,7 @@ public final class SimpleParserTest {
         assertSingleStatement("/* my comment */", new Statement(type, "my comment"));
         assertSingleStatement("/*/* my comment */", new Statement(type, "/* my comment"));
         assertSingleStatement("/*\r\nmy\r\ncomment\r\n*/", new Statement(type, "mycomment"));
+        assertSingleStatement("/**/", new Statement(type, ""));
     }
 
     @Test
