@@ -5,11 +5,9 @@ import notpure.antlr4.macro.model.lang.Statement;
 import notpure.antlr4.macro.model.lang.StatementType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.model.token.TokenListIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,11 +32,10 @@ public final class SimpleParser extends Parser {
         if (tokens == null)
             throw new IllegalArgumentException("Token list is null.");
 
-        TokenListIterator iterator = new TokenListIterator(tokens);
-
-        while (iterator.hasNext()) {
-            Token token = iterator.next();
-            int idx = iterator.getCurrentIndex();
+        for (int idx = 0; idx < tokens.size(); idx++) {
+            Token token = tokens.get(idx);
+            boolean hasNext = idx + 1 < tokens.size();
+            Token nextToken = hasNext ? tokens.get(idx + 1) : null;
 
             if (token.getName().equals(TokenDefinition.EOF.name()))
                 continue;
@@ -46,10 +43,10 @@ public final class SimpleParser extends Parser {
             // TODO impl/finish
             final char c = token.getValue().charAt(0);
 
-            if (c == '/' && iterator.hasNext() && iterator.peek().getValue().equals("/")) { // single-line comment
+            if (c == '/' && hasNext && nextToken.getValue().equals("/")) { // single-line comment
                 idx += 2; // skip '//'
                 idx = parseSingleLineComment(tokens, idx);
-            } else if (c == '/' && iterator.hasNext() && iterator.peek().getValue().equals("*")) { // multi-line comment
+            } else if (c == '/' && hasNext && nextToken.getValue().equals("*")) { // multi-line comment
                 idx += 2; // skip '/*'
                 idx = parseMultiLineComment(tokens, idx);
             } else if (c == '#') { // macro rule
@@ -63,11 +60,6 @@ public final class SimpleParser extends Parser {
                 }
             } else if (Character.isUpperCase(c)) { // lexer rule
                 idx = parseStatement(tokens, idx, (idx > 1 ? -1 : 0), StatementType.LEXER_RULE) - 1;
-            }
-
-            // Update index
-            if (idx != iterator.getCurrentIndex()) {
-                iterator.setCurrentIndex(idx);
             }
         }
         return this;
