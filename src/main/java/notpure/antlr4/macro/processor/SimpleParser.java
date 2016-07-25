@@ -46,12 +46,10 @@ public final class SimpleParser extends Parser {
             // TODO impl/finish
             final char c = token.getValue().charAt(0);
 
-            if (c == '/' && hasMoreTokens && tokens.get(nextIdx).getValue().length() == 1
-                    && tokens.get(nextIdx).getValue().equals("/")) { // single-line comment
+            if (c == '/' && hasMoreTokens && tokens.get(nextIdx).getValue().equals("/")) { // single-line comment
                 idx += 2; // skip '//'
                 idx = parseSingleLineComment(tokens, idx);
-            } else if (c == '/' && hasMoreTokens && tokens.get(nextIdx).getValue().length() == 1
-                    && tokens.get(nextIdx).getValue().equals("*")) { // multi-line comment
+            } else if (c == '/' && hasMoreTokens && tokens.get(nextIdx).getValue().equals("*")) { // multi-line comment
                 idx += 2; // skip '/*'
                 idx = parseMultiLineComment(tokens, idx);
             } else if (c == '#') { // macro rule
@@ -59,12 +57,12 @@ public final class SimpleParser extends Parser {
             } else if (Character.isLowerCase(c)) {
                 if (seekString(tokens, idx, GRAMMAR_NAME_TEXT)) { // grammar header file
                     idx += GRAMMAR_NAME_TEXT.length(); // skip header text
-                    idx = parseFileHeaderStatement(tokens, idx);
+                    idx = parseFileHeaderStatement(tokens, idx) - 1;
                 } else { // parser rule
-                    idx = parseStatement(tokens, idx, (idx > 4 ? -4 : 0), StatementType.PARSER_RULE);
+                    idx = parseStatement(tokens, idx, (idx > 4 ? -4 : 0), StatementType.PARSER_RULE) - 1;
                 }
             } else if (Character.isUpperCase(c)) { // lexer rule
-                idx = parseStatement(tokens, idx, (idx > 1 ? -1 : 0), StatementType.LEXER_RULE);
+                idx = parseStatement(tokens, idx, (idx > 1 ? -1 : 0), StatementType.LEXER_RULE) - 1;
             }
         }
         return this;
@@ -148,9 +146,11 @@ public final class SimpleParser extends Parser {
 
             // TODO make sure this is all right
             if (!target.isConsecutive() && !Token.arrayContains(targets, token)) {
-                outputValue += token.getValue().equals("\n") || token.getValue().equals("\r") ? "" : token.getValue();
+                if (token.getValue() != null)
+                    outputValue += token.getValue().equals("\n") || token.getValue().equals("\r") ? "" : token.getValue();
             } else if (target.isConsecutive() && !tokensContainsConsecutively(tokens, targets, idx)) {
-                outputValue += token.getValue().equals("\n") || token.getValue().equals("\r") ? "" : token.getValue();
+                if (token.getValue() != null)
+                    outputValue += token.getValue().equals("\n") || token.getValue().equals("\r") ? "" : token.getValue();
             } else {
                 return new ParsedToken(new Token(tokenName, trimOutput ? outputValue.trim() : outputValue), idx + 1);
             }
@@ -159,7 +159,7 @@ public final class SimpleParser extends Parser {
         // Throw exception
         String type = target.isConsecutive() ? "consecutive" : "any of";
         throw new IndexOutOfBoundsException("Unable to find " + type + " target token"
-                + (targets.length > 1 ? "s" : "") + ": " + Token.toString(targets));
+                + (targets.length > 1 ? "s" : "") + ": " + Token.toString(targets) + " while seeking for " + tokenName);
     }
 
     private static boolean tokensContainsConsecutively(List<Token> tokens, Token[] targets, int idx) {

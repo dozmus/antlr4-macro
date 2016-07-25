@@ -90,7 +90,52 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfInlineElements() {
-        // TODO impl
+        // Statements
+        final Statement mlCommentStatement = new Statement(StatementType.MULTI_LINE_COMMENT, "comment");
+        final Statement slCommentStatement = new Statement(StatementType.SINGLE_LINE_COMMENT, "comment");
+        final Statement grammarStatement = new Statement(StatementType.GRAMMAR_NAME, "HelloWorld");
+        final Statement parserStatement = new Statement(StatementType.PARSER_RULE, "hello", "WORLD");
+        final Statement lexerStatement = new Statement(StatementType.LEXER_RULE, "HELLO", "WORLD");
+
+        // Tests
+        assertDoubleStatement("grammar HelloWorld;//comment", grammarStatement, slCommentStatement);
+        assertDoubleStatement("grammar HelloWorld;// comment", grammarStatement, slCommentStatement);
+        assertDoubleStatement("grammar HelloWorld; //comment", grammarStatement, slCommentStatement);
+        assertDoubleStatement("grammar HelloWorld; // comment", grammarStatement, slCommentStatement);
+
+        assertDoubleStatement("grammar HelloWorld;/*comment*/", grammarStatement, mlCommentStatement);
+        assertDoubleStatement("grammar HelloWorld;/* comment*/", grammarStatement, mlCommentStatement);
+        assertDoubleStatement("grammar HelloWorld;/*comment */", grammarStatement, mlCommentStatement);
+        assertDoubleStatement("grammar HelloWorld; /*comment*/", grammarStatement, mlCommentStatement);
+        assertDoubleStatement("grammar HelloWorld; /* comment*/", grammarStatement, mlCommentStatement);
+        assertDoubleStatement("grammar HelloWorld; /*comment */", grammarStatement, mlCommentStatement);
+        assertDoubleStatement("grammar HelloWorld; /* comment */", grammarStatement, mlCommentStatement);
+
+        assertDoubleStatement("hello: WORLD;//comment", parserStatement, slCommentStatement);
+        assertDoubleStatement("hello: WORLD;// comment", parserStatement, slCommentStatement);
+        assertDoubleStatement("hello: WORLD; //comment", parserStatement, slCommentStatement);
+        assertDoubleStatement("hello: WORLD; // comment", parserStatement, slCommentStatement);
+
+        assertDoubleStatement("hello: WORLD;/*comment*/", parserStatement, mlCommentStatement);
+        assertDoubleStatement("hello: WORLD;/* comment*/", parserStatement, mlCommentStatement);
+        assertDoubleStatement("hello: WORLD;/*comment */", parserStatement, mlCommentStatement);
+        assertDoubleStatement("hello: WORLD; /*comment*/", parserStatement, mlCommentStatement);
+        assertDoubleStatement("hello: WORLD; /* comment*/", parserStatement, mlCommentStatement);
+        assertDoubleStatement("hello: WORLD; /*comment */", parserStatement, mlCommentStatement);
+        assertDoubleStatement("hello: WORLD; /* comment */", parserStatement, mlCommentStatement);
+
+        assertDoubleStatement("HELLO: WORLD;//comment", lexerStatement, slCommentStatement);
+        assertDoubleStatement("HELLO: WORLD;// comment", lexerStatement, slCommentStatement);
+        assertDoubleStatement("HELLO: WORLD; //comment", lexerStatement, slCommentStatement);
+        assertDoubleStatement("HELLO: WORLD; // comment", lexerStatement, slCommentStatement);
+
+        assertDoubleStatement("HELLO: WORLD;/*comment*/", lexerStatement, mlCommentStatement);
+        assertDoubleStatement("HELLO: WORLD;/* comment*/", lexerStatement, mlCommentStatement);
+        assertDoubleStatement("HELLO: WORLD;/*comment */", lexerStatement, mlCommentStatement);
+        assertDoubleStatement("HELLO: WORLD; /*comment*/", lexerStatement, mlCommentStatement);
+        assertDoubleStatement("HELLO: WORLD; /* comment*/", lexerStatement, mlCommentStatement);
+        assertDoubleStatement("HELLO: WORLD; /*comment */", lexerStatement, mlCommentStatement);
+        assertDoubleStatement("HELLO: WORLD; /* comment */", lexerStatement, mlCommentStatement);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -109,6 +154,20 @@ public final class SimpleParserTest {
         // Assert values
         assertEquals(1, output.size());
         assertEquals(expectedStatement, output.get(0));
+    }
+
+    /**
+     * Parses the input value into a list of {@link Statement} and ensures that the size is 1 and the only element
+     * matches the expectedStatement.
+     */
+    private static void assertDoubleStatement(String input, Statement expectedStatement1, Statement expectedStatement2) {
+        // Generate statements
+        List<Statement> output = statements(input);
+
+        // Assert values
+        assertEquals(2, output.size());
+        assertEquals(expectedStatement1, output.get(0));
+        assertEquals(expectedStatement2, output.get(1));
     }
 
     /**
