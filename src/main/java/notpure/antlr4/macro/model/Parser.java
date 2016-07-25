@@ -3,14 +3,19 @@ package notpure.antlr4.macro.model;
 import notpure.antlr4.macro.model.lang.Statement;
 import notpure.antlr4.macro.model.token.Token;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * A Parser - parses a {@link List} of {@link Token} into a {@link List} of {@link Statement}.
  */
-public interface Parser {
+public abstract class Parser {
 
-    Parser parse(List<Token> tokens);
+    private final List<Statement> statements = new ArrayList<>();
 
-    List<Statement> getStatements();
+    public abstract Parser parse(List<Token> tokens);
+
+    public List<Statement> getStatements() {
+        return statements;
+    }
 }

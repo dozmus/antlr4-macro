@@ -4,6 +4,7 @@ import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.util.FileHelper;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,11 +12,15 @@ import java.util.List;
  */
 public abstract class Lexer {
 
+    private final List<Token> tokens = new ArrayList<>();
+
     public Lexer tokenize(String input) {
         return tokenize(FileHelper.stringStream(input));
     }
 
     public abstract Lexer tokenize(InputStream inputStream);
 
-    public abstract List<Token> getTokens();
+    public List<Token> getTokens() {
+        return tokens;
+    }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * A simple LL(*) parser.
  */
-public final class SimpleParser implements Parser {
+public final class SimpleParser extends Parser {
 
     /**
      * Logger instance.
@@ -24,10 +24,6 @@ public final class SimpleParser implements Parser {
      * The grammar name text.
      */
     private static final String GRAMMAR_NAME_TEXT = "grammar";
-    /**
-     * A list containing the output statements.
-     */
-    private final List<Statement> statements = new ArrayList<>();
 
     /**
      * Parses the tokens into more complicated ones.
@@ -94,7 +90,7 @@ public final class SimpleParser implements Parser {
     private int parseCustomStatement(List<Token> tokens, int idx, TokenTarget tokenTarget, StatementType statementType) {
         ParsedToken pair = seekToken(tokens, idx, tokenTarget, statementType.name(), true);
         LOGGER.info("Parsed {}: {} [nextIdx={}]", statementType, pair.getToken(), pair.getNextIdx());
-        statements.add(new Statement(statementType, pair.getToken().getValue()));
+        getStatements().add(new Statement(statementType, pair.getToken().getValue()));
         return pair.getNextIdx();
     }
 
@@ -112,18 +108,13 @@ public final class SimpleParser implements Parser {
 
         // Add to statements list and continue
         Statement statement = fromParsedToken(identifier, value, type);
-        statements.add(statement);
+        getStatements().add(statement);
         LOGGER.info("Parsed statement {}: {}={}", type, statement.getIdentifier(), statement.getValue());
         return idx;
     }
 
     private static Statement fromParsedToken(ParsedToken identifier, ParsedToken value, StatementType type) {
         return new Statement(type, identifier.getToken().getValue(), value.getToken().getValue());
-    }
-
-    @Override
-    public List<Statement> getStatements() {
-        return statements;
     }
 
     private static boolean seekString(List<Token> tokens, int currentIdx, String target) {

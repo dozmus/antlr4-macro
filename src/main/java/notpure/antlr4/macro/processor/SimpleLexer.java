@@ -20,7 +20,6 @@ public final class SimpleLexer extends Lexer {
      * Logger instance.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
-    private final List<Token> tokens = new ArrayList<>();
 
     /**
      * Tokenizes the input stream into simple tokens.
@@ -46,11 +45,6 @@ public final class SimpleLexer extends Lexer {
         return this;
     }
 
-    @Override
-    public List<Token> getTokens() {
-        return tokens;
-    }
-
     /**
      * Attempts to match the provided value with a {@link TokenDefinition}, if this is successful the new token
      * is added to {@link SimpleLexer#tokens}.
@@ -58,14 +52,14 @@ public final class SimpleLexer extends Lexer {
      */
     private void tryTokenize(String value) {
         if (value == null) {
-            tokens.add(new Token(TokenDefinition.EOF));
+            getTokens().add(new Token(TokenDefinition.EOF));
             LOGGER.info("Current value: '{}' has been mapped to '{}'", "null", TokenDefinition.EOF.name());
             return;
         } else {
             for (TokenDefinition def : TokenDefinition.values()) {
                 if (def.matches(value)) {
                     LOGGER.info("Current value: '{}' has been mapped to '{}'", value.trim(), def.name());
-                    tokens.add(new Token(def.name(), value));
+                    getTokens().add(new Token(def.name(), value));
                     return;
                 }
             }
