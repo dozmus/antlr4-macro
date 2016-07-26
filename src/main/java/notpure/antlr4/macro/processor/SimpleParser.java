@@ -5,6 +5,7 @@ import notpure.antlr4.macro.model.lang.Statement;
 import notpure.antlr4.macro.model.lang.StatementType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
+import notpure.antlr4.macro.util.ArrayHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public final class SimpleParser extends Parser {
             boolean hasNext = idx + 1 < tokens.size();
             Token nextToken = hasNext ? tokens.get(idx + 1) : null;
 
-            if (token.getName().equals(TokenDefinition.EOF.name()))
+            if (token.nameEquals(TokenDefinition.EOF))
                 continue;
 
             // TODO impl/finish
@@ -142,7 +143,7 @@ public final class SimpleParser extends Parser {
             Token token = tokens.get(idx);
 
             // TODO make sure this is all right
-            if (!target.isConsecutive() && !Token.arrayContains(targets, token)) {
+            if (!target.isConsecutive() && !ArrayHelper.arrayContains(targets, token)) {
                 if (token.getValue() != null)
                     outputValue += token.getValue().equals("\n") || token.getValue().equals("\r") ? "" : token.getValue();
             } else if (target.isConsecutive() && !tokensContainsConsecutively(tokens, targets, idx)) {
@@ -154,9 +155,9 @@ public final class SimpleParser extends Parser {
         }
 
         // Throw exception
-        String type = target.isConsecutive() ? "consecutive" : "any of";
-        throw new IndexOutOfBoundsException("Unable to find " + type + " target token"
-                + (targets.length > 1 ? "s" : "") + ": " + Token.toString(targets) + " while seeking for " + tokenName);
+        String seekType = target.isConsecutive() ? "consecutive" : "any of";
+        throw new IndexOutOfBoundsException("Unable to find " + seekType + " target token"
+                + (targets.length > 1 ? "s" : "") + ": " + ArrayHelper.toString(targets) + " while seeking for " + tokenName);
     }
 
     private static boolean tokensContainsConsecutively(List<Token> tokens, Token[] targets, int idx) {

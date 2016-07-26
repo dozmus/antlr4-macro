@@ -2,7 +2,7 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import org.junit.Assert;
+import notpure.antlr4.macro.util.ArrayHelper;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -43,14 +43,14 @@ public final class TokenTest {
 
         // Test valid values
         for (Token token : tokens) {
-            assertTrue(Token.arrayContains(tokens, token));
+            assertTrue(ArrayHelper.arrayContains(tokens, token));
         }
 
         // Test invalid values
-        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.SEMICOLON)));
-        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.NEW_LINE)));
-        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.EOF)));
-        assertFalse(Token.arrayContains(tokens, new Token(TokenDefinition.LEFT_BRACKET)));
+        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.SEMICOLON)));
+        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.NEW_LINE)));
+        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.EOF)));
+        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.LEFT_BRACKET)));
     }
 
     @Test
@@ -67,7 +67,7 @@ public final class TokenTest {
 
         String expectedValue = "Token[] { Token(ASTERISK='*'), Token(BACK_SLASH='\\'), Token(AND='&'), Token(AT='@'),"
                 + " Token(CARET='^'), Token(CARRIAGE_RETURN=''), Token(COLON=':') }";
-        assertEquals(expectedValue, Token.toString(tokens));
+        assertEquals(expectedValue, ArrayHelper.toString(tokens));
     }
 
     private static void assertToken(TokenDefinition def) {

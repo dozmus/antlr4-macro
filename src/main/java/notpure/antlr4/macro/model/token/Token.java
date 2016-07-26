@@ -21,31 +21,6 @@ public final class Token {
         this.value = value;
     }
 
-    public static boolean arrayContains(Token[] src, Token target) {
-        // TODO extract into an array helper class
-        for (Token t : src) {
-            if (t.equals(target))
-                return true;
-        }
-        return false;
-    }
-
-    public static String toString(Token[] targets) {
-        final int n = targets.length;
-        StringBuilder sb = new StringBuilder();
-        sb.append("Token[] { ");
-
-        for (int i = 0; i < n; i++) {
-            sb.append(targets[i].toString());
-
-            if (i + 1 < n)
-                sb.append(",");
-            sb.append(" ");
-        }
-
-        return sb.append("}").toString();
-    }
-
     public String getName() {
         return name;
     }
@@ -59,7 +34,8 @@ public final class Token {
         if (obj instanceof Token) {
             Token other = (Token) obj;
             return other.getName().equals(name)
-                    && (value == null || other.getValue().equals(value));
+                    && (value == null && other.getValue() == null
+                    || value != null && other.getValue() != null && other.getValue().equals(value));
         }
         return false;
     }
