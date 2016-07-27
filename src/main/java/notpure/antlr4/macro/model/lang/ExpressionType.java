@@ -1,9 +1,9 @@
 package notpure.antlr4.macro.model.lang;
 
 /**
- * The type of a {@link Statement}.
+ * The type of a {@link Expression}.
  */
-public enum StatementType {
+public enum ExpressionType {
     GRAMMAR_NAME,
     SINGLE_LINE_COMMENT,
     MULTI_LINE_COMMENT,

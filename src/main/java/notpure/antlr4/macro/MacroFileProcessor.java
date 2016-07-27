@@ -2,7 +2,7 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.processor.SimpleParser;
-import notpure.antlr4.macro.model.lang.Statement;
+import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.util.FileHelper;
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ public final class MacroFileProcessor {
         }
 
         // Parser
-        List<Statement> statements = new SimpleParser().parse(tokens).getStatements();
+        List<Expression> expressions = new SimpleParser().parse(tokens).getExpressions();
 
         // Resolve macro definitions
         // ...

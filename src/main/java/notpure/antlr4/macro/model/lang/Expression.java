@@ -1,21 +1,21 @@
 package notpure.antlr4.macro.model.lang;
 
 /**
- * A parsed statement.
+ * A parsed expression.
  */
-public final class Statement {
+public final class Expression {
 
     private final String identifier;
     private final String value;
-    private final StatementType type;
+    private final ExpressionType type;
 
-    public Statement(StatementType type, String identifier, String value) {
+    public Expression(ExpressionType type, String identifier, String value) {
         this.identifier = identifier;
         this.value = value;
         this.type = type;
     }
 
-    public Statement(StatementType type, String value) {
+    public Expression(ExpressionType type, String value) {
         this(type, null, value);
     }
 
@@ -27,7 +27,7 @@ public final class Statement {
         return value;
     }
 
-    public StatementType getType() {
+    public ExpressionType getType() {
         return type;
     }
 
@@ -38,9 +38,9 @@ public final class Statement {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Statement))
+        if (!(obj instanceof Expression))
             return false;
-        Statement other = (Statement) obj;
+        Expression other = (Expression) obj;
         return other.getType() == type && other.getValue().equals(value)
                 && (other.getIdentifier() == null && identifier == null
                 || other.getIdentifier() != null && identifier != null && other.getIdentifier().equals(identifier));

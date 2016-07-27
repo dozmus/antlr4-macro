@@ -2,8 +2,8 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.processor.SimpleParser;
-import notpure.antlr4.macro.model.lang.Statement;
-import notpure.antlr4.macro.model.lang.StatementType;
+import notpure.antlr4.macro.model.lang.Expression;
+import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import org.junit.Test;
 
@@ -18,130 +18,130 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
-        final StatementType type = StatementType.MACRO_RULE;
-        final Statement statement1 = new Statement(type, "HELLO_WORLD", "'HELLO'");
-        assertSingleStatement("#P:w;", new Statement(type, "P", "w"));
-        assertSingleStatement("#HELLO290woRld:'HELLO';", new Statement(type, "HELLO290woRld", "'HELLO'"));
-        assertSingleStatement("#HELLO:HELLO;", new Statement(type, "HELLO", "HELLO"));
-        assertSingleStatement("#HELLO_WORLD  :'HELLO';", statement1);
-        assertSingleStatement("#HELLO_WORLD  : 'HELLO' ;", statement1);
-        assertSingleStatement("#HELLO_WORLD : 'HELLO' ;", statement1);
-        assertSingleStatement("#HELLO_WORLD: 'HELLO' ;", statement1);
-        assertSingleStatement("#hELLO290woRld : 'HELLO' ;", new Statement(type, "hELLO290woRld", "'HELLO'"));
-        assertSingleStatement("#hELLO290woRld: 'HELLO' ;", new Statement(type, "hELLO290woRld", "'HELLO'"));
-        assertSingleStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", new Statement(type, "HELLO290woRld", "'HELLO'"));
-        assertSingleStatement("#HELLO290woRld  : 'HELLO' ;", new Statement(type, "HELLO290woRld", "'HELLO'"));
-        assertSingleStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", new Statement(type, "HELLO290woRld", "'HELLO|WORLD'"));
-        assertSingleStatement("#HELLO290woRld  : \r\nHELLO\r\n|WORLD;", new Statement(type, "HELLO290woRld", "HELLO|WORLD"));
+        final ExpressionType type = ExpressionType.MACRO_RULE;
+        final Expression expression1 = new Expression(type, "HELLO_WORLD", "'HELLO'");
+        assertSingleStatement("#P:w;", new Expression(type, "P", "w"));
+        assertSingleStatement("#HELLO290woRld:'HELLO';", new Expression(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO:HELLO;", new Expression(type, "HELLO", "HELLO"));
+        assertSingleStatement("#HELLO_WORLD  :'HELLO';", expression1);
+        assertSingleStatement("#HELLO_WORLD  : 'HELLO' ;", expression1);
+        assertSingleStatement("#HELLO_WORLD : 'HELLO' ;", expression1);
+        assertSingleStatement("#HELLO_WORLD: 'HELLO' ;", expression1);
+        assertSingleStatement("#hELLO290woRld : 'HELLO' ;", new Expression(type, "hELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#hELLO290woRld: 'HELLO' ;", new Expression(type, "hELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO290woRld\r\n: \r\n'HELLO' ;", new Expression(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO290woRld  : 'HELLO' ;", new Expression(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';", new Expression(type, "HELLO290woRld", "'HELLO|WORLD'"));
+        assertSingleStatement("#HELLO290woRld  : \r\nHELLO\r\n|WORLD;", new Expression(type, "HELLO290woRld", "HELLO|WORLD"));
     }
 
     @Test
     public void parserTestOfParserRuleDefinitions() {
-        final StatementType type = StatementType.PARSER_RULE;
-        final Statement statement1 = new Statement(type, "helloWorld", "'HELLO'");
-        assertSingleStatement("p:w;", new Statement(type, "p", "w"));
-        assertSingleStatement("hello2903:'HELLO';", new Statement(type, "hello2903", "'HELLO'"));
-        assertSingleStatement("hello:HELLO;", new Statement(type, "hello", "HELLO"));
-        assertSingleStatement("helloWorld  :'HELLO';", statement1);
-        assertSingleStatement("helloWorld  : 'HELLO' ;", statement1);
-        assertSingleStatement("helloWorld : 'HELLO' ;", statement1);
-        assertSingleStatement("helloWorld: 'HELLO' ;", statement1);
-        assertSingleStatement("helloWorld\r\n: \r\n'HELLO' ;", statement1);
-        assertSingleStatement("helloWorld  : 'HELLO' ;", statement1);
-        assertSingleStatement("helloWorld  :'HELLO\r\n|WORLD';", new Statement(type, "helloWorld", "'HELLO|WORLD'"));
-        assertSingleStatement("helloWorld  :HELLO\r\n|WORLD;", new Statement(type, "helloWorld", "HELLO|WORLD"));
+        final ExpressionType type = ExpressionType.PARSER_RULE;
+        final Expression expression1 = new Expression(type, "helloWorld", "'HELLO'");
+        assertSingleStatement("p:w;", new Expression(type, "p", "w"));
+        assertSingleStatement("hello2903:'HELLO';", new Expression(type, "hello2903", "'HELLO'"));
+        assertSingleStatement("hello:HELLO;", new Expression(type, "hello", "HELLO"));
+        assertSingleStatement("helloWorld  :'HELLO';", expression1);
+        assertSingleStatement("helloWorld  : 'HELLO' ;", expression1);
+        assertSingleStatement("helloWorld : 'HELLO' ;", expression1);
+        assertSingleStatement("helloWorld: 'HELLO' ;", expression1);
+        assertSingleStatement("helloWorld\r\n: \r\n'HELLO' ;", expression1);
+        assertSingleStatement("helloWorld  : 'HELLO' ;", expression1);
+        assertSingleStatement("helloWorld  :'HELLO\r\n|WORLD';", new Expression(type, "helloWorld", "'HELLO|WORLD'"));
+        assertSingleStatement("helloWorld  :HELLO\r\n|WORLD;", new Expression(type, "helloWorld", "HELLO|WORLD"));
     }
 
     @Test
     public void parserTestOfLexerRuleDefinitions() {
-        final StatementType type = StatementType.LEXER_RULE;
-        final Statement statement1 = new Statement(type, "HELLOWORLD", "'HELLO'");
-        assertSingleStatement("P:w;", new Statement(type, "P", "w"));
-        assertSingleStatement("HELLO290woRld:'HELLO';", new Statement(type, "HELLO290woRld", "'HELLO'"));
-        assertSingleStatement("HELLO:HELLO;", new Statement(type, "HELLO", "HELLO"));
-        assertSingleStatement("HELLOWORLD  :'HELLO';", statement1);
-        assertSingleStatement("HELLOWORLD  : 'HELLO' ;", statement1);
-        assertSingleStatement("HELLOWORLD : 'HELLO' ;",statement1);
-        assertSingleStatement("HELLOWORLD: 'HELLO' ;", statement1);
-        assertSingleStatement("HELLOWORLD\r\n: \r\n'HELLO' ;", statement1);
-        assertSingleStatement("HELLOWORLD  : 'HELLO' ;", statement1);
-        assertSingleStatement("HELLOWORLD  :'HELLO\r\n|WORLD';", new Statement(type, "HELLOWORLD", "'HELLO|WORLD'"));
-        assertSingleStatement("HELLOWORLD  :HELLO\r\n|WORLD;", new Statement(type, "HELLOWORLD", "HELLO|WORLD"));
+        final ExpressionType type = ExpressionType.LEXER_RULE;
+        final Expression expression1 = new Expression(type, "HELLOWORLD", "'HELLO'");
+        assertSingleStatement("P:w;", new Expression(type, "P", "w"));
+        assertSingleStatement("HELLO290woRld:'HELLO';", new Expression(type, "HELLO290woRld", "'HELLO'"));
+        assertSingleStatement("HELLO:HELLO;", new Expression(type, "HELLO", "HELLO"));
+        assertSingleStatement("HELLOWORLD  :'HELLO';", expression1);
+        assertSingleStatement("HELLOWORLD  : 'HELLO' ;", expression1);
+        assertSingleStatement("HELLOWORLD : 'HELLO' ;", expression1);
+        assertSingleStatement("HELLOWORLD: 'HELLO' ;", expression1);
+        assertSingleStatement("HELLOWORLD\r\n: \r\n'HELLO' ;", expression1);
+        assertSingleStatement("HELLOWORLD  : 'HELLO' ;", expression1);
+        assertSingleStatement("HELLOWORLD  :'HELLO\r\n|WORLD';", new Expression(type, "HELLOWORLD", "'HELLO|WORLD'"));
+        assertSingleStatement("HELLOWORLD  :HELLO\r\n|WORLD;", new Expression(type, "HELLOWORLD", "HELLO|WORLD"));
     }
 
     @Test
     public void parserTestOfFileHeaderDefinitions() {
-        final StatementType type = StatementType.GRAMMAR_NAME;
-        assertSingleStatement("grammar myGrammar;", new Statement(type, "myGrammar"));
-        assertSingleStatement("grammar myGrammar2;", new Statement(type, "myGrammar2"));
-        assertSingleStatement("grammar 2;", new Statement(type, "2"));
-        assertSingleStatement("grammar m;", new Statement(type, "m"));
+        final ExpressionType type = ExpressionType.GRAMMAR_NAME;
+        assertSingleStatement("grammar myGrammar;", new Expression(type, "myGrammar"));
+        assertSingleStatement("grammar myGrammar2;", new Expression(type, "myGrammar2"));
+        assertSingleStatement("grammar 2;", new Expression(type, "2"));
+        assertSingleStatement("grammar m;", new Expression(type, "m"));
     }
 
     @Test
     public void parserTestOfMultiLineComment() {
-        final StatementType type = StatementType.MULTI_LINE_COMMENT;
-        assertSingleStatement("/*my comment*/", new Statement(type, "my comment"));
-        assertSingleStatement("/* my comment */", new Statement(type, "my comment"));
-        assertSingleStatement("/*/* my comment */", new Statement(type, "/* my comment"));
-        assertSingleStatement("/*\r\nmy\r\ncomment\r\n*/", new Statement(type, "mycomment"));
-        assertSingleStatement("/**/", new Statement(type, ""));
+        final ExpressionType type = ExpressionType.MULTI_LINE_COMMENT;
+        assertSingleStatement("/*my comment*/", new Expression(type, "my comment"));
+        assertSingleStatement("/* my comment */", new Expression(type, "my comment"));
+        assertSingleStatement("/*/* my comment */", new Expression(type, "/* my comment"));
+        assertSingleStatement("/*\r\nmy\r\ncomment\r\n*/", new Expression(type, "mycomment"));
+        assertSingleStatement("/**/", new Expression(type, ""));
     }
 
     @Test
     public void parserTestOfInlineElements() {
         // Statements
-        final Statement mlCommentStatement = new Statement(StatementType.MULTI_LINE_COMMENT, "comment");
-        final Statement slCommentStatement = new Statement(StatementType.SINGLE_LINE_COMMENT, "comment");
-        final Statement grammarStatement = new Statement(StatementType.GRAMMAR_NAME, "HelloWorld");
-        final Statement parserStatement = new Statement(StatementType.PARSER_RULE, "hello", "WORLD");
-        final Statement lexerStatement = new Statement(StatementType.LEXER_RULE, "HELLO", "WORLD");
+        final Expression mlCommentExpression = new Expression(ExpressionType.MULTI_LINE_COMMENT, "comment");
+        final Expression slCommentExpression = new Expression(ExpressionType.SINGLE_LINE_COMMENT, "comment");
+        final Expression grammarExpression = new Expression(ExpressionType.GRAMMAR_NAME, "HelloWorld");
+        final Expression parserExpression = new Expression(ExpressionType.PARSER_RULE, "hello", "WORLD");
+        final Expression lexerExpression = new Expression(ExpressionType.LEXER_RULE, "HELLO", "WORLD");
 
         // Tests
-        assertDoubleStatement("grammar HelloWorld;//comment", grammarStatement, slCommentStatement);
-        assertDoubleStatement("grammar HelloWorld;// comment", grammarStatement, slCommentStatement);
-        assertDoubleStatement("grammar HelloWorld; //comment", grammarStatement, slCommentStatement);
-        assertDoubleStatement("grammar HelloWorld; // comment", grammarStatement, slCommentStatement);
+        assertDoubleStatement("grammar HelloWorld;//comment", grammarExpression, slCommentExpression);
+        assertDoubleStatement("grammar HelloWorld;// comment", grammarExpression, slCommentExpression);
+        assertDoubleStatement("grammar HelloWorld; //comment", grammarExpression, slCommentExpression);
+        assertDoubleStatement("grammar HelloWorld; // comment", grammarExpression, slCommentExpression);
 
-        assertDoubleStatement("grammar HelloWorld;/*comment*/", grammarStatement, mlCommentStatement);
-        assertDoubleStatement("grammar HelloWorld;/* comment*/", grammarStatement, mlCommentStatement);
-        assertDoubleStatement("grammar HelloWorld;/*comment */", grammarStatement, mlCommentStatement);
-        assertDoubleStatement("grammar HelloWorld; /*comment*/", grammarStatement, mlCommentStatement);
-        assertDoubleStatement("grammar HelloWorld; /* comment*/", grammarStatement, mlCommentStatement);
-        assertDoubleStatement("grammar HelloWorld; /*comment */", grammarStatement, mlCommentStatement);
-        assertDoubleStatement("grammar HelloWorld; /* comment */", grammarStatement, mlCommentStatement);
+        assertDoubleStatement("grammar HelloWorld;/*comment*/", grammarExpression, mlCommentExpression);
+        assertDoubleStatement("grammar HelloWorld;/* comment*/", grammarExpression, mlCommentExpression);
+        assertDoubleStatement("grammar HelloWorld;/*comment */", grammarExpression, mlCommentExpression);
+        assertDoubleStatement("grammar HelloWorld; /*comment*/", grammarExpression, mlCommentExpression);
+        assertDoubleStatement("grammar HelloWorld; /* comment*/", grammarExpression, mlCommentExpression);
+        assertDoubleStatement("grammar HelloWorld; /*comment */", grammarExpression, mlCommentExpression);
+        assertDoubleStatement("grammar HelloWorld; /* comment */", grammarExpression, mlCommentExpression);
 
-        assertDoubleStatement("hello: WORLD;//comment", parserStatement, slCommentStatement);
-        assertDoubleStatement("hello: WORLD;// comment", parserStatement, slCommentStatement);
-        assertDoubleStatement("hello: WORLD; //comment", parserStatement, slCommentStatement);
-        assertDoubleStatement("hello: WORLD; // comment", parserStatement, slCommentStatement);
+        assertDoubleStatement("hello: WORLD;//comment", parserExpression, slCommentExpression);
+        assertDoubleStatement("hello: WORLD;// comment", parserExpression, slCommentExpression);
+        assertDoubleStatement("hello: WORLD; //comment", parserExpression, slCommentExpression);
+        assertDoubleStatement("hello: WORLD; // comment", parserExpression, slCommentExpression);
 
-        assertDoubleStatement("hello: WORLD;/*comment*/", parserStatement, mlCommentStatement);
-        assertDoubleStatement("hello: WORLD;/* comment*/", parserStatement, mlCommentStatement);
-        assertDoubleStatement("hello: WORLD;/*comment */", parserStatement, mlCommentStatement);
-        assertDoubleStatement("hello: WORLD; /*comment*/", parserStatement, mlCommentStatement);
-        assertDoubleStatement("hello: WORLD; /* comment*/", parserStatement, mlCommentStatement);
-        assertDoubleStatement("hello: WORLD; /*comment */", parserStatement, mlCommentStatement);
-        assertDoubleStatement("hello: WORLD; /* comment */", parserStatement, mlCommentStatement);
+        assertDoubleStatement("hello: WORLD;/*comment*/", parserExpression, mlCommentExpression);
+        assertDoubleStatement("hello: WORLD;/* comment*/", parserExpression, mlCommentExpression);
+        assertDoubleStatement("hello: WORLD;/*comment */", parserExpression, mlCommentExpression);
+        assertDoubleStatement("hello: WORLD; /*comment*/", parserExpression, mlCommentExpression);
+        assertDoubleStatement("hello: WORLD; /* comment*/", parserExpression, mlCommentExpression);
+        assertDoubleStatement("hello: WORLD; /*comment */", parserExpression, mlCommentExpression);
+        assertDoubleStatement("hello: WORLD; /* comment */", parserExpression, mlCommentExpression);
 
-        assertDoubleStatement("HELLO: WORLD;//comment", lexerStatement, slCommentStatement);
-        assertDoubleStatement("HELLO: WORLD;// comment", lexerStatement, slCommentStatement);
-        assertDoubleStatement("HELLO: WORLD; //comment", lexerStatement, slCommentStatement);
-        assertDoubleStatement("HELLO: WORLD; // comment", lexerStatement, slCommentStatement);
+        assertDoubleStatement("HELLO: WORLD;//comment", lexerExpression, slCommentExpression);
+        assertDoubleStatement("HELLO: WORLD;// comment", lexerExpression, slCommentExpression);
+        assertDoubleStatement("HELLO: WORLD; //comment", lexerExpression, slCommentExpression);
+        assertDoubleStatement("HELLO: WORLD; // comment", lexerExpression, slCommentExpression);
 
-        assertDoubleStatement("HELLO: WORLD;/*comment*/", lexerStatement, mlCommentStatement);
-        assertDoubleStatement("HELLO: WORLD;/* comment*/", lexerStatement, mlCommentStatement);
-        assertDoubleStatement("HELLO: WORLD;/*comment */", lexerStatement, mlCommentStatement);
-        assertDoubleStatement("HELLO: WORLD; /*comment*/", lexerStatement, mlCommentStatement);
-        assertDoubleStatement("HELLO: WORLD; /* comment*/", lexerStatement, mlCommentStatement);
-        assertDoubleStatement("HELLO: WORLD; /*comment */", lexerStatement, mlCommentStatement);
-        assertDoubleStatement("HELLO: WORLD; /* comment */", lexerStatement, mlCommentStatement);
+        assertDoubleStatement("HELLO: WORLD;/*comment*/", lexerExpression, mlCommentExpression);
+        assertDoubleStatement("HELLO: WORLD;/* comment*/", lexerExpression, mlCommentExpression);
+        assertDoubleStatement("HELLO: WORLD;/*comment */", lexerExpression, mlCommentExpression);
+        assertDoubleStatement("HELLO: WORLD; /*comment*/", lexerExpression, mlCommentExpression);
+        assertDoubleStatement("HELLO: WORLD; /* comment*/", lexerExpression, mlCommentExpression);
+        assertDoubleStatement("HELLO: WORLD; /*comment */", lexerExpression, mlCommentExpression);
+        assertDoubleStatement("HELLO: WORLD; /* comment */", lexerExpression, mlCommentExpression);
 
         // TODO fix code to work for tests below.
-        assertDoubleStatement("HELLO: WORLD; HELLO: WORLD;", lexerStatement, lexerStatement);
-        assertDoubleStatement("HELLO:WORLD; HELLO: WORLD;", lexerStatement, lexerStatement);
-        assertDoubleStatement("HELLO: WORLD; HELLO:WORLD;", lexerStatement, lexerStatement);
-        assertDoubleStatement("HELLO:WORLD; HELLO:WORLD;", lexerStatement, lexerStatement);
+        assertDoubleStatement("HELLO: WORLD; HELLO: WORLD;", lexerExpression, lexerExpression);
+        assertDoubleStatement("HELLO:WORLD; HELLO: WORLD;", lexerExpression, lexerExpression);
+        assertDoubleStatement("HELLO: WORLD; HELLO:WORLD;", lexerExpression, lexerExpression);
+        assertDoubleStatement("HELLO:WORLD; HELLO:WORLD;", lexerExpression, lexerExpression);
 //        assertDoubleStatement("HELLO:WORLD;HELLO:WORLD;", lexerStatement, lexerStatement);
 
 //        assertDoubleStatement("HELLO: WORLD; hello: WORLD;", lexerStatement, parserStatement);
@@ -150,7 +150,14 @@ public final class SimpleParserTest {
 //        assertDoubleStatement("HELLO:WORLD;hello: WORLD;", lexerStatement, parserStatement);
 //        assertDoubleStatement("HELLO: WORLD;hello:WORLD;", lexerStatement, parserStatement);
 //        assertDoubleStatement("HELLO:WORLD;hello:WORLD;", lexerStatement, parserStatement);
-//
+
+        assertDoubleStatement("hello: WORLD; HELLO: WORLD;", parserExpression, lexerExpression);
+        assertDoubleStatement("hello:WORLD; HELLO: WORLD;", parserExpression, lexerExpression);
+        assertDoubleStatement("hello: WORLD; HELLO:WORLD;", parserExpression, lexerExpression);
+//        assertDoubleStatement("hello:WORLD;HELLO: WORLD;", parserStatement, lexerStatement);
+//        assertDoubleStatement("hello: WORLD;HELLO:WORLD;", parserStatement, lexerStatement);
+//        assertDoubleStatement("hello:WORLD;HELLO:WORLD;", parserStatement, lexerStatement);
+
 //        assertDoubleStatement("/* comment *//* comment */", mlCommentStatement, mlCommentStatement);
 //        assertDoubleStatement("/* comment*//*comment*/", mlCommentStatement, mlCommentStatement);
 //        assertDoubleStatement("/*comment *//*comment*/", mlCommentStatement, mlCommentStatement);
@@ -170,37 +177,37 @@ public final class SimpleParserTest {
     }
 
     /**
-     * Parses the input value into a list of {@link Statement} and ensures that the size is 1 and the only element
+     * Parses the input value into a list of {@link Expression} and ensures that the size is 1 and the only element
      * matches the expectedStatement.
      */
-    private static void assertSingleStatement(String input, Statement expectedStatement) {
+    private static void assertSingleStatement(String input, Expression expectedExpression) {
         // Generate statements
-        List<Statement> output = statements(input);
+        List<Expression> output = statements(input);
 
         // Assert values
         assertEquals(1, output.size());
-        assertEquals(expectedStatement, output.get(0));
+        assertEquals(expectedExpression, output.get(0));
     }
 
     /**
-     * Parses the input value into a list of {@link Statement} and ensures that the size is 1 and the only element
+     * Parses the input value into a list of {@link Expression} and ensures that the size is 1 and the only element
      * matches the expectedStatement.
      */
-    private static void assertDoubleStatement(String input, Statement expectedStatement1, Statement expectedStatement2) {
+    private static void assertDoubleStatement(String input, Expression expectedExpression1, Expression expectedExpression2) {
         // Generate statements
-        List<Statement> output = statements(input);
+        List<Expression> output = statements(input);
 
         // Assert values
         assertEquals(2, output.size());
-        assertEquals(expectedStatement1, output.get(0));
-        assertEquals(expectedStatement2, output.get(1));
+        assertEquals(expectedExpression1, output.get(0));
+        assertEquals(expectedExpression2, output.get(1));
     }
 
     /**
-     * Generates a list of {@link Statement} from the given input.
+     * Generates a list of {@link Expression} from the given input.
      */
-    private static List<Statement> statements(String input) {
+    private static List<Expression> statements(String input) {
         List<Token> tokens = new SimpleLexer().tokenize(input).getTokens();
-        return new SimpleParser().parse(tokens).getStatements();
+        return new SimpleParser().parse(tokens).getExpressions();
     }
 }

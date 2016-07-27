@@ -2,8 +2,8 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.processor.SimpleParser;
-import notpure.antlr4.macro.model.lang.Statement;
-import notpure.antlr4.macro.model.lang.StatementType;
+import notpure.antlr4.macro.model.lang.Expression;
+import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
 import org.junit.Test;
@@ -100,25 +100,25 @@ public final class CombinedTest {
         }
 
         // Store expected statements
-        List<Statement> expectedStatements = new ArrayList<>();
-        expectedStatements.add(new Statement(StatementType.GRAMMAR_NAME, "Hello"));
-        expectedStatements.add(new Statement(StatementType.SINGLE_LINE_COMMENT, "parser rules"));
-        expectedStatements.add(new Statement(StatementType.PARSER_RULE, "r", "'hello' ID"));
-        expectedStatements.add(new Statement(StatementType.SINGLE_LINE_COMMENT, "lexer rules"));
-        expectedStatements.add(new Statement(StatementType.LEXER_RULE, "ID", "[a-z]+"));
-        expectedStatements.add(new Statement(StatementType.LEXER_RULE, "WS", "[ \\t\\r\\n]+ -> skip"));
+        List<Expression> expectedExpressions = new ArrayList<>();
+        expectedExpressions.add(new Expression(ExpressionType.GRAMMAR_NAME, "Hello"));
+        expectedExpressions.add(new Expression(ExpressionType.SINGLE_LINE_COMMENT, "parser rules"));
+        expectedExpressions.add(new Expression(ExpressionType.PARSER_RULE, "r", "'hello' ID"));
+        expectedExpressions.add(new Expression(ExpressionType.SINGLE_LINE_COMMENT, "lexer rules"));
+        expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "ID", "[a-z]+"));
+        expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", "[ \\t\\r\\n]+ -> skip"));
 
         // Store actual statements
-        List<Statement> actualStatements = new SimpleParser().parse(actualOutput).getStatements();
+        List<Expression> actualExpressions = new SimpleParser().parse(actualOutput).getExpressions();
 
         // Compare outputs
-        assertEquals(expectedStatements.size(), actualStatements.size());
+        assertEquals(expectedExpressions.size(), actualExpressions.size());
 
         // Iterate over generated statements
-        for (int i = 0; i < expectedStatements.size(); i++) {
-            Statement expectedStatement = expectedStatements.get(i);
-            Statement actualStatement = actualStatements.get(i);
-            assertEquals(expectedStatement, actualStatement);
+        for (int i = 0; i < expectedExpressions.size(); i++) {
+            Expression expectedExpression = expectedExpressions.get(i);
+            Expression actualExpression = actualExpressions.get(i);
+            assertEquals(expectedExpression, actualExpression);
         }
     }
 }
