@@ -159,6 +159,14 @@ public final class SimpleParserTest {
         assertDoubleStatement("hello: WORLD; /*comment */", parserExpression, mlCommentExpression);
         assertDoubleStatement("hello: WORLD; /* comment */", parserExpression, mlCommentExpression);
 
+        assertDoubleStatement("/*comment*/hello: WORLD;", mlCommentExpression, parserExpression);
+        assertDoubleStatement("/* comment*/hello: WORLD;", mlCommentExpression, parserExpression);
+        assertDoubleStatement("/*comment */hello: WORLD;", mlCommentExpression, parserExpression);
+        assertDoubleStatement("/*comment*/hello: WORLD;", mlCommentExpression, parserExpression);
+        assertDoubleStatement("/* comment*/hello: WORLD;", mlCommentExpression, parserExpression);
+        assertDoubleStatement("/*comment */hello: WORLD;", mlCommentExpression, parserExpression);
+        assertDoubleStatement("/* comment */hello: WORLD;", mlCommentExpression, parserExpression);
+
         assertDoubleStatement("HELLO: WORLD;//comment", lexerExpression, slCommentExpression);
         assertDoubleStatement("HELLO: WORLD;// comment", lexerExpression, slCommentExpression);
         assertDoubleStatement("HELLO: WORLD; //comment", lexerExpression, slCommentExpression);
@@ -172,7 +180,6 @@ public final class SimpleParserTest {
         assertDoubleStatement("HELLO: WORLD; /*comment */", lexerExpression, mlCommentExpression);
         assertDoubleStatement("HELLO: WORLD; /* comment */", lexerExpression, mlCommentExpression);
 
-        // TODO fix code to work for tests below.
         assertDoubleStatement("HELLO: WORLD; HELLO: WORLD;", lexerExpression, lexerExpression);
         assertDoubleStatement("HELLO:WORLD; HELLO: WORLD;", lexerExpression, lexerExpression);
         assertDoubleStatement("HELLO: WORLD; HELLO:WORLD;", lexerExpression, lexerExpression);
