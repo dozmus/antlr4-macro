@@ -8,39 +8,49 @@ import java.util.regex.Pattern;
  * Definitions for the {@link SimpleLexer}.
  */
 public enum TokenDefinition {
+    /* Letters / Digits */
     LETTER("[A-Za-z]", ValueType.REGEX),
     DIGIT("[0-9]", ValueType.REGEX),
-    HASH("#"),
-    SEMICOLON(";"),
-    COLON(":"),
-    SINGLE_QUOTE("'"),
-    DOUBLE_QUOTE("\""),
-    UNDERSCORE("_"),
+    /* Brackets */
     LEFT_BRACKET("("),
     RIGHT_BRACKET(")"),
-    VERTICAL_LINE("|"),
-    QUESTION_MARK("?"),
-    ASTERISK("*"),
-    PLUS("+"),
-    EQUALS("="),
-    BACK_SLASH("\\"),
-    FORWARD_SLASH("/"),
-    MODULO("%"),
-    EXCLAMATION_MARK("!"),
-    AND("&"),
-    AT("@"),
-    CARET("^"),
-    TILDE("~"),
-    DOLLAR("$"),
-    POUND("£"),
-    HYPHEN("-"),
-    LESS_THAN("<"),
-    GREATER_THAN(">"),
     LEFT_SQUARE_BRACKET("["),
     RIGHT_SQUARE_BRACKET("]"),
-    SPACE(" "),
+    /* Math symbols */
+    PLUS("+"),
+    HYPHEN("-"),
+    ASTERISK("*"),
+    EQUALS("="),
+    PERCENT("%"),
+    LESS_THAN("<"),
+    GREATER_THAN(">"),
+    /* Punctuation */
+    EXCLAMATION_MARK("!"),
+    AMPERSAND("&"),
+    QUESTION_MARK("?"),
+    SINGLE_QUOTE("'"),
+    DOUBLE_QUOTE("\""),
+    /* Other */
+    HASH("#"),
+    GRAVE_ACCENT("`"),
+    CARET("^"),
+    SEMICOLON(";"),
+    COLON(":"),
+    UNDERSCORE("_"),
+    VERTICAL_LINE("|"),
+    BACK_SLASH("\\"),
+    FORWARD_SLASH("/"),
+    COMMERCIAL_AT("@"),
+    TILDE("~"),
+    /* Currencies */
+    DOLLAR("$"),
+    POUND("£"),
+    EURO("€"),
+    /* Escape sequences / white space */
     CARRIAGE_RETURN("\r"),
     NEW_LINE("\n"),
+    TAB("\t"),
+    SPACE(" "),
     /**
      * End of file, unique token.
      */
@@ -72,8 +82,8 @@ public enum TokenDefinition {
                 return input.equals(value);
             case REGEX:
                 return pattern.matcher(input).matches();
-            default:
             case SPECIAL:
+            default:
                 return false;
         }
     }

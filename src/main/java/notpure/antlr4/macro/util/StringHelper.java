@@ -1,12 +1,12 @@
 package notpure.antlr4.macro.util;
 
 /**
- * Created by pure on 29/07/2016.
+ * A set of utility methods yielding String outputs.
  */
 public final class StringHelper {
 
     /**
-     * Formats the given char for printing.
+     * Formats the given char for printing by escaping escape sequences, i.e. '\n' -> "\\n".
      * @return
      */
     public static String toPretty(char c) {
