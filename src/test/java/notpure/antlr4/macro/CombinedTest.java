@@ -1,11 +1,11 @@
 package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.processor.SimpleLexer;
-import notpure.antlr4.macro.processor.SimpleParser;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
+import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.junit.Test;
 
 import java.io.FileInputStream;

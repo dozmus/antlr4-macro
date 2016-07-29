@@ -1,10 +1,10 @@
 package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.processor.SimpleLexer;
-import notpure.antlr4.macro.processor.SimpleParser;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.junit.Test;
 
 import java.util.List;
@@ -142,33 +142,33 @@ public final class SimpleParserTest {
         assertDoubleStatement("HELLO:WORLD; HELLO: WORLD;", lexerExpression, lexerExpression);
         assertDoubleStatement("HELLO: WORLD; HELLO:WORLD;", lexerExpression, lexerExpression);
         assertDoubleStatement("HELLO:WORLD; HELLO:WORLD;", lexerExpression, lexerExpression);
-//        assertDoubleStatement("HELLO:WORLD;HELLO:WORLD;", lexerStatement, lexerStatement);
+        assertDoubleStatement("HELLO:WORLD;HELLO:WORLD;", lexerExpression, lexerExpression);
 
-//        assertDoubleStatement("HELLO: WORLD; hello: WORLD;", lexerStatement, parserStatement);
-//        assertDoubleStatement("HELLO:WORLD; hello: WORLD;", lexerStatement, parserStatement);
-//        assertDoubleStatement("HELLO: WORLD; hello:WORLD;", lexerStatement, parserStatement);
-//        assertDoubleStatement("HELLO:WORLD;hello: WORLD;", lexerStatement, parserStatement);
-//        assertDoubleStatement("HELLO: WORLD;hello:WORLD;", lexerStatement, parserStatement);
-//        assertDoubleStatement("HELLO:WORLD;hello:WORLD;", lexerStatement, parserStatement);
+        assertDoubleStatement("HELLO: WORLD; hello: WORLD;", lexerExpression, parserExpression);
+        assertDoubleStatement("HELLO:WORLD; hello: WORLD;", lexerExpression, parserExpression);
+        assertDoubleStatement("HELLO: WORLD; hello:WORLD;", lexerExpression, parserExpression);
+        assertDoubleStatement("HELLO:WORLD;hello: WORLD;", lexerExpression, parserExpression);
+        assertDoubleStatement("HELLO: WORLD;hello:WORLD;", lexerExpression, parserExpression);
+        assertDoubleStatement("HELLO:WORLD;hello:WORLD;", lexerExpression, parserExpression);
 
         assertDoubleStatement("hello: WORLD; HELLO: WORLD;", parserExpression, lexerExpression);
         assertDoubleStatement("hello:WORLD; HELLO: WORLD;", parserExpression, lexerExpression);
         assertDoubleStatement("hello: WORLD; HELLO:WORLD;", parserExpression, lexerExpression);
-//        assertDoubleStatement("hello:WORLD;HELLO: WORLD;", parserStatement, lexerStatement);
-//        assertDoubleStatement("hello: WORLD;HELLO:WORLD;", parserStatement, lexerStatement);
-//        assertDoubleStatement("hello:WORLD;HELLO:WORLD;", parserStatement, lexerStatement);
+        assertDoubleStatement("hello:WORLD;HELLO: WORLD;", parserExpression, lexerExpression);
+        assertDoubleStatement("hello: WORLD;HELLO:WORLD;", parserExpression, lexerExpression);
+        assertDoubleStatement("hello:WORLD;HELLO:WORLD;", parserExpression, lexerExpression);
 
-//        assertDoubleStatement("/* comment *//* comment */", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/* comment*//*comment*/", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/*comment *//*comment*/", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/*comment*//* comment*/", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/*comment*//*comment */", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/*comment*/ /*comment*/", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/* comment */ /* comment */", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/* comment*/ /*comment*/", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/*comment */ /*comment*/", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/*comment*/ /* comment*/", mlCommentStatement, mlCommentStatement);
-//        assertDoubleStatement("/*comment*/ /*comment */", mlCommentStatement, mlCommentStatement);
+        assertDoubleStatement("/* comment *//* comment */", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/* comment*//*comment*/", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/*comment *//*comment*/", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/*comment*//* comment*/", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/*comment*//*comment */", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/*comment*/ /*comment*/", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/* comment */ /* comment */", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/* comment*/ /*comment*/", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/*comment */ /*comment*/", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/*comment*/ /* comment*/", mlCommentExpression, mlCommentExpression);
+        assertDoubleStatement("/*comment*/ /*comment */", mlCommentExpression, mlCommentExpression);
     }
 
     @Test(expected = IllegalArgumentException.class)
