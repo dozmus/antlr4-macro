@@ -19,8 +19,10 @@ public final class FileHelperTest {
     public void testParseFileName() {
         assertEquals("C:/ANTLR4/antlr4-macro", FileHelper.parseFileName("C:/ANTLR4/antlr4-macro.jar"));
         assertEquals("/ANTLR4/antlr4-macro", FileHelper.parseFileName("/ANTLR4/antlr4-macro.jar"));
+        assertEquals("ANTLR4/antlr4-macro", FileHelper.parseFileName("ANTLR4/antlr4-macro.jar"));
         assertEquals("C:/ANTLR4/antlr4.macro", FileHelper.parseFileName("C:/ANTLR4/antlr4.macro.jar"));
         assertEquals("/ANTLR4/antlr4.macro", FileHelper.parseFileName("/ANTLR4/antlr4.macro.jar"));
+        assertEquals("ANTLR4/antlr4.macro", FileHelper.parseFileName("ANTLR4/antlr4.macro.jar"));
         assertEquals("antlr4macro", FileHelper.parseFileName("antlr4macro"));
     }
 
