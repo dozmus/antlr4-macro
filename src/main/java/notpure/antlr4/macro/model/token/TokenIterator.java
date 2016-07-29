@@ -95,17 +95,22 @@ public final class TokenIterator implements Iterator<Token> {
 
         while (hasNext()) {
             // Check if time to stop
-            if ((!target.isConsecutiveMatch() && ArrayHelper.arrayContains(target.getTokens(), peek()))
-                    || consecutiveMatch(target)) {
+            if (anyMatch(target) || consecutiveMatch(target)) {
                 return trimOutput ? value.trim() : value;
             } else { // else aggregate
                 Token token = next();
 
-                if (!isNewLine(token))
+                if (omitNewLines && !isNewLine(token))
+                    value += token.getValue();
+                else if (!omitNewLines)
                     value += token.getValue();
             }
         }
         return null; // TODO throw exception
+    }
+
+    private boolean anyMatch(TokenTarget target) {
+        return !target.isConsecutiveMatch() && ArrayHelper.arrayContains(target.getTokens(), peek());
     }
 
     private boolean consecutiveMatch(TokenTarget target) {
@@ -118,5 +123,31 @@ public final class TokenIterator implements Iterator<Token> {
             }
         }
         return true;
+    }
+
+    /**
+     * TokenTarget for {@link TokenIterator#aggregateValues(TokenTarget, boolean, boolean)}.
+     */
+    public static final class TokenTarget {
+
+        private Token[] tokens;
+        private boolean consecutiveMatch;
+
+        public TokenTarget(Token[] tokens, boolean consecutiveMatch) {
+            this.tokens = tokens;
+            this.consecutiveMatch = consecutiveMatch;
+        }
+
+        public TokenTarget(Token token, boolean consecutiveMatch) {
+            this(new Token[]{token}, consecutiveMatch);
+        }
+
+        public Token[] getTokens() {
+            return tokens;
+        }
+
+        public boolean isConsecutiveMatch() {
+            return consecutiveMatch;
+        }
     }
 }
