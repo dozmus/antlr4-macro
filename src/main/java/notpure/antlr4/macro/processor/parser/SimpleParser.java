@@ -5,6 +5,8 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenIterator;
 import notpure.antlr4.macro.processor.parser.impl.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,10 @@ import java.util.List;
  */
 public final class SimpleParser extends Parser {
 
+    /**
+     * Logger instance.
+     */
+    private static final Logger LOGGER = LoggerFactory.getLogger(GrammarRuleParser.class);
     private final List<ExpressionParser> parsers = new ArrayList<>();
 
     public SimpleParser() {
@@ -32,7 +38,15 @@ public final class SimpleParser extends Parser {
             ExpressionParser parser = getParser(it);
 
             if (parser != null) {
-                Expression expr = parser.parse(it);
+                Expression expr;
+
+                try {
+                     expr = parser.parse(it);
+                } catch (ParserException e) {
+                    LOGGER.error("Error parsing: {}", e.getMessage());
+                    e.printStackTrace();
+                    return this;
+                }
 
                 if (expr != null)
                     getExpressions().add(expr);

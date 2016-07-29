@@ -90,7 +90,8 @@ public final class TokenIterator implements Iterator<Token> {
         return amt;
     }
 
-    public String aggregateValues(TokenTarget target, boolean omitNewLines, boolean trimOutput) {
+    public String aggregateValues(TokenTarget target, boolean omitNewLines, boolean trimOutput)
+            throws ArrayIndexOutOfBoundsException {
         String value = "";
 
         while (hasNext()) {
@@ -106,7 +107,7 @@ public final class TokenIterator implements Iterator<Token> {
                     value += token.getValue();
             }
         }
-        return null; // TODO throw exception
+        throw new ArrayIndexOutOfBoundsException("Could not find token target.");
     }
 
     private boolean anyMatch(TokenTarget target) {
@@ -123,6 +124,14 @@ public final class TokenIterator implements Iterator<Token> {
             }
         }
         return true;
+    }
+
+    public boolean skip(TokenDefinition semicolon) {
+        if (peek().nameEquals(semicolon)) {
+            next();
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -6,6 +6,7 @@ import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.model.token.TokenIterator;
 import notpure.antlr4.macro.processor.parser.ExpressionParser;
+import notpure.antlr4.macro.processor.parser.ParserException;
 
 /**
  * Created by pure on 28/07/2016.
@@ -16,9 +17,15 @@ public final class SingleLineCommentParser implements ExpressionParser {
             new Token[]{new Token(TokenDefinition.EOF), new Token(TokenDefinition.NEW_LINE)}, false);
 
     @Override
-    public Expression parse(TokenIterator it) {
+    public Expression parse(TokenIterator it) throws ParserException {
         it.skip(2); // skip '//'
-        String value = it.aggregateValues(TARGET_TOKEN, true, true);
+        String value;
+
+        try {
+            value = it.aggregateValues(TARGET_TOKEN, true, true);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            throw new ParserException(getClass(), "Failed to parse single-line comment, did not find ending symbols EOF or new line.");
+        }
         return new Expression(ExpressionType.SINGLE_LINE_COMMENT, value);
     }
 

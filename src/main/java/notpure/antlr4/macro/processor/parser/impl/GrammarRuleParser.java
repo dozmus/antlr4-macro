@@ -6,6 +6,7 @@ import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.model.token.TokenIterator;
 import notpure.antlr4.macro.processor.parser.ExpressionParser;
+import notpure.antlr4.macro.processor.parser.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,19 +31,38 @@ public abstract class GrammarRuleParser implements ExpressionParser {
     }
 
     @Override
-    public Expression parse(TokenIterator it) {
-        // skip hash if macro rule
+    public Expression parse(TokenIterator it) throws ParserException {
+        // Skip hash if macro rule
         if (type == ExpressionType.MACRO_RULE)
-            it.skip(1); // skip '#'
+            it.skip(TokenDefinition.HASH); // skip '#'
+        String identifier;
 
-        String identifier = it.aggregateValues(RULE_IDENTIFIER_TARGET_TOKEN, true, true);
+        try {
+            identifier = it.aggregateValues(RULE_IDENTIFIER_TARGET_TOKEN, true, true);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            throw new ParserException(getClass(), "Expected colon after grammar rule identifier of type " + type);
+        }
         it.skipAllWhitespace();
-        it.skip(1); // skip ':'
-        it.skipAllWhitespace();
-        String value = it.aggregateValues(RULE_VALUE_TARGET_TOKEN, true, true);
-        it.skipAllWhitespace();
-        it.skip(1); // skip ';'
 
+        if (!it.skip(TokenDefinition.COLON)) {
+            throw new ParserException(getClass(), "Expected colon after grammar rule identifier of type " + type);
+        }
+
+        it.skipAllWhitespace();
+        String value;
+
+        try {
+            value = it.aggregateValues(RULE_VALUE_TARGET_TOKEN, true, true);
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            throw new ParserException(getClass(), "Expected semi-colon after grammar rule value of type " + type);
+        }
+        it.skipAllWhitespace();
+
+        if (!it.skip(TokenDefinition.SEMICOLON)) {
+            throw new ParserException(getClass(), "Expected semi-colon after grammar rule value of type " + type);
+        }
+
+        // Construct expression
         Expression expr = new Expression(type, identifier, value);
         LOGGER.info("Parsed {}", expr);
         return expr;

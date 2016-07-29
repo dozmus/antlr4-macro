@@ -8,7 +8,7 @@ import notpure.antlr4.macro.model.token.TokenIterator;
  */
 public interface ExpressionParser {
 
-    Expression parse(TokenIterator it);
+    Expression parse(TokenIterator it) throws ParserException;
 
     boolean validate(TokenIterator it);
 }
