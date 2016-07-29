@@ -35,6 +35,8 @@ public abstract class GrammarRuleParser implements ExpressionParser {
         // Skip hash if macro rule
         if (type == ExpressionType.MACRO_RULE)
             it.skip(TokenDefinition.HASH); // skip '#'
+
+        // Parse identifier
         String identifier;
 
         try {
@@ -43,12 +45,10 @@ public abstract class GrammarRuleParser implements ExpressionParser {
             throw new ParserException(getClass(), "Expected colon after grammar rule identifier of type " + type);
         }
         it.skipAllWhitespace();
-
-        if (!it.skip(TokenDefinition.COLON)) {
-            throw new ParserException(getClass(), "Expected colon after grammar rule identifier of type " + type);
-        }
-
+        it.skip(TokenDefinition.COLON);
         it.skipAllWhitespace();
+
+        // Parse value
         String value;
 
         try {
@@ -57,10 +57,7 @@ public abstract class GrammarRuleParser implements ExpressionParser {
             throw new ParserException(getClass(), "Expected semi-colon after grammar rule value of type " + type);
         }
         it.skipAllWhitespace();
-
-        if (!it.skip(TokenDefinition.SEMICOLON)) {
-            throw new ParserException(getClass(), "Expected semi-colon after grammar rule value of type " + type);
-        }
+        it.skip(TokenDefinition.SEMICOLON);
 
         // Construct expression
         Expression expr = new Expression(type, identifier, value);

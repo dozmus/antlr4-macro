@@ -21,7 +21,7 @@ public final class GrammarNameParser implements ExpressionParser {
     public Expression parse(TokenIterator it) throws ParserException {
         it.skip(GRAMMAR_TEXT.length()); // skip 'grammar'
 
-        // Skip white space in between, need at least one
+        // Skip white space in between identifier and value, need at least one
         if (it.skipAllWhitespace() == 0) {
             throw new ParserException(getClass(), "Expected whitespace between 'grammar' and its name.");
         }
@@ -32,10 +32,7 @@ public final class GrammarNameParser implements ExpressionParser {
         } catch (ArrayIndexOutOfBoundsException ex) {
             throw new ParserException(getClass(), "Expected semi-colon after grammar name.");
         }
-
-        if (!it.skip(TokenDefinition.SEMICOLON)) {
-            throw new ParserException(getClass(), "Expected semi-colon after grammar name.");
-        }
+        it.skip(TokenDefinition.SEMICOLON);
         return new Expression(ExpressionType.GRAMMAR_NAME, value);
     }
 
