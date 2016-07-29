@@ -25,12 +25,18 @@ public final class GrammarNameParser implements ExpressionParser {
         if (it.skipAllWhitespace() == 0) {
             throw new ParserException(getClass(), "Expected whitespace between 'grammar' and its name.");
         }
+
+        // Parse value
         String value;
 
         try {
             value = it.aggregateValues(TARGET_TOKEN, true, true);
         } catch (ArrayIndexOutOfBoundsException ex) {
             throw new ParserException(getClass(), "Expected semi-colon after grammar name.");
+        }
+
+        if (value.trim().length() == 0) {
+            throw new ParserException(getClass(), "Expected value after grammar name.");
         }
         it.skip(TokenDefinition.SEMICOLON);
         return new Expression(ExpressionType.GRAMMAR_NAME, value);

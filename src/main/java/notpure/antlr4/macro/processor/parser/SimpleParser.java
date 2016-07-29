@@ -20,6 +20,7 @@ public final class SimpleParser extends Parser {
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(GrammarRuleParser.class);
     private final List<ExpressionParser> parsers = new ArrayList<>();
+    private boolean errorParsing;
 
     public SimpleParser() {
         initParsers();
@@ -44,6 +45,7 @@ public final class SimpleParser extends Parser {
                 } catch (ParserException e) {
                     LOGGER.error("Error parsing: {}", e.getMessage());
                     e.printStackTrace();
+                    errorParsing = true;
                     return this;
                 }
 
@@ -57,9 +59,9 @@ public final class SimpleParser extends Parser {
     }
 
     private void initParsers() {
-        parsers.add(new GrammarNameParser());
-        parsers.add(new SingleLineCommentParser());
         parsers.add(new MultiLineCommentParser());
+        parsers.add(new SingleLineCommentParser());
+        parsers.add(new GrammarNameParser());
         parsers.add(new LexerRuleParser());
         parsers.add(new ParserRuleParser());
         parsers.add(new MacroRuleParser());
@@ -72,5 +74,9 @@ public final class SimpleParser extends Parser {
             }
         }
         return null;
+    }
+
+    public boolean errorOccurredParsing() {
+        return errorParsing;
     }
 }

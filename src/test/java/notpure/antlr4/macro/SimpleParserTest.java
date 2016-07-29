@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A set of tests for {@link SimpleParser}. These tests rely on {@link SimpleLexerTest} passing.
@@ -227,5 +228,77 @@ public final class SimpleParserTest {
     @Test(expected = IllegalArgumentException.class)
     public void parserTestOfNullInput() {
         new SimpleParser().parse(null);
+    }
+
+    @Test
+    public void parserTestOfInvalidGrammarNameParsing1() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("grammar myGrammar"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidGrammarNameParsing2() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("grammarmyGrammar;"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidGrammarNameParsing3() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("grammar ;"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidLexerRuleParsing1() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("HELLO WORLD;"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidLexerRuleParsing2() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("HELLO:WORLD"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidLexerRuleParsing3() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("HELLO:;"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidMacroRuleParsing1() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("#HELLO WORLD;"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidMacroRuleParsing2() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("#HELLO:WORLD"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidMacroRuleParsing3() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("#HELLO:;"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidParserRuleParsing1() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("hello world;"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidParserRuleParsing2() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("hello:world"));
+        assertTrue(sp.errorOccurredParsing());
+    }
+
+    @Test
+    public void parserTestOfInvalidParserRuleParsing3() {
+        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("hello:;"));
+        assertTrue(sp.errorOccurredParsing());
     }
 }
