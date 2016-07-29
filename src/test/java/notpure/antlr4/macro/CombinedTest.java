@@ -1,10 +1,10 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
+import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.junit.Test;
 
@@ -14,9 +14,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static notpure.antlr4.macro.util.TokenHelper.getLineTerminatorTokens;
-import static notpure.antlr4.macro.util.TokenHelper.getLiteralTokens;
-import static notpure.antlr4.macro.util.TokenHelper.getTokens;
+import static notpure.antlr4.macro.util.TokenHelper.*;
 import static org.junit.Assert.assertEquals;
 
 /**

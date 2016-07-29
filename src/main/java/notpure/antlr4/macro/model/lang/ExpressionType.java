@@ -9,5 +9,5 @@ public enum ExpressionType {
     MULTI_LINE_COMMENT,
     MACRO_RULE,
     PARSER_RULE,
-    expressionType, LEXER_RULE
+    LEXER_RULE
 }

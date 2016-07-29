@@ -14,6 +14,6 @@ public final class ParserRuleParser extends GrammarRuleParser {
 
     @Override
     public boolean validate(TokenIterator it) {
-        return it.remaining() > 0  && it.peek().getValue() != null && Character.isLowerCase(it.peek().getValue().charAt(0));
+        return it.remaining() > 0 && it.peek().getValue() != null && Character.isLowerCase(it.peek().getValue().charAt(0));
     }
 }

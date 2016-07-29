@@ -1,9 +1,9 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.junit.Test;
 
@@ -15,6 +15,41 @@ import static org.junit.Assert.assertEquals;
  * A set of tests for {@link SimpleParser}. These tests rely on {@link SimpleLexerTest} passing.
  */
 public final class SimpleParserTest {
+
+    /**
+     * Parses the input value into a list of {@link Expression} and ensures that the size is 1 and the only element
+     * matches the expectedStatement.
+     */
+    private static void assertSingleStatement(String input, Expression expectedExpression) {
+        // Generate statements
+        List<Expression> output = statements(input);
+
+        // Assert values
+        assertEquals(1, output.size());
+        assertEquals(expectedExpression, output.get(0));
+    }
+
+    /**
+     * Parses the input value into a list of {@link Expression} and ensures that the size is 1 and the only element
+     * matches the expectedStatement.
+     */
+    private static void assertDoubleStatement(String input, Expression expectedExpression1, Expression expectedExpression2) {
+        // Generate statements
+        List<Expression> output = statements(input);
+
+        // Assert values
+        assertEquals(2, output.size());
+        assertEquals(expectedExpression1, output.get(0));
+        assertEquals(expectedExpression2, output.get(1));
+    }
+
+    /**
+     * Generates a list of {@link Expression} from the given input.
+     */
+    private static List<Expression> statements(String input) {
+        List<Token> tokens = new SimpleLexer().tokenize(input).getTokens();
+        return new SimpleParser().parse(tokens).getExpressions();
+    }
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
@@ -174,40 +209,5 @@ public final class SimpleParserTest {
     @Test(expected = IllegalArgumentException.class)
     public void parserTestOfNullInput() {
         new SimpleParser().parse(null);
-    }
-
-    /**
-     * Parses the input value into a list of {@link Expression} and ensures that the size is 1 and the only element
-     * matches the expectedStatement.
-     */
-    private static void assertSingleStatement(String input, Expression expectedExpression) {
-        // Generate statements
-        List<Expression> output = statements(input);
-
-        // Assert values
-        assertEquals(1, output.size());
-        assertEquals(expectedExpression, output.get(0));
-    }
-
-    /**
-     * Parses the input value into a list of {@link Expression} and ensures that the size is 1 and the only element
-     * matches the expectedStatement.
-     */
-    private static void assertDoubleStatement(String input, Expression expectedExpression1, Expression expectedExpression2) {
-        // Generate statements
-        List<Expression> output = statements(input);
-
-        // Assert values
-        assertEquals(2, output.size());
-        assertEquals(expectedExpression1, output.get(0));
-        assertEquals(expectedExpression2, output.get(1));
-    }
-
-    /**
-     * Generates a list of {@link Expression} from the given input.
-     */
-    private static List<Expression> statements(String input) {
-        List<Token> tokens = new SimpleLexer().tokenize(input).getTokens();
-        return new SimpleParser().parse(tokens).getExpressions();
     }
 }

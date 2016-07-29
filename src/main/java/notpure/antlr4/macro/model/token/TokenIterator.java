@@ -1,6 +1,5 @@
 package notpure.antlr4.macro.model.token;
 
-import notpure.antlr4.macro.model.token.x.TokenTarget;
 import notpure.antlr4.macro.util.ArrayHelper;
 
 import java.util.Iterator;
@@ -21,6 +20,14 @@ public final class TokenIterator implements Iterator<Token> {
     public TokenIterator(List<Token> tokens) {
         this.tokens = new Token[tokens.size()];
         this.tokens = tokens.toArray(this.tokens);
+    }
+
+    private static boolean isWhiteSpace(Token token) {
+        return isNewLine(token) || token.nameEquals(TokenDefinition.SPACE);
+    }
+
+    private static boolean isNewLine(Token token) {
+        return token.nameEquals(TokenDefinition.CARRIAGE_RETURN) || token.nameEquals(TokenDefinition.NEW_LINE);
     }
 
     public int getCurrentIdx() {
@@ -81,14 +88,6 @@ public final class TokenIterator implements Iterator<Token> {
             }
         }
         return amt;
-    }
-
-    private static boolean isWhiteSpace(Token token) {
-        return isNewLine(token) || token.nameEquals(TokenDefinition.SPACE);
-    }
-
-    private static boolean isNewLine(Token token) {
-        return token.nameEquals(TokenDefinition.CARRIAGE_RETURN) || token.nameEquals(TokenDefinition.NEW_LINE);
     }
 
     public String aggregateValues(TokenTarget target, boolean omitNewLines, boolean trimOutput) {

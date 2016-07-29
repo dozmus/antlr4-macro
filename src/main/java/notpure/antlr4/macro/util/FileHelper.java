@@ -17,6 +17,7 @@ public final class FileHelper {
 
     /**
      * Gets all files recursively in target directory, with given file extension.
+     *
      * @param ext The file extension to look for, e.g. '.g4'.
      * @return List of full file names.
      */
@@ -42,6 +43,7 @@ public final class FileHelper {
     /**
      * Parses the file name, out of a fully qualified file name.
      * e.g. 'my/dir/file.txt' -> 'my/dir/file'.
+     *
      * @throws IllegalArgumentException If fileName is null or empty.
      */
     public static String parseFileName(String fileName) {
@@ -53,6 +55,7 @@ public final class FileHelper {
 
     /**
      * Creates a {@link InputStream} for the provided {@link String}.
+     *
      * @throws IllegalArgumentException If input is null.
      */
     public static InputStream stringStream(String input) {

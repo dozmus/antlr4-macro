@@ -5,7 +5,7 @@ import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.model.token.TokenIterator;
-import notpure.antlr4.macro.model.token.x.TokenTarget;
+import notpure.antlr4.macro.model.token.TokenTarget;
 import notpure.antlr4.macro.processor.parser.ExpressionParser;
 
 /**
@@ -14,7 +14,7 @@ import notpure.antlr4.macro.processor.parser.ExpressionParser;
 public final class MultiLineCommentParser implements ExpressionParser {
 
     private static final TokenTarget TARGET_TOKEN = new TokenTarget(
-            new Token[] { new Token(TokenDefinition.ASTERISK), new Token(TokenDefinition.FORWARD_SLASH) }, true);
+            new Token[]{new Token(TokenDefinition.ASTERISK), new Token(TokenDefinition.FORWARD_SLASH)}, true);
 
     @Override
     public Expression parse(TokenIterator it) {

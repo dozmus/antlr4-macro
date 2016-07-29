@@ -19,6 +19,7 @@ public final class ArrayHelper {
 
     /**
      * Constructs a String representation of a {@link Token} array and its values.
+     *
      * @param targets
      * @return
      */

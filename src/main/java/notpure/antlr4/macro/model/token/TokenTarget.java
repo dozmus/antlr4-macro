@@ -1,7 +1,4 @@
-package notpure.antlr4.macro.model.token.x;
-
-import notpure.antlr4.macro.model.token.Token;
-import notpure.antlr4.macro.model.token.TokenIterator;
+package notpure.antlr4.macro.model.token;
 
 /**
  * TokenTarget for {@link TokenIterator#aggregateValues(TokenTarget, boolean, boolean)}.
@@ -17,7 +14,7 @@ public final class TokenTarget {
     }
 
     public TokenTarget(Token token, boolean consecutiveMatch) {
-        this(new Token[] { token }, consecutiveMatch);
+        this(new Token[]{token}, consecutiveMatch);
     }
 
     public Token[] getTokens() {

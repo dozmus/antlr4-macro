@@ -5,14 +5,18 @@ import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.util.ArrayHelper;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.*;
 
 /**
  * A set of tests for {@link notpure.antlr4.macro.model.token.Token}.
  */
 public final class TokenTest {
+
+    private static void assertToken(TokenDefinition def) {
+        Token token = new Token(def);
+        assertEquals(token.getName(), def.name());
+        assertEquals(token.getValue(), def.getValue());
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testTokenConstructorForRegexTokenDefinitionParameter() {
@@ -31,7 +35,7 @@ public final class TokenTest {
 
     @Test
     public void testArrayContains() {
-        Token[] tokens = new Token[] {
+        Token[] tokens = new Token[]{
                 new Token(TokenDefinition.ASTERISK),
                 new Token(TokenDefinition.BACK_SLASH),
                 new Token(TokenDefinition.AND),
@@ -55,7 +59,7 @@ public final class TokenTest {
 
     @Test
     public void testArrayToString() {
-        Token[] tokens = new Token[] {
+        Token[] tokens = new Token[]{
                 new Token(TokenDefinition.ASTERISK),
                 new Token(TokenDefinition.BACK_SLASH),
                 new Token(TokenDefinition.AND),
@@ -68,11 +72,5 @@ public final class TokenTest {
         String expectedValue = "Token[] { Token(ASTERISK='*'), Token(BACK_SLASH='\\'), Token(AND='&'), Token(AT='@'),"
                 + " Token(CARET='^'), Token(CARRIAGE_RETURN=''), Token(COLON=':') }";
         assertEquals(expectedValue, ArrayHelper.toString(tokens));
-    }
-
-    private static void assertToken(TokenDefinition def) {
-        Token token = new Token(def);
-        assertEquals(token.getName(), def.name());
-        assertEquals(token.getValue(), def.getValue());
     }
 }

@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A simple lexer.
@@ -48,6 +46,7 @@ public final class SimpleLexer extends Lexer {
     /**
      * Attempts to match the provided value with a {@link TokenDefinition}, if this is successful the new token
      * is added to {@link SimpleLexer#tokens}.
+     *
      * @param value
      */
     private void tryTokenize(String value) {
