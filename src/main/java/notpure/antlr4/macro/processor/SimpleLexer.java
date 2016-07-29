@@ -4,6 +4,7 @@ import notpure.antlr4.macro.model.Lexer;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.util.CharStream;
+import notpure.antlr4.macro.util.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +19,10 @@ public final class SimpleLexer extends Lexer {
      * Logger instance.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
+    /**
+     * Null character.
+     */
+    private static final char NULL_CHAR = Character.MIN_VALUE;
 
     /**
      * Tokenizes the input stream into simple tokens.
@@ -32,37 +37,43 @@ public final class SimpleLexer extends Lexer {
         // Process input
         while (in.hasNext()) {
             // Get next string
-            String value = in.next();
+            char value = in.next();
 
             // Try to map it to a definition
             tryTokenize(value);
         }
 
         // Add end of file token
-        tryTokenize(null);
+        tryTokenize(NULL_CHAR);
         return this;
     }
 
     /**
      * Attempts to match the provided value with a {@link TokenDefinition}, if this is successful the new token
-     * is added to {@link SimpleLexer#tokens}.
-     *
-     * @param value
+     * is added to {@link SimpleLexer#tokens}. If the value is {@link SimpleLexer#NULL_CHAR} then
+     * {@link TokenDefinition#EOF} is added to {@link SimpleLexer#tokens} instead.
+     * @param value The character to try to parse.
      */
-    private void tryTokenize(String value) {
-        if (value == null) {
+    private void tryTokenize(char value) {
+        // Attempt to tokenize EOF
+        if (value == NULL_CHAR) {
             getTokens().add(new Token(TokenDefinition.EOF));
             LOGGER.info("Current value: '{}' has been mapped to '{}'", "null", TokenDefinition.EOF.name());
             return;
-        } else {
-            for (TokenDefinition def : TokenDefinition.values()) {
-                if (def.matches(value)) {
-                    LOGGER.info("Current value: '{}' has been mapped to '{}'", value.trim(), def.name());
-                    getTokens().add(new Token(def.name(), value));
-                    return;
-                }
+        }
+
+        // Attempt to tokenize char
+        String val = value + "";
+
+        for (TokenDefinition def : TokenDefinition.values()) {
+            if (def.matches(val)) {
+                LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.toPretty(value), def.name());
+                getTokens().add(new Token(def.name(), val));
+                return;
             }
         }
-        LOGGER.info("Current value: {}", value);
+
+        // Fall-back, log the skipped value
+        LOGGER.info("Skipped value: {}", value);
     }
 }

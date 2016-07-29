@@ -19,7 +19,7 @@ public final class CharStream {
         return scanner.hasNext();
     }
 
-    public String next() {
-        return scanner.next();
+    public char next() {
+        return scanner.next().charAt(0);
     }
 }
