@@ -4,9 +4,9 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.model.token.TokenIterator;
 import notpure.antlr4.macro.processor.parser.ExpressionParser;
 import notpure.antlr4.macro.processor.parser.ParserException;
+import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +19,9 @@ public abstract class GrammarRuleParser implements ExpressionParser {
      * Logger instance.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(GrammarRuleParser.class);
-    private static final TokenIterator.TokenTarget RULE_IDENTIFIER_TARGET_TOKEN = new TokenIterator.TokenTarget(
+    private static final TokenParserIterator.TokenTarget RULE_IDENTIFIER_TARGET_TOKEN = new TokenParserIterator.TokenTarget(
             new Token[]{new Token(TokenDefinition.COLON)}, false);
-    private static final TokenIterator.TokenTarget RULE_VALUE_TARGET_TOKEN = new TokenIterator.TokenTarget(
+    private static final TokenParserIterator.TokenTarget RULE_VALUE_TARGET_TOKEN = new TokenParserIterator.TokenTarget(
             new Token[]{new Token(TokenDefinition.SEMICOLON)}, false);
 
     private final ExpressionType type;
@@ -31,7 +31,7 @@ public abstract class GrammarRuleParser implements ExpressionParser {
     }
 
     @Override
-    public Expression parse(TokenIterator it) throws ParserException {
+    public Expression parse(TokenParserIterator it) throws ParserException {
         // Skip hash if macro rule
         if (type == ExpressionType.MACRO_RULE)
             it.skip(TokenDefinition.HASH); // skip '#'
@@ -56,7 +56,11 @@ public abstract class GrammarRuleParser implements ExpressionParser {
         } catch (ArrayIndexOutOfBoundsException ex) {
             throw new ParserException(getClass(), "Expected semi-colon after grammar rule value of type " + type);
         }
-        it.skipAllWhitespace();
+
+        if (value.trim().length() == 0) {
+            throw new ParserException(getClass(), "Expected value after grammar rule identifier of type  " + type);
+        }
+
         it.skip(TokenDefinition.SEMICOLON);
 
         // Construct expression
@@ -66,5 +70,5 @@ public abstract class GrammarRuleParser implements ExpressionParser {
     }
 
     @Override
-    public abstract boolean validate(TokenIterator it);
+    public abstract boolean validate(TokenParserIterator it);
 }

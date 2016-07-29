@@ -4,9 +4,9 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.model.token.TokenIterator;
 import notpure.antlr4.macro.processor.parser.ExpressionParser;
 import notpure.antlr4.macro.processor.parser.ParserException;
+import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 
 /**
  * Created by pure on 28/07/2016.
@@ -14,11 +14,11 @@ import notpure.antlr4.macro.processor.parser.ParserException;
 public final class GrammarNameParser implements ExpressionParser {
 
     private static final String GRAMMAR_TEXT = "grammar";
-    private static final TokenIterator.TokenTarget TARGET_TOKEN = new TokenIterator.TokenTarget(
+    private static final TokenParserIterator.TokenTarget TARGET_TOKEN = new TokenParserIterator.TokenTarget(
             new Token[]{new Token(TokenDefinition.SEMICOLON)}, false);
 
     @Override
-    public Expression parse(TokenIterator it) throws ParserException {
+    public Expression parse(TokenParserIterator it) throws ParserException {
         it.skip(GRAMMAR_TEXT.length()); // skip 'grammar'
 
         // Skip white space in between identifier and value, need at least one
@@ -37,7 +37,7 @@ public final class GrammarNameParser implements ExpressionParser {
     }
 
     @Override
-    public boolean validate(TokenIterator it) {
+    public boolean validate(TokenParserIterator it) {
         return it.hasNext(GRAMMAR_TEXT);
     }
 }

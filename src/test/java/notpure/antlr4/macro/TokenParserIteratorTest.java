@@ -2,7 +2,7 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.model.token.TokenIterator;
+import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 import notpure.antlr4.macro.util.TokenHelper;
 import org.junit.Test;
 
@@ -12,15 +12,15 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 /**
- * A set of tests for {@link TokenIterator}.
+ * A set of tests for {@link TokenParserIterator}.
  */
-public final class TokenIteratorTest {
+public final class TokenParserIteratorTest {
 
     @Test
     public void listInputTest() {
         String input = "hello";
         List<Token> tokens = new ArrayList<>(TokenHelper.getTokens(TokenDefinition.LETTER, input));
-        TokenIterator it = new TokenIterator(tokens);
+        TokenParserIterator it = new TokenParserIterator(tokens);
 
         assertEquals(input.length(), it.size());
         assertEquals(input.length(), it.remaining());
@@ -62,7 +62,7 @@ public final class TokenIteratorTest {
     public void hasNextStringInputTest() {
         String input = "hello";
         List<Token> tokens = new ArrayList<>(TokenHelper.getTokens(TokenDefinition.LETTER, input));
-        TokenIterator it = new TokenIterator(tokens);
+        TokenParserIterator it = new TokenParserIterator(tokens);
 
         assertEquals(input.length(), it.size());
         assertEquals(true, it.hasNext(input));

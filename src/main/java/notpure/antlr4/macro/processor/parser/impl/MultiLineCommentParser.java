@@ -4,20 +4,20 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.model.token.TokenIterator;
 import notpure.antlr4.macro.processor.parser.ExpressionParser;
 import notpure.antlr4.macro.processor.parser.ParserException;
+import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 
 /**
  * Created by pure on 28/07/2016.
  */
 public final class MultiLineCommentParser implements ExpressionParser {
 
-    private static final TokenIterator.TokenTarget TARGET_TOKEN = new TokenIterator.TokenTarget(
+    private static final TokenParserIterator.TokenTarget TARGET_TOKEN = new TokenParserIterator.TokenTarget(
             new Token[]{new Token(TokenDefinition.ASTERISK), new Token(TokenDefinition.FORWARD_SLASH)}, true);
 
     @Override
-    public Expression parse(TokenIterator it) throws ParserException {
+    public Expression parse(TokenParserIterator it) throws ParserException {
         it.skip(2); // skip '/*'
         String value;
 
@@ -31,7 +31,7 @@ public final class MultiLineCommentParser implements ExpressionParser {
     }
 
     @Override
-    public boolean validate(TokenIterator it) {
+    public boolean validate(TokenParserIterator it) {
         return it.remaining() >= 2
                 && it.peek().nameEquals(TokenDefinition.FORWARD_SLASH)
                 && it.peek(1).nameEquals(TokenDefinition.ASTERISK);

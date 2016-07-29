@@ -3,7 +3,6 @@ package notpure.antlr4.macro.processor.parser;
 import notpure.antlr4.macro.model.Parser;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.token.Token;
-import notpure.antlr4.macro.model.token.TokenIterator;
 import notpure.antlr4.macro.processor.parser.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +31,7 @@ public final class SimpleParser extends Parser {
             throw new IllegalArgumentException("Token list is null.");
 
         // Parse tokens
-        TokenIterator it = new TokenIterator(tokens);
+        TokenParserIterator it = new TokenParserIterator(tokens);
 
         while (it.hasNext()) {
             ExpressionParser parser = getParser(it);
@@ -66,7 +65,7 @@ public final class SimpleParser extends Parser {
         parsers.add(new MacroRuleParser());
     }
 
-    private ExpressionParser getParser(TokenIterator it) {
+    private ExpressionParser getParser(TokenParserIterator it) {
         for (ExpressionParser parser : parsers) {
             if (parser.validate(it)) {
                 return parser;
