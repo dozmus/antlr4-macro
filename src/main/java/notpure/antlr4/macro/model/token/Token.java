@@ -7,6 +7,8 @@ public final class Token {
 
     private final String name;
     private final String value;
+    private int lineNo;
+    private int colNo;
 
     public Token(TokenDefinition def) {
         if (def.getValueType() == TokenDefinition.ValueType.REGEX) {
@@ -14,11 +16,18 @@ public final class Token {
         }
         this.name = def.name();
         this.value = def.getValue();
+        lineNo = colNo = -1;
     }
 
     public Token(String name, String value) {
+        this(name, value, -1, -1);
+    }
+
+    public Token(String name, String value, int lineNo, int colNo) {
         this.name = name;
         this.value = value;
+        this.lineNo = lineNo;
+        this.colNo = colNo;
     }
 
     public String getName() {
@@ -27,6 +36,14 @@ public final class Token {
 
     public String getValue() {
         return value;
+    }
+
+    public int getLineNo() {
+        return lineNo;
+    }
+
+    public int getColNo() {
+        return colNo;
     }
 
     @Override

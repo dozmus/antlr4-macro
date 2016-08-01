@@ -23,6 +23,8 @@ public final class SimpleLexer extends Lexer {
      * Null character.
      */
     private static final char NULL_CHAR = Character.MIN_VALUE;
+    private int currentLineNo = 0;
+    private int currentColNo = 0;
 
     /**
      * Tokenizes the input stream into simple tokens.
@@ -67,8 +69,16 @@ public final class SimpleLexer extends Lexer {
 
         for (TokenDefinition def : TokenDefinition.values()) {
             if (def.matches(val)) {
+                // Add token
                 LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.toPretty(value), def.name());
-                getTokens().add(new Token(def.name(), val));
+                getTokens().add(new Token(def.name(), val, currentLineNo, currentColNo));
+
+                // Update lineNo/colNo
+                currentColNo++;
+                if (def == TokenDefinition.NEW_LINE) {
+                    currentLineNo++;
+                    currentColNo = 0;
+                }
                 return;
             }
         }

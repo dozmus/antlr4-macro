@@ -54,4 +54,30 @@ public final class SimpleLexerTest {
             assertEquals(expectedToken, actualToken);
         }
     }
+
+    /**
+     * Tests the line and col numbers given to each token in the input.
+     */
+    @Test
+    public void lexerTestOfLineAndColNo() {
+        // Tokenize input
+        List<Token> actualOutput = new SimpleLexer().tokenize("my friend\r\nhello!").getTokens();
+
+        // Check output
+        assertEquals(17 + 1, actualOutput.size());
+
+        for (int i = 0; i < 9; i++)
+            assertTokenLineAndColEquals(0, i, actualOutput.get(i));
+
+        assertTokenLineAndColEquals(0, 9, actualOutput.get(9));
+        assertTokenLineAndColEquals(0, 10, actualOutput.get(10));
+
+        for (int i = 11; i < 17; i++)
+            assertTokenLineAndColEquals(1, i - 11, actualOutput.get(i));
+    }
+
+    private static void assertTokenLineAndColEquals(int lineNo, int colNo, Token actualToken) {
+        assertEquals(lineNo, actualToken.getLineNo());
+        assertEquals(colNo, actualToken.getColNo());
+    }
 }
