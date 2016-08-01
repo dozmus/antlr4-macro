@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.model;
+package notpure.antlr4.macro.model.parser;
 
 /**
  * A parser exeception.

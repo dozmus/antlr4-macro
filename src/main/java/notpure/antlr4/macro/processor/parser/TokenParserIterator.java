@@ -1,8 +1,8 @@
 package notpure.antlr4.macro.processor.parser;
 
-import notpure.antlr4.macro.model.token.Token;
-import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.model.token.TokenIterator;
+import notpure.antlr4.macro.model.lexer.token.Token;
+import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
+import notpure.antlr4.macro.model.lexer.token.TokenIterator;
 import notpure.antlr4.macro.util.ArrayHelper;
 
 import java.util.List;

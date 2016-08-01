@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.model.token;
+package notpure.antlr4.macro.model.lexer.token;
 
 import notpure.antlr4.macro.processor.SimpleLexer;
 

@@ -1,14 +1,14 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.model.token.Token;
-import notpure.antlr4.macro.model.token.TokenDefinition;
+import notpure.antlr4.macro.model.lexer.token.Token;
+import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
 import notpure.antlr4.macro.util.ArrayHelper;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 /**
- * A set of tests for {@link notpure.antlr4.macro.model.token.Token}.
+ * A set of tests for {@link Token}.
  */
 public final class TokenTest {
 

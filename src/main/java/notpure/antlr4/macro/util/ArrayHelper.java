@@ -1,6 +1,6 @@
 package notpure.antlr4.macro.util;
 
-import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.lexer.token.Token;
 
 /**
  * Array utility methods.

@@ -2,10 +2,10 @@ package notpure.antlr4.macro.processor.parser.impl;
 
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
-import notpure.antlr4.macro.model.token.Token;
-import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.model.ExpressionParser;
-import notpure.antlr4.macro.model.ParserException;
+import notpure.antlr4.macro.model.lexer.token.Token;
+import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
+import notpure.antlr4.macro.model.parser.ExpressionParser;
+import notpure.antlr4.macro.model.parser.ParserException;
 import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

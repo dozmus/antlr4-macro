@@ -1,11 +1,11 @@
 package notpure.antlr4.macro.processor.parser;
 
-import notpure.antlr4.macro.model.ExpressionParser;
-import notpure.antlr4.macro.model.Parser;
-import notpure.antlr4.macro.model.ParserException;
-import notpure.antlr4.macro.model.ParserExceptionListener;
+import notpure.antlr4.macro.model.parser.ExpressionParser;
+import notpure.antlr4.macro.model.parser.Parser;
+import notpure.antlr4.macro.model.parser.ParserException;
+import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
-import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.processor.parser.impl.*;
 
 import java.util.ArrayList;

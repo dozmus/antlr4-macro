@@ -1,6 +1,6 @@
-package notpure.antlr4.macro.model;
+package notpure.antlr4.macro.model.lexer;
 
-import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.util.FileHelper;
 
 import java.io.InputStream;

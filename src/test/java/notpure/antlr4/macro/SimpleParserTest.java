@@ -1,9 +1,9 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.model.ParserExceptionListener;
+import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
-import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.processor.SimpleLexer;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.junit.Test;
