@@ -1,6 +1,7 @@
-package notpure.antlr4.macro.processor.parser;
+package notpure.antlr4.macro.model;
 
 import notpure.antlr4.macro.model.lang.Expression;
+import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 
 /**
  * Parses one expression.

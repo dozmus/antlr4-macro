@@ -4,8 +4,8 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.processor.parser.ExpressionParser;
-import notpure.antlr4.macro.processor.parser.ParserException;
+import notpure.antlr4.macro.model.ExpressionParser;
+import notpure.antlr4.macro.model.ParserException;
 import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 
 /**
