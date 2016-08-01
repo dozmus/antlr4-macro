@@ -1,5 +1,6 @@
 package notpure.antlr4.macro;
 
+import notpure.antlr4.macro.model.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.token.Token;
@@ -232,73 +233,85 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfInvalidGrammarNameParsing1() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("grammar myGrammar"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("grammar myGrammar"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidGrammarNameParsing2() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("grammarmyGrammar;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("grammarmyGrammar;"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidGrammarNameParsing3() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("grammar ;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("grammar ;"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidLexerRuleParsing1() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("HELLO WORLD;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("HELLO WORLD;"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidLexerRuleParsing2() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("HELLO:WORLD"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("HELLO:WORLD"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidLexerRuleParsing3() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("HELLO:;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("HELLO:;"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidMacroRuleParsing1() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("#HELLO WORLD;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("#HELLO WORLD;"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidMacroRuleParsing2() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("#HELLO:WORLD"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("#HELLO:WORLD"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidMacroRuleParsing3() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("#HELLO:;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("#HELLO:;"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidParserRuleParsing1() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("hello world;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("hello world;"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidParserRuleParsing2() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("hello:world"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("hello:world"));
+        assertTrue(sp.isErrorOccurred());
     }
 
     @Test
     public void parserTestOfInvalidParserRuleParsing3() {
-        SimpleParser sp = (SimpleParser)new SimpleParser().parse(tokens("hello:;"));
-        assertTrue(sp.errorOccurredParsing());
+        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
+                .parse(tokens("hello:;"));
+        assertTrue(sp.isErrorOccurred());
     }
 }

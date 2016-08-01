@@ -3,11 +3,10 @@ package notpure.antlr4.macro.processor.parser;
 import notpure.antlr4.macro.model.ExpressionParser;
 import notpure.antlr4.macro.model.Parser;
 import notpure.antlr4.macro.model.ParserException;
+import notpure.antlr4.macro.model.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.processor.parser.impl.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +16,16 @@ import java.util.List;
  */
 public final class SimpleParser extends Parser {
 
-    /**
-     * Logger instance.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(GrammarRuleParser.class);
     private final List<ExpressionParser> parsers = new ArrayList<>();
-    private boolean errorParsing;
+    private final ParserExceptionListener parserExceptionListener;
+    private boolean errorOccurred;
 
     public SimpleParser() {
+        this(new ParserExceptionListener.ParserExceptionLogger());
+    }
+
+    public SimpleParser(ParserExceptionListener parserExceptionListener) {
+        this.parserExceptionListener = parserExceptionListener;
         initParsers();
     }
 
@@ -44,10 +45,8 @@ public final class SimpleParser extends Parser {
 
                 try {
                      expr = parser.parse(it);
-                } catch (ParserException e) {
-                    LOGGER.error("Error parsing: {}", e.getMessage());
-                    e.printStackTrace();
-                    errorParsing = true;
+                } catch (ParserException ex) {
+                    parserExceptionListener.parserExceptionOccurred(this, ex);
                     return this;
                 }
 
@@ -78,7 +77,11 @@ public final class SimpleParser extends Parser {
         return null;
     }
 
-    public boolean errorOccurredParsing() {
-        return errorParsing;
+    public boolean isErrorOccurred() {
+        return errorOccurred;
+    }
+
+    public void setErrorOccurred(boolean errorOccurred) {
+        this.errorOccurred = errorOccurred;
     }
 }
