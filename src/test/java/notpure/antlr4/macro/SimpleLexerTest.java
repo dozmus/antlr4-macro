@@ -2,7 +2,7 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
-import notpure.antlr4.macro.processor.SimpleLexer;
+import notpure.antlr4.macro.processor.lexer.SimpleLexer;
 import org.junit.Test;
 
 import java.util.ArrayList;
