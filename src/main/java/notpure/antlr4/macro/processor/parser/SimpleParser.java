@@ -63,9 +63,9 @@ public final class SimpleParser extends Parser {
         parsers.add(new MultiLineCommentParser());
         parsers.add(new SingleLineCommentParser());
         parsers.add(new GrammarNameParser());
-        parsers.add(new LexerRuleParser());
-        parsers.add(new ParserRuleParser());
-        parsers.add(new MacroRuleParser());
+        parsers.add(new GrammarRuleParser.LexerRuleParser());
+        parsers.add(new GrammarRuleParser.ParserRuleParser());
+        parsers.add(new GrammarRuleParser.MacroRuleParser());
     }
 
     private ExpressionParser getParser(TokenParserIterator it) {

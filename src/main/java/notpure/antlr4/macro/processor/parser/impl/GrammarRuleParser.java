@@ -60,7 +60,6 @@ public abstract class GrammarRuleParser implements ExpressionParser {
         if (value.trim().length() == 0) {
             throw new ParserException(getClass(), "Expected value after grammar rule identifier of type  " + type);
         }
-
         it.skip(TokenDefinition.SEMICOLON);
 
         // Construct expression
@@ -71,4 +70,49 @@ public abstract class GrammarRuleParser implements ExpressionParser {
 
     @Override
     public abstract boolean validate(TokenParserIterator it);
+
+    /**
+     * Parses {@link ExpressionType#PARSER_RULE}.
+     */
+    public static final class ParserRuleParser extends GrammarRuleParser {
+
+        public ParserRuleParser() {
+            super(ExpressionType.PARSER_RULE);
+        }
+
+        @Override
+        public boolean validate(TokenParserIterator it) {
+            return it.hasNext() && it.peek().getValue() != null && Character.isLowerCase(it.peek().getValue().charAt(0));
+        }
+    }
+
+    /**
+     * Parses {@link ExpressionType#MACRO_RULE}.
+     */
+    public static final class MacroRuleParser extends GrammarRuleParser {
+
+        public MacroRuleParser() {
+            super(ExpressionType.MACRO_RULE);
+        }
+
+        @Override
+        public boolean validate(TokenParserIterator it) {
+            return it.hasNext() && it.peek().nameEquals(TokenDefinition.HASH);
+        }
+    }
+
+    /**
+     * Parses {@link ExpressionType#LEXER_RULE}.
+     */
+    public static final class LexerRuleParser extends GrammarRuleParser {
+
+        public LexerRuleParser() {
+            super(ExpressionType.LEXER_RULE);
+        }
+
+        @Override
+        public boolean validate(TokenParserIterator it) {
+            return it.hasNext() && it.peek().getValue() != null && Character.isUpperCase(it.peek().getValue().charAt(0));
+        }
+    }
 }

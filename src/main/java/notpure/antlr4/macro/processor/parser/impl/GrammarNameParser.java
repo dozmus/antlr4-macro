@@ -9,7 +9,7 @@ import notpure.antlr4.macro.model.parser.ParserException;
 import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 
 /**
- * Created by pure on 28/07/2016.
+ * Parses {@link ExpressionType#GRAMMAR_NAME}.
  */
 public final class GrammarNameParser implements ExpressionParser {
 
