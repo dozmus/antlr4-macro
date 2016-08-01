@@ -1,32 +1,36 @@
 package notpure.antlr4.macro.util;
 
-import notpure.antlr4.macro.model.lexer.token.Token;
-
 /**
  * Array utility methods.
  */
 public final class ArrayHelper {
 
     /**
-     * Linear-search implementation.
+     * Linear-search implementation, uses {@link ArrayHelper#find(Object[], Object)}.
+     * @return True if target is included in the source array.
      */
     public static <T> boolean arrayContains(T[] src, T target) {
-        for (T t : src)
-            if (t.equals(target))
-                return true;
-        return false;
+        return find(src, target) != -1;
     }
 
     /**
-     * Constructs a String representation of a {@link Token} array and its values.
-     *
-     * @param targets
-     * @return
+     * Linear-search implementation.
      */
-    public static String toString(Token[] targets) {
+    public static <T> int find(T[] src, T target) {
+        for (int i = 0; i < src.length; i++) {
+            if (src[i].equals(target))
+                return i;
+        }
+        return -1;
+    }
+
+    /**
+     * Constructs a String representation of an array and its values.
+     */
+    public static <T> String toString(T[] targets) {
         final int n = targets.length;
         StringBuilder sb = new StringBuilder();
-        sb.append("Token[] { ");
+        sb.append(targets.getClass().getSimpleName()).append(" { ");
 
         for (int i = 0; i < n; i++) {
             sb.append(targets[i].toString());
