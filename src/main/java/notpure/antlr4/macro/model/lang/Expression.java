@@ -1,30 +1,45 @@
 package notpure.antlr4.macro.model.lang;
 
+import notpure.antlr4.macro.util.ArrayHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A parsed expression.
  */
 public final class Expression {
 
     private final String identifier;
-    private final String value;
+    private final List<ExpressionValue> values;
     private final ExpressionType type;
 
-    public Expression(ExpressionType type, String identifier, String value) {
+    public Expression(ExpressionType type, String identifier, List<ExpressionValue> values) {
         this.identifier = identifier;
-        this.value = value;
+        this.values = values;
         this.type = type;
     }
 
-    public Expression(ExpressionType type, String value) {
-        this(type, null, value);
+    public Expression(ExpressionType type, String identifier, ExpressionValue value) {
+        this(type, identifier, new ArrayList<>());
+        values.add(value);
+    }
+
+    public Expression(ExpressionType type, List<ExpressionValue> values) {
+        this(type, null, values);
+    }
+
+    public Expression(ExpressionType type, ExpressionValue value) {
+        this(type, null, new ArrayList<>());
+        values.add(value);
     }
 
     public String getIdentifier() {
         return identifier;
     }
 
-    public String getValue() {
-        return value;
+    public List<ExpressionValue> getValues() {
+        return values;
     }
 
     public ExpressionType getType() {
@@ -33,7 +48,7 @@ public final class Expression {
 
     @Override
     public String toString() {
-        return type.name() + "(" + (identifier == null ? "" : identifier + "=") + value + ")";
+        return type.name() + "(" + (identifier == null ? "" : identifier + "=") + ArrayHelper.toString(values) + ")";
     }
 
     @Override
@@ -41,7 +56,7 @@ public final class Expression {
         if (!(obj instanceof Expression))
             return false;
         Expression other = (Expression) obj;
-        return other.getType() == type && other.getValue().equals(value)
+        return other.getType() == type && ExpressionValue.equals(other.getValues(), values)
                 && (other.getIdentifier() == null && identifier == null
                 || other.getIdentifier() != null && identifier != null && other.getIdentifier().equals(identifier));
     }

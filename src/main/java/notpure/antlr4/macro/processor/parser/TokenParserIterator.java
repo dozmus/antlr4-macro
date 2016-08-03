@@ -90,8 +90,8 @@ public final class TokenParserIterator extends TokenIterator {
         return true;
     }
 
-    public boolean skip(TokenDefinition semicolon) {
-        if (peek().nameEquals(semicolon)) {
+    public boolean skip(TokenDefinition def) {
+        if (peek().nameEquals(def)) {
             next();
             return true;
         }
@@ -111,8 +111,8 @@ public final class TokenParserIterator extends TokenIterator {
             this.consecutiveMatch = consecutiveMatch;
         }
 
-        public TokenTarget(Token token, boolean consecutiveMatch) {
-            this(new Token[]{token}, consecutiveMatch);
+        public TokenTarget(Token token) {
+            this(new Token[]{token}, false);
         }
 
         public Token[] getTokens() {

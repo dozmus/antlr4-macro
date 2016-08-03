@@ -1,11 +1,11 @@
 package notpure.antlr4.macro.model.parser;
 
 /**
- * A parser exeception.
+ * A parser exception.
  */
 public final class ParserException extends Exception {
 
-    public ParserException(Class<? extends ExpressionParser> clazz, String message) {
+    public ParserException(Class clazz, String message) {
         super(clazz.getSimpleName() + ": " + message);
     }
 }

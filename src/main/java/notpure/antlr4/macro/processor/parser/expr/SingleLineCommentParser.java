@@ -1,7 +1,9 @@
-package notpure.antlr4.macro.processor.parser.impl;
+package notpure.antlr4.macro.processor.parser.expr;
 
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
+import notpure.antlr4.macro.model.lang.ExpressionValue;
+import notpure.antlr4.macro.model.lang.ExpressionValueType;
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
 import notpure.antlr4.macro.model.parser.ExpressionParser;
@@ -11,7 +13,7 @@ import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 /**
  * Parses {@link ExpressionType#SINGLE_LINE_COMMENT}.
  */
-public final class SingleLineCommentParser implements ExpressionParser {
+public final class SingleLineCommentParser implements ExpressionParser<Expression> {
 
     private static final TokenParserIterator.TokenTarget TARGET_TOKEN = new TokenParserIterator.TokenTarget(
             new Token[]{new Token(TokenDefinition.EOF), new Token(TokenDefinition.NEW_LINE)}, false);
@@ -22,11 +24,11 @@ public final class SingleLineCommentParser implements ExpressionParser {
         String value;
 
         try {
-            value = it.aggregateValues(TARGET_TOKEN, true, true);
+            value = it.aggregateValues(TARGET_TOKEN, false, false);
         } catch (ArrayIndexOutOfBoundsException ex) {
             throw new ParserException(getClass(), "Failed to parse single-line comment, did not find ending symbols EOF or new line.");
         }
-        return new Expression(ExpressionType.SINGLE_LINE_COMMENT, value);
+        return new Expression(ExpressionType.SINGLE_LINE_COMMENT, new ExpressionValue(ExpressionValueType.RAW, value));
     }
 
     @Override

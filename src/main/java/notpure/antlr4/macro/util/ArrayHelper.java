@@ -1,5 +1,9 @@
 package notpure.antlr4.macro.util;
 
+import notpure.antlr4.macro.model.lang.ExpressionValue;
+
+import java.util.List;
+
 /**
  * Array utility methods.
  */
@@ -39,7 +43,13 @@ public final class ArrayHelper {
                 sb.append(",");
             sb.append(" ");
         }
-
         return sb.append("}").toString();
+    }
+
+    /**
+     * Constructs a String representation of a {@link List} and its values.
+     */
+    public static String toString(List<ExpressionValue> values) {
+        return toString(values.toArray());
     }
 }

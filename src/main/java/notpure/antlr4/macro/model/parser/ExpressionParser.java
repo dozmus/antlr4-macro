@@ -1,14 +1,15 @@
 package notpure.antlr4.macro.model.parser;
 
 import notpure.antlr4.macro.model.lang.Expression;
+import notpure.antlr4.macro.model.lang.ExpressionValue;
 import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 
 /**
- * Parses one expression.
+ * Parses one {@link Expression} or {@link ExpressionValue}.
  */
-public interface ExpressionParser {
+public interface ExpressionParser<T> {
 
-    Expression parse(TokenParserIterator it) throws ParserException;
+    T parse(TokenParserIterator it) throws ParserException;
 
     boolean validate(TokenParserIterator it);
 }

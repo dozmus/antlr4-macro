@@ -6,8 +6,9 @@ import notpure.antlr4.macro.model.parser.ParserException;
 import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lexer.token.Token;
-import notpure.antlr4.macro.processor.parser.impl.*;
+import notpure.antlr4.macro.processor.parser.expr.*;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public final class SimpleParser extends Parser {
                 Expression expr;
 
                 try {
-                     expr = parser.parse(it);
+                     expr = (Expression)parser.parse(it);
                 } catch (ParserException ex) {
                     parserExceptionListener.parserExceptionOccurred(this, ex);
                     return this;

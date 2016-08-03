@@ -96,6 +96,15 @@ public enum TokenDefinition {
         return valueType;
     }
 
+    public static TokenDefinition forName(String name) {
+        for (TokenDefinition def : values()) {
+            if (def.name().equals(name)) {
+                return def;
+            }
+        }
+        return null;
+    }
+
     /**
      * Value type for {@link TokenDefinition}.
      */

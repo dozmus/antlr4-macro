@@ -75,6 +75,7 @@ public final class SimpleLexer extends Lexer {
 
                 // Update lineNo/colNo
                 currentColNo++;
+
                 if (def == TokenDefinition.NEW_LINE) {
                     currentLineNo++;
                     currentColNo = 0;

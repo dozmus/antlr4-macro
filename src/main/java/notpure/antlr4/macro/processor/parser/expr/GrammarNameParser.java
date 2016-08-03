@@ -1,7 +1,9 @@
-package notpure.antlr4.macro.processor.parser.impl;
+package notpure.antlr4.macro.processor.parser.expr;
 
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
+import notpure.antlr4.macro.model.lang.ExpressionValue;
+import notpure.antlr4.macro.model.lang.ExpressionValueType;
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
 import notpure.antlr4.macro.model.parser.ExpressionParser;
@@ -11,7 +13,7 @@ import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 /**
  * Parses {@link ExpressionType#GRAMMAR_NAME}.
  */
-public final class GrammarNameParser implements ExpressionParser {
+public final class GrammarNameParser implements ExpressionParser<Expression> {
 
     private static final String GRAMMAR_TEXT = "grammar";
     private static final TokenParserIterator.TokenTarget TARGET_TOKEN = new TokenParserIterator.TokenTarget(
@@ -39,7 +41,7 @@ public final class GrammarNameParser implements ExpressionParser {
             throw new ParserException(getClass(), "Expected value after grammar name.");
         }
         it.skip(TokenDefinition.SEMICOLON);
-        return new Expression(ExpressionType.GRAMMAR_NAME, value);
+        return new Expression(ExpressionType.GRAMMAR_NAME, new ExpressionValue(ExpressionValueType.RAW, value));
     }
 
     @Override
