@@ -1,6 +1,7 @@
 package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.lang.Expression;
+import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.processor.lexer.SimpleLexer;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
@@ -15,6 +16,7 @@ import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The master processor for macro files.
@@ -51,7 +53,7 @@ public final class MacroFileProcessor {
      */
     public static void processFile(String inFileName, String outFileName) {
         // Tokenize
-        List<Token> tokens;
+        final List<Token> tokens;
 
         try (InputStream inputStream = new FileInputStream(inFileName)) {
             tokens = new SimpleLexer().tokenize(inputStream).getTokens();
@@ -64,9 +66,18 @@ public final class MacroFileProcessor {
         }
 
         // Parser
-        List<Expression> expressions = new SimpleParser().parse(tokens).getExpressions();
+        final List<Expression> expressions = new SimpleParser().parse(tokens).getExpressions();
 
         // Resolve macro definitions
+        List<Expression> macroExpressions = expressions.stream()
+                .filter(p -> p.getType() == ExpressionType.MACRO_RULE)
+                .collect(Collectors.toList());
+        // ...
+
+        // Update expressions
+        List<Expression> ruleExpressions = expressions.stream()
+                .filter(p -> p.getType() == ExpressionType.PARSER_RULE || p.getType() == ExpressionType.LEXER_RULE)
+                .collect(Collectors.toList());
         // ...
 
         // Write to output file
