@@ -24,7 +24,7 @@ public final class SingleLineCommentParser implements ExpressionParser<Expressio
         String value;
 
         try {
-            value = it.aggregateValues(TARGET_TOKEN, false, false);
+            value = it.aggregateValues(TARGET_TOKEN, true, false);
         } catch (ArrayIndexOutOfBoundsException ex) {
             throw new ParserException(getClass(), "Failed to parse single-line comment, did not find ending symbols EOF or new line.");
         }

@@ -17,6 +17,10 @@ public enum ExpressionValueType {
      */
     STRING,
     /**
+     * A RegEx Group in the format `[...]`, which can end with a plus or astericks.
+     */
+    REGEX_GROUP,
+    /**
      * 'OR' in a grammar rule's value, i.e. `|`.
      */
     ALTERNATOR

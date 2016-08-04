@@ -5,6 +5,7 @@ import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
 import notpure.antlr4.macro.model.parser.ExpressionParser;
 import notpure.antlr4.macro.model.parser.ParserException;
 import notpure.antlr4.macro.processor.parser.exprval.AlternatorParser;
+import notpure.antlr4.macro.processor.parser.exprval.RegexGroupParser;
 import notpure.antlr4.macro.processor.parser.exprval.RuleReferenceParser;
 import notpure.antlr4.macro.processor.parser.exprval.StringParser;
 import org.slf4j.Logger;
@@ -63,6 +64,7 @@ public final class ExpressionValueParser {
         parsers.add(new AlternatorParser());
         parsers.add(new StringParser());
         parsers.add(new RuleReferenceParser());
+        parsers.add(new RegexGroupParser());
     }
 
     private static ExpressionParser getParser(TokenParserIterator it) {
