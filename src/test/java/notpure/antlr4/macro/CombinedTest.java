@@ -105,6 +105,11 @@ public final class CombinedTest {
         expressionValues1.add(new ExpressionValue(ExpressionValueType.STRING, "hello"));
         expressionValues1.add(new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "ID"));
 
+        List<ExpressionValue> expressionValues2 = new ArrayList<>();
+        expressionValues2.add(new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[ \\t\\r\\n]+"));
+        expressionValues2.add(new ExpressionValue(ExpressionValueType.REDIRECT, "->"));
+        expressionValues2.add(new ExpressionValue(ExpressionValueType.OUTPUT_REDIRECT, "skip"));
+
         List<Expression> expectedExpressions = new ArrayList<>();
         expectedExpressions.add(new Expression(ExpressionType.GRAMMAR_NAME,
                 new ExpressionValue(RAW, "Hello")));
@@ -113,14 +118,15 @@ public final class CombinedTest {
         expectedExpressions.add(new Expression(ExpressionType.PARSER_RULE, "r", expressionValues1));
         expectedExpressions.add(new Expression(ExpressionType.SINGLE_LINE_COMMENT,
                 new ExpressionValue(RAW, " lexer rules")));
-        expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "ID", new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[a-z]+")));
-//        expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", "[ \\t\\r\\n]+ -> skip"));
+        expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "ID",
+                new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[a-z]+")));
+        expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", expressionValues2));
 
         // Store actual statements
         List<Expression> actualExpressions = new SimpleParser().parse(actualOutput).getExpressions();
 
         // Compare outputs
-//        assertEquals(expectedExpressions.size(), actualExpressions.size());
+        assertEquals(expectedExpressions.size(), actualExpressions.size());
 
         // Iterate over generated statements
         for (int i = 0; i < expectedExpressions.size(); i++) {

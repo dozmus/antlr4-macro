@@ -1,13 +1,11 @@
 package notpure.antlr4.macro.processor.parser;
 
 import notpure.antlr4.macro.model.lang.ExpressionValue;
+import notpure.antlr4.macro.model.lang.ExpressionValueType;
 import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
 import notpure.antlr4.macro.model.parser.ExpressionParser;
 import notpure.antlr4.macro.model.parser.ParserException;
-import notpure.antlr4.macro.processor.parser.exprval.AlternatorParser;
-import notpure.antlr4.macro.processor.parser.exprval.RegexGroupParser;
-import notpure.antlr4.macro.processor.parser.exprval.RuleReferenceParser;
-import notpure.antlr4.macro.processor.parser.exprval.StringParser;
+import notpure.antlr4.macro.processor.parser.exprval.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +32,7 @@ public final class ExpressionValueParser {
 
     public static List<ExpressionValue> parse(TokenParserIterator it) {
         List<ExpressionValue> values = new ArrayList<>();
+        boolean afterRedirectSymbol = false;
 
         while (it.hasNext()) {
             // Check if end of statement
@@ -47,9 +46,17 @@ public final class ExpressionValueParser {
                 ExpressionValue expr;
 
                 try {
-                    expr = (ExpressionValue)parser.parse(it);
+                    if (parser instanceof RuleReferenceParser) {
+                        expr = ((RuleReferenceParser)parser).parse(it, afterRedirectSymbol);
+                    } else {
+                        expr = (ExpressionValue)parser.parse(it);
+                    }
+
                     values.add(expr);
                     LOGGER.info("Parsed ExpressionValue: {}", expr);
+
+                    if (expr.getType() == ExpressionValueType.REDIRECT)
+                        afterRedirectSymbol = true;
                 } catch (ParserException e) {
                     // TODO throw ex
                 }
@@ -62,6 +69,7 @@ public final class ExpressionValueParser {
 
     private static void initParsers() {
         parsers.add(new AlternatorParser());
+        parsers.add(new RedirectParser());
         parsers.add(new StringParser());
         parsers.add(new RuleReferenceParser());
         parsers.add(new RegexGroupParser());

@@ -19,6 +19,10 @@ public final class RuleReferenceParser implements ExpressionParser<ExpressionVal
 
     @Override
     public ExpressionValue parse(TokenParserIterator it) throws ParserException {
+        return parse(it, false);
+    }
+
+    public ExpressionValue parse(TokenParserIterator it, boolean redirectOutput) throws ParserException {
         // Parse value
         String value;
 
@@ -29,7 +33,9 @@ public final class RuleReferenceParser implements ExpressionParser<ExpressionVal
         }
 
         // Parse further
-        if (value.contains("=")) {
+        if (redirectOutput) {
+            return new ExpressionValue(ExpressionValueType.OUTPUT_REDIRECT, value);
+        } else if (value.contains("=")) {
             String[] frag = value.split("=");
             return new ExpressionValue(ExpressionValueType.RULE_REFERENCE, frag[0], frag[1]);
         } else {

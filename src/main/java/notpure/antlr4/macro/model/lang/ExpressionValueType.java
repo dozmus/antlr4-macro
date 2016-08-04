@@ -23,5 +23,13 @@ public enum ExpressionValueType {
     /**
      * 'OR' in a grammar rule's value, i.e. `|`.
      */
-    ALTERNATOR
+    ALTERNATOR,
+    /**
+     * 'Redirect' in a grammar rule's value, i.e. `->`.
+     */
+    REDIRECT,
+    /**
+     * The output to redirect input to, i.e. in `a -> skip` this would be `skip`.
+     */
+    OUTPUT_REDIRECT
 }
