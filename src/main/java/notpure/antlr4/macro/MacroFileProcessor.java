@@ -4,6 +4,7 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.processor.lexer.SimpleLexer;
+import notpure.antlr4.macro.processor.macro.MacroExpressionResolver;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import notpure.antlr4.macro.util.FileHelper;
 import org.slf4j.Logger;
@@ -72,7 +73,13 @@ public final class MacroFileProcessor {
         List<Expression> macroExpressions = expressions.stream()
                 .filter(p -> p.getType() == ExpressionType.MACRO_RULE)
                 .collect(Collectors.toList());
-        // ...
+
+        try {
+            macroExpressions = MacroExpressionResolver.resolve(macroExpressions);
+        } catch (Exception ex) {
+            LOGGER.warn("Error resolving macro definition: '{}'", ex.getMessage());
+            return;
+        }
 
         // Update expressions
         List<Expression> ruleExpressions = expressions.stream()
