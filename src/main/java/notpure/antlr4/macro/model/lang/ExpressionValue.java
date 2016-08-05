@@ -1,6 +1,8 @@
 package notpure.antlr4.macro.model.lang;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * The value of an {@link Expression}.
@@ -40,16 +42,12 @@ public final class ExpressionValue {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof ExpressionValue) {
-            ExpressionValue other = (ExpressionValue)obj;
-            return other.getType() == type
-                    // comparing value
-                    && other.getValue() != null && value != null && other.getValue().equals(value)
-                    // comparing identifier
-                    && (other.getIdentifier() == null && identifier == null
-                    || other.getIdentifier() != null && identifier != null && other.getIdentifier().equals(identifier));
-        }
-        return false;
+        return Optional.ofNullable(obj)
+                .filter($ -> $ instanceof ExpressionValue)
+                .map($ -> (ExpressionValue)$)
+                .filter($ -> $.getValue() != null && value != null && $.getValue().equals(value))
+                .filter($ -> Objects.equals($.getIdentifier(), identifier))
+                .isPresent();
     }
 
     public static boolean equals(List<ExpressionValue> v1, List<ExpressionValue> v2) {

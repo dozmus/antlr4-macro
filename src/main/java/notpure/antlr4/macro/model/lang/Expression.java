@@ -4,6 +4,8 @@ import notpure.antlr4.macro.util.ArrayHelper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A parsed expression.
@@ -53,11 +55,12 @@ public final class Expression {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Expression))
-            return false;
-        Expression other = (Expression) obj;
-        return other.getType() == type && ExpressionValue.equals(other.getValues(), values)
-                && (other.getIdentifier() == null && identifier == null
-                || other.getIdentifier() != null && identifier != null && other.getIdentifier().equals(identifier));
+        return Optional.ofNullable(obj)
+                .filter($ -> $ instanceof Expression)
+                .map($ -> (Expression)$)
+                .filter($ -> $.getType() == type)
+                .filter($ -> ExpressionValue.equals($.getValues(), values))
+                .filter($ -> Objects.equals($.getIdentifier(), identifier))
+                .isPresent();
     }
 }
