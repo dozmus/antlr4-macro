@@ -1,6 +1,6 @@
 package notpure.antlr4.macro.model.lang;
 
-import notpure.antlr4.macro.util.ArrayHelper;
+import notpure.antlr4.macro.util.CollectionHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +50,7 @@ public final class Expression {
 
     @Override
     public String toString() {
-        return type.name() + "(" + (identifier == null ? "" : identifier + "=") + ArrayHelper.toString(values) + ")";
+        return type.name() + "(" + (identifier == null ? "" : identifier + "=") + CollectionHelper.toString(values) + ")";
     }
 
     @Override

@@ -5,22 +5,22 @@ import notpure.antlr4.macro.model.lang.ExpressionValue;
 import java.util.List;
 
 /**
- * Array utility methods.
+ * Collection utility methods.
  */
-public final class ArrayHelper {
+public final class CollectionHelper {
 
     /**
-     * Linear-search implementation, uses {@link ArrayHelper#find(Object[], Object)}.
+     * Linear-search implementation, uses {@link CollectionHelper#search(Object[], Object)}.
      * @return True if target is included in the source array.
      */
     public static <T> boolean arrayContains(T[] src, T target) {
-        return find(src, target) != -1;
+        return search(src, target) != -1;
     }
 
     /**
      * Linear-search implementation.
      */
-    public static <T> int find(T[] src, T target) {
+    public static <T> int search(T[] src, T target) {
         for (int i = 0; i < src.length; i++) {
             if (src[i].equals(target))
                 return i;

@@ -24,16 +24,16 @@ public final class FileHelper {
     public static List<String> getFileNames(List<String> fileNames, Path dir, String ext) {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
             // Iterate over paths
-            for (Path path : stream) {
-                if (path.toFile().isDirectory()) {
-                    getFileNames(fileNames, path, ext);
+            stream.forEach(p -> {
+                if (p.toFile().isDirectory()) {
+                    getFileNames(fileNames, p, ext);
                 } else {
-                    String fileName = path.toAbsolutePath().toString();
+                    String fileName = p.toAbsolutePath().toString();
 
                     if (fileName.endsWith(ext))
-                        fileNames.add(path.toAbsolutePath().toString());
+                        fileNames.add(p.toAbsolutePath().toString());
                 }
-            }
+            });
         } catch (IOException e) {
             return new ArrayList<>();
         }

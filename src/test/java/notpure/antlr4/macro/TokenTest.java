@@ -2,7 +2,7 @@ package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
-import notpure.antlr4.macro.util.ArrayHelper;
+import notpure.antlr4.macro.util.CollectionHelper;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -47,14 +47,14 @@ public final class TokenTest {
 
         // Test valid values
         for (Token token : tokens) {
-            assertTrue(ArrayHelper.arrayContains(tokens, token));
+            assertTrue(CollectionHelper.arrayContains(tokens, token));
         }
 
         // Test invalid values
-        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.SEMICOLON)));
-        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.NEW_LINE)));
-        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.EOF)));
-        assertFalse(ArrayHelper.arrayContains(tokens, new Token(TokenDefinition.LEFT_BRACKET)));
+        assertFalse(CollectionHelper.arrayContains(tokens, new Token(TokenDefinition.SEMICOLON)));
+        assertFalse(CollectionHelper.arrayContains(tokens, new Token(TokenDefinition.NEW_LINE)));
+        assertFalse(CollectionHelper.arrayContains(tokens, new Token(TokenDefinition.EOF)));
+        assertFalse(CollectionHelper.arrayContains(tokens, new Token(TokenDefinition.LEFT_BRACKET)));
     }
 
     @Test
@@ -71,6 +71,6 @@ public final class TokenTest {
 
         String expectedValue = "Token[] { Token(ASTERISK='*'), Token(BACK_SLASH='\\'), Token(AMPERSAND='&'),"
         + " Token(COMMERCIAL_AT='@'), Token(CARET='^'), Token(CARRIAGE_RETURN=''), Token(COLON=':') }";
-        assertEquals(expectedValue, ArrayHelper.toString(tokens));
+        assertEquals(expectedValue, CollectionHelper.toString(tokens));
     }
 }

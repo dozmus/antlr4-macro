@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * A static utility class to parse {@link ExpressionValue} from {@link TokenParserIterator}.
@@ -76,11 +77,7 @@ public final class ExpressionValueParser {
     }
 
     private static ExpressionParser getParser(TokenParserIterator it) {
-        for (ExpressionParser parser : parsers) {
-            if (parser.validate(it)) {
-                return parser;
-            }
-        }
-        return null;
+        Optional<ExpressionParser> parser = parsers.stream().filter(p -> p.validate(it)).findFirst();
+        return parser.isPresent() ? parser.get() : null;
     }
 }

@@ -3,7 +3,7 @@ package notpure.antlr4.macro.processor.parser;
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
 import notpure.antlr4.macro.model.lexer.token.TokenIterator;
-import notpure.antlr4.macro.util.ArrayHelper;
+import notpure.antlr4.macro.util.CollectionHelper;
 
 import java.util.List;
 
@@ -75,7 +75,7 @@ public final class TokenParserIterator extends TokenIterator {
     }
 
     private boolean anyMatch(TokenTarget target) {
-        return !target.isConsecutiveMatch() && ArrayHelper.arrayContains(target.getTokens(), peek());
+        return !target.isConsecutiveMatch() && CollectionHelper.arrayContains(target.getTokens(), peek());
     }
 
     private boolean consecutiveMatch(TokenTarget target) {

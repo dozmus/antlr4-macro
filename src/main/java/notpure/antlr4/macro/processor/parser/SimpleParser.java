@@ -11,6 +11,7 @@ import notpure.antlr4.macro.processor.parser.expr.*;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Parses tokens into statements.
@@ -70,12 +71,8 @@ public final class SimpleParser extends Parser {
     }
 
     private ExpressionParser getParser(TokenParserIterator it) {
-        for (ExpressionParser parser : parsers) {
-            if (parser.validate(it)) {
-                return parser;
-            }
-        }
-        return null;
+        Optional<ExpressionParser> parser = parsers.stream().filter(p -> p.validate(it)).findFirst();
+        return parser.isPresent() ? parser.get() : null;
     }
 
     public boolean isErrorOccurred() {
