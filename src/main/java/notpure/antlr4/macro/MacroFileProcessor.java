@@ -4,6 +4,7 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.processor.lexer.SimpleLexer;
+import notpure.antlr4.macro.processor.macro.MacroExpressionProcessor;
 import notpure.antlr4.macro.processor.macro.MacroExpressionResolver;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import notpure.antlr4.macro.util.FileHelper;
@@ -67,11 +68,11 @@ public final class MacroFileProcessor {
         }
 
         // Parser
-        final List<Expression> expressions = new SimpleParser().parse(tokens).getExpressions();
+        List<Expression> expressions = new SimpleParser().parse(tokens).getExpressions();
 
         // Resolve macro definitions
         List<Expression> macroExpressions = expressions.stream()
-                .filter(p -> p.getType() == ExpressionType.MACRO_RULE)
+                .filter(expr -> expr.getType() == ExpressionType.MACRO_RULE)
                 .collect(Collectors.toList());
 
         try {
@@ -82,10 +83,12 @@ public final class MacroFileProcessor {
         }
 
         // Update expressions
-        List<Expression> ruleExpressions = expressions.stream()
-                .filter(p -> p.getType() == ExpressionType.PARSER_RULE || p.getType() == ExpressionType.LEXER_RULE)
-                .collect(Collectors.toList());
-        // ...
+        try {
+            expressions = MacroExpressionProcessor.process(expressions, macroExpressions);
+        } catch (Exception ex) {
+            LOGGER.warn("Error applying macro definitions: '{}'", ex.getMessage());
+            return;
+        }
 
         // Write to output file
         // ...

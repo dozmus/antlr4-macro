@@ -1,0 +1,67 @@
+package notpure.antlr4.macro.processor.macro;
+
+import notpure.antlr4.macro.model.lang.Expression;
+import notpure.antlr4.macro.model.lang.ExpressionType;
+import notpure.antlr4.macro.model.lang.ExpressionValue;
+import notpure.antlr4.macro.model.lang.ExpressionValueType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Takes a list of rules and a list of macro rules, and applies the latter to the prior.
+ */
+public final class MacroExpressionProcessor {
+
+    public static List<Expression> process(List<Expression> inputExpressions,
+                                           List<Expression> expandedMacroExpressions) throws Exception {
+        List<Expression> outputExpressions = new ArrayList<>();
+
+        for (Expression expr : inputExpressions) {
+            if (expr.getType() == ExpressionType.LEXER_RULE || expr.getType() == ExpressionType.PARSER_RULE) {
+                try {
+                    outputExpressions.add(applyMacros(expandedMacroExpressions, expr));
+                } catch (Exception ex) {
+                    throw ex;
+                }
+            }
+        }
+        return outputExpressions;
+    }
+
+    private static Expression applyMacros(List<Expression> expandedMacroExpressions, Expression expr) throws Exception {
+        boolean resolved = true;
+
+        while (resolved) {
+            resolved = false;
+
+            for (int i = 0; i < expr.getValues().size(); i++) {
+                ExpressionValue val = expr.getValues().get(i);
+
+                if (val.getType() == ExpressionValueType.RULE_REFERENCE) {
+                    String reference = val.getValue();
+                    Expression macroExpr = getMacroExpr(expandedMacroExpressions, reference);
+
+                    if (macroExpr != null) {
+                        expr.getValues().remove(i);
+
+                        for (int j = 0; j < macroExpr.getValues().size(); j++) {
+                            expr.getValues().add(i + j, macroExpr.getValues().get(j));
+                        }
+                        resolved = true;
+                    } else {
+                        throw new Exception("Unable to locate macro rule for macro identifier `" + reference + "`");
+                    }
+                }
+            }
+        }
+        return expr;
+    }
+
+    private static Expression getMacroExpr(List<Expression> expandedMacroExpressions, String ref) {
+        for (Expression expr : expandedMacroExpressions)
+            if (expr.getIdentifier().equals(ref))
+                return expr;
+        return null;
+    }
+}

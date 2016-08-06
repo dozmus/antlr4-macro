@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by pure on 05/08/2016.
+ * Takes a list of macro expressions and replaces its expression values with their expanded equivalent.
  */
 public final class MacroExpressionResolver {
 
