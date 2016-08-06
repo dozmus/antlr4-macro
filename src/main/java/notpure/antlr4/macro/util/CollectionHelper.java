@@ -31,10 +31,10 @@ public final class CollectionHelper {
     /**
      * Constructs a String representation of an array and its values.
      */
-    public static <T> String toString(T[] targets) {
+    public static <T> String toString(String arrayName, T[] targets) {
         final int n = targets.length;
         StringBuilder sb = new StringBuilder();
-        sb.append(targets.getClass().getSimpleName()).append(" { ");
+        sb.append(arrayName).append(" { ");
 
         for (int i = 0; i < n; i++) {
             sb.append(targets[i].toString());
@@ -47,9 +47,23 @@ public final class CollectionHelper {
     }
 
     /**
+     * Constructs a String representation of an array and its values.
+     */
+    public static <T> String toString(T[] targets) {
+        return toString(targets.getClass().getSimpleName(), targets);
+    }
+
+    /**
      * Constructs a String representation of a {@link List} and its values.
      */
-    public static String toString(List<ExpressionValue> values) {
+    public static <T> String toString(List<T> values) {
         return toString(values.toArray());
+    }
+
+    /**
+     * Constructs a String representation of a {@link List} and its values.
+     */
+    public static <T> String toString(String arrayName, List<T> values) {
+        return toString(arrayName, values.toArray());
     }
 }

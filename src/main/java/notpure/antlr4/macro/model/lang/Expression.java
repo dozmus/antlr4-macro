@@ -50,7 +50,8 @@ public final class Expression {
 
     @Override
     public String toString() {
-        return type.name() + "(" + (identifier == null ? "" : identifier + "=") + CollectionHelper.toString(values) + ")";
+        return type.name() + "(" + (identifier == null ? "" : identifier + "=")
+                + CollectionHelper.toString("ExpressionValue[]", values) + ")";
     }
 
     @Override
