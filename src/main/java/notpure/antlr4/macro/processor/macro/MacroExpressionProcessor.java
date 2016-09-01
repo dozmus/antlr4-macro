@@ -4,6 +4,7 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lang.ExpressionValue;
 import notpure.antlr4.macro.model.lang.ExpressionValueType;
+import notpure.antlr4.macro.model.macro.MissingMacroRuleException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 public final class MacroExpressionProcessor {
 
     public static List<Expression> process(List<Expression> inputExpressions,
-                                           List<Expression> expandedMacroExpressions) throws Exception {
+                                           List<Expression> expandedMacroExpressions)
+            throws MissingMacroRuleException {
         List<Expression> outputExpressions = new ArrayList<>();
 
         for (Expression expr : inputExpressions) {
@@ -29,7 +31,8 @@ public final class MacroExpressionProcessor {
         return outputExpressions;
     }
 
-    private static Expression applyMacros(List<Expression> expandedMacroExpressions, Expression expr) throws Exception {
+    private static Expression applyMacros(List<Expression> expandedMacroExpressions, Expression expr)
+            throws MissingMacroRuleException {
         boolean resolved = true;
 
         while (resolved) {
@@ -50,7 +53,7 @@ public final class MacroExpressionProcessor {
                         }
                         resolved = true;
                     } else {
-                        throw new Exception("Unable to locate macro rule for macro identifier `" + reference + "`");
+                        throw new MissingMacroRuleException(reference);
                     }
                 }
             }

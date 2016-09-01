@@ -3,18 +3,20 @@ package notpure.antlr4.macro.processor.macro;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionValue;
 import notpure.antlr4.macro.model.lang.ExpressionValueType;
+import notpure.antlr4.macro.model.macro.MacroResolverException;
+import notpure.antlr4.macro.model.macro.MacroResolverException.CyclicMacroRuleReferenceException;
+import notpure.antlr4.macro.model.macro.MacroResolverException.MissingMacroRuleReferenceException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * Takes a list of macro expressions and replaces its expression values with their expanded equivalent.
  */
 public final class MacroExpressionResolver {
 
-    public static List<Expression> resolve(List<Expression> inputExpressions) throws Exception {
+    public static List<Expression> resolve(List<Expression> inputExpressions) throws MacroResolverException {
         List<Expression> outputExpressions = new ArrayList<>();
 
         for (Expression expr : inputExpressions) {
@@ -23,7 +25,7 @@ public final class MacroExpressionResolver {
         return outputExpressions;
     }
 
-    private static Expression resolve(List<Expression> inputExpressions, Expression expr) throws Exception {
+    private static Expression resolve(List<Expression> inputExpressions, Expression expr) throws MacroResolverException {
         boolean resolved = true;
 
         while (resolved) {
@@ -37,14 +39,14 @@ public final class MacroExpressionResolver {
 
                     // Check if cyclic reference
                     if (reference.equals(expr.getIdentifier())) {
-                        throw new Exception("Cyclic reference in rule: " + expr.getIdentifier());
+                        throw new CyclicMacroRuleReferenceException(expr.getIdentifier());
                     } else { // resolve
                         // Get value
                         List<ExpressionValue> resolvedValues = getExpressionValue(inputExpressions, reference);
 
                         // Insert into list
                         if (resolvedValues == null) {
-                            throw new Exception("Reference not found `" + reference + "` in rule: " + expr.getIdentifier());
+                            throw new MissingMacroRuleReferenceException(expr.getIdentifier(), reference);
                         } else {
                             expr.getValues().remove(i);
 
