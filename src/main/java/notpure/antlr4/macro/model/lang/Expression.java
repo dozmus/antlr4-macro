@@ -70,7 +70,10 @@ public final class Expression implements Antlr4Serializable {
     public String toAntlr4String() {
         switch (type) {
             case GRAMMAR_NAME:
-                return String.format("grammar %s;", getValues().get(0).getValue());
+                if (identifier == null)
+                    return String.format("grammar %s;", getValues().get(0).getValue());
+                else
+                    return String.format("grammar %s %s;", identifier, getValues().get(0).getValue());
             case SINGLE_LINE_COMMENT:
                 return String.format("//%s", getValues().get(0).getValue());
             case MULTI_LINE_COMMENT:

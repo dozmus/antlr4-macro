@@ -67,7 +67,7 @@ public final class CollectionHelper {
         return toString(arrayName, values.toArray());
     }
 
-    public static Object toAntlr4String(List<ExpressionValue> values) {
+    public static String toAntlr4String(List<ExpressionValue> values) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < values.size(); i++) {

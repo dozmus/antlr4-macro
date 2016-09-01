@@ -23,9 +23,14 @@ public final class AntlrSerializationTest {
     @Test
     public void testSerialization() {
         // Grammar name
-        assertEquals("grammar Hello;", new Expression(GRAMMAR_NAME, null, new ExpressionValue(RAW, "Hello")));
-        assertEquals("grammar ;", new Expression(GRAMMAR_NAME, null, new ExpressionValue(RAW, "")));
-        assertEquals("grammar 332;", new Expression(GRAMMAR_NAME, null, new ExpressionValue(RAW, "332")));
+        String[] grammarTypes = {null, "parser", "lexer"};
+
+        for (String type : grammarTypes) {
+            String grammarPart = type == null ? "" : " " + type;
+            assertEquals("grammar" + grammarPart + " Hello;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "Hello")));
+            assertEquals("grammar" + grammarPart + " ;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "")));
+            assertEquals("grammar" + grammarPart + " 332;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "332")));
+        }
 
         // Single-line comments
         assertEquals("//Hello", new Expression(SINGLE_LINE_COMMENT, null, new ExpressionValue(RAW, "Hello")));
