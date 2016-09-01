@@ -9,6 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Optional;
 
 /**
  * A simple lexer.
@@ -67,24 +69,21 @@ public final class SimpleLexer extends Lexer {
         // Attempt to tokenize char
         String val = value + "";
 
-        for (TokenDefinition def : TokenDefinition.values()) {
-            if (def.matches(val)) {
-                // Add token
-                LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.toPretty(value), def.name());
-                getTokens().add(new Token(def.name(), val, currentLineNo, currentColNo));
+        Optional<TokenDefinition> possibleDef = Arrays.stream(TokenDefinition.values())
+                .filter(d -> d.matches(val))
+                .findFirst();
+        TokenDefinition def = possibleDef.isPresent() ? possibleDef.get() : TokenDefinition.UNKNOWN;
 
-                // Update lineNo/colNo
-                currentColNo++;
+        // Add token
+        LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.toPretty(value), def.name());
+        getTokens().add(new Token(def.name(), val, currentLineNo, currentColNo));
 
-                if (def == TokenDefinition.NEW_LINE) {
-                    currentLineNo++;
-                    currentColNo = 0;
-                }
-                return;
-            }
+        // Update lineNo/colNo
+        currentColNo++;
+
+        if (def == TokenDefinition.NEW_LINE) {
+            currentLineNo++;
+            currentColNo = 0;
         }
-
-        // Fall-back, log the skipped value
-        LOGGER.info("Skipped value: {}", value);
     }
 }

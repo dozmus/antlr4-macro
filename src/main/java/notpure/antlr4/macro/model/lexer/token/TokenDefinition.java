@@ -52,6 +52,10 @@ public enum TokenDefinition {
     TAB("\t"),
     SPACE(" "),
     /**
+     * Unknown token.
+     */
+    UNKNOWN,
+    /**
      * End of file, unique token.
      */
     EOF;

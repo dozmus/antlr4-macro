@@ -12,7 +12,7 @@ public final class CharStream implements Iterator<Character> {
     private final Scanner scanner;
 
     public CharStream(InputStream inputStream) {
-        scanner = new Scanner(inputStream);
+        scanner = new Scanner(inputStream, "UTF-8");
         scanner.useDelimiter("");
     }
 
