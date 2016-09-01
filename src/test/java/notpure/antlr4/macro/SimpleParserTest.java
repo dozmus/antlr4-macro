@@ -97,6 +97,10 @@ public final class SimpleParserTest {
         assertSingleStatement("#HELLO290woRld  :'HELLO\r\n|WORLD';",
                 new Expression(type, "HELLO290woRld", new ExpressionValue(STRING, "HELLO\r\n|WORLD")));
 
+        // UTF-8 in string
+        assertSingleStatement("#HELLO:'HǺLLO';",
+                new Expression(type, "HELLO", new ExpressionValue(STRING, "HǺLLO")));
+
         // Compound values
         final List<ExpressionValue> expressionValues = new ArrayList<>();
         expressionValues.add(new ExpressionValue(RULE_REFERENCE, "HELLO"));
@@ -125,6 +129,10 @@ public final class SimpleParserTest {
         assertSingleStatement("helloWorld  :'HELLO\r\n|WORLD';",
                 new Expression(type, "helloWorld", new ExpressionValue(STRING, "HELLO\r\n|WORLD")));
 
+        // UTF-8 in string
+        assertSingleStatement("hello:'HǺLLO';",
+                new Expression(type, "hello", new ExpressionValue(STRING, "HǺLLO")));
+
         // Compound values
         final List<ExpressionValue> expressionValues = new ArrayList<>();
         expressionValues.add(new ExpressionValue(RULE_REFERENCE, "HELLO"));
@@ -151,6 +159,11 @@ public final class SimpleParserTest {
         assertSingleStatement("HELLOWORLD  : 'HELLO' ;", expr1);
         assertSingleStatement("HELLOWORLD  :'HELLO\r\n|WORLD';",
                 new Expression(type, "HELLOWORLD", new ExpressionValue(STRING, "HELLO\r\n|WORLD")));
+
+
+        // UTF-8 in string
+        assertSingleStatement("HELLO:'HǺLLO';",
+                new Expression(type, "HELLO", new ExpressionValue(STRING, "HǺLLO")));
 
         // Compound values
         final List<ExpressionValue> expressionValues = new ArrayList<>();
