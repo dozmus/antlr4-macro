@@ -7,7 +7,7 @@ import java.util.Optional;
 /**
  * The value of an {@link Expression}.
  */
-public final class ExpressionValue {
+public final class ExpressionValue implements Antlr4Serializable {
 
     private final ExpressionValueType type;
     private final String identifier;
@@ -62,5 +62,22 @@ public final class ExpressionValue {
             }
         }
         return true;
+    }
+
+    @Override
+    public String toAntlr4String() {
+        switch (type) {
+            case RAW:
+            case RULE_REFERENCE:
+            case REGEX_GROUP:
+            case REDIRECT:
+            case OUTPUT_REDIRECT:
+            case ALTERNATOR:
+                return getValue();
+            case STRING:
+                return String.format("'%s'", getValue());
+            default:
+                return null;
+        }
     }
 }

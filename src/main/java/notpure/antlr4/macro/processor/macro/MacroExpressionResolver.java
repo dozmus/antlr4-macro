@@ -6,6 +6,8 @@ import notpure.antlr4.macro.model.lang.ExpressionValueType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Takes a list of macro expressions and replaces its expression values with their expanded equivalent.
@@ -30,7 +32,7 @@ public final class MacroExpressionResolver {
             for (int i = 0; i < expr.getValues().size(); i++) {
                 ExpressionValue val = expr.getValues().get(i);
 
-                if (val.getType() == ExpressionValueType.RULE_REFERENCE) {
+                if (val.getType() == ExpressionValueType.RULE_REFERENCE && val.getValue().startsWith("#")) {
                     String reference = val.getValue();
 
                     // Check if cyclic reference
@@ -60,11 +62,11 @@ public final class MacroExpressionResolver {
     }
 
     private static List<ExpressionValue> getExpressionValue(List<Expression> expressions, String reference) {
-        for (Expression expr : expressions) {
-            if (expr.getIdentifier() != null && expr.getIdentifier().equals(reference)) {
-                return expr.getValues();
-            }
-        }
-        return null;
+        Optional<Expression> expression = expressions.stream()
+                .filter(expr -> expr.getIdentifier() != null)
+                .filter(expr -> expr.getIdentifier().startsWith("#"))
+                .filter(expr -> expr.getIdentifier().equals(reference))
+                .findFirst();
+        return expression.isPresent() ? expression.get().getValues() : null;
     }
 }

@@ -11,10 +11,7 @@ import notpure.antlr4.macro.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +79,7 @@ public final class MacroFileProcessor {
             return;
         }
 
-        // Update expressions
+        // Update expressions, with macro definitions applied
         try {
             expressions = MacroExpressionProcessor.process(expressions, macroExpressions);
         } catch (Exception ex) {
@@ -90,9 +87,32 @@ public final class MacroFileProcessor {
             return;
         }
 
-        // Write to output file
-        // ...
+        // Create output string
+        StringBuilder sb = new StringBuilder();
 
-        // TODO finish
+        expressions.forEach(expr -> {
+            sb.append(expr.toAntlr4String());
+            sb.append("\r\n");
+        });
+
+        // Write to output file
+        File file = new File(outFileName);
+
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                LOGGER.error("Error occurred while creating file: '{}'", inFileName);
+                return;
+            }
+        }
+
+        try (Writer writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(sb.toString());
+            writer.flush();
+        } catch (IOException e) {
+            LOGGER.error("IOException occurred while processing file: '{}'", inFileName);
+        }
+        LOGGER.info("Processed '{}'", inFileName);
     }
 }

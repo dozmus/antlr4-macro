@@ -68,13 +68,13 @@ public final class MacroExpressionResolverTest {
         values.add(new ExpressionValue(ExpressionValueType.STRING, "hello"));
         values.add(new ExpressionValue(ExpressionValueType.ALTERNATOR, "|"));
         values.add(new ExpressionValue(ExpressionValueType.STRING, "world"));
-        assertResolveOfNoOperation(new Expression(ExpressionType.MACRO_RULE, "HELLO_WORLD", values));
+        assertResolveOfNoOperation(new Expression(ExpressionType.MACRO_RULE, "#HELLO_WORLD", values));
     }
 
     @Test(expected = Exception.class)
     public void testCyclicMacroExpressionResolving1() throws Exception {
-        assertResolveOfCyclicReference(new Expression(ExpressionType.MACRO_RULE, "HELLO_WORLD",
-                new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "HELLO_WORLD")));
+        assertResolveOfCyclicReference(new Expression(ExpressionType.MACRO_RULE, "#HELLO_WORLD",
+                new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "#HELLO_WORLD")));
     }
 
     @Test(expected = Exception.class)
@@ -84,17 +84,17 @@ public final class MacroExpressionResolverTest {
         values.add(new ExpressionValue(ExpressionValueType.ALTERNATOR, "|"));
         values.add(new ExpressionValue(ExpressionValueType.STRING, "world"));
         values.add(new ExpressionValue(ExpressionValueType.ALTERNATOR, "|"));
-        values.add(new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "HELLO_WORLD"));
-        assertResolveOfCyclicReference(new Expression(ExpressionType.MACRO_RULE, "HELLO_WORLD", values));
+        values.add(new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "#HELLO_WORLD"));
+        assertResolveOfCyclicReference(new Expression(ExpressionType.MACRO_RULE, "#HELLO_WORLD", values));
     }
 
     @Test(expected = Exception.class)
     public void testCyclicMacroExpressionResolving3() throws Exception {
         List<Expression> values = new ArrayList<>();
         values.add(new Expression(ExpressionType.MACRO_RULE, "HELLO_WORLD",
-                new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "BYE_WORLD")));
+                new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "#BYE_WORLD")));
         values.add(new Expression(ExpressionType.MACRO_RULE, "BYE_WORLD",
-                new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "HELLO_WORLD")));
+                new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "#HELLO_WORLD")));
         assertResolveOfCyclicReference(values);
     }
 }

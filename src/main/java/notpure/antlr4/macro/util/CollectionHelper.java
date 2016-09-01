@@ -66,4 +66,16 @@ public final class CollectionHelper {
     public static <T> String toString(String arrayName, List<T> values) {
         return toString(arrayName, values.toArray());
     }
+
+    public static Object toAntlr4String(List<ExpressionValue> values) {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < values.size(); i++) {
+            sb.append(values.get(i).toAntlr4String());
+
+            if (i + 1 < values.size())
+                sb.append(" ");
+        }
+        return sb.toString();
+    }
 }

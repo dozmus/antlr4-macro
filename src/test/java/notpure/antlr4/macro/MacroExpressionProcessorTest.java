@@ -21,11 +21,12 @@ public final class MacroExpressionProcessorTest {
     @Test
     public void testValidMacroRuleApplication() throws Exception {
         Expression expr1 = new Expression(ExpressionType.MACRO_RULE, "FNAME", new ExpressionValue(STRING, "John"));
-        Expression expr2 = new Expression(ExpressionType.LEXER_RULE, "NAME", new ExpressionValue(RULE_REFERENCE, "FNAME"));
+        Expression expr2 = new Expression(ExpressionType.LEXER_RULE, "NAME", new ExpressionValue(RULE_REFERENCE, "#FNAME"));
         Expression expectedOutputExpr = new Expression(ExpressionType.LEXER_RULE, "NAME", new ExpressionValue(STRING, "John"));
 
         List<Expression> macros = new ArrayList<>();
         macros.add(expr1);
+
         List<Expression> expressions = new ArrayList<>();
         expressions.add(expr2);
 
@@ -37,8 +38,8 @@ public final class MacroExpressionProcessorTest {
     @Test
     public void testComplexValidMacroRuleApplication() throws Exception {
         List<ExpressionValue> values = new ArrayList<>();
-        values.add(new ExpressionValue(RULE_REFERENCE, "FNAME"));
-        values.add(new ExpressionValue(RULE_REFERENCE, "LNAME"));
+        values.add(new ExpressionValue(RULE_REFERENCE, "#FNAME"));
+        values.add(new ExpressionValue(RULE_REFERENCE, "#LNAME"));
 
         Expression expr1 = new Expression(ExpressionType.MACRO_RULE, "FNAME", new ExpressionValue(STRING, "John"));
         Expression expr2 = new Expression(ExpressionType.MACRO_RULE, "LNAME", new ExpressionValue(STRING, "Doe"));
@@ -60,14 +61,13 @@ public final class MacroExpressionProcessorTest {
         assertEquals(expectedOutputExpr, outputExpressions.get(0));
     }
 
-    @Test (expected = Exception.class)
+    @Test(expected = Exception.class)
     public void testMissingMacroRuleApplication() throws Exception {
-        Expression expr2 = new Expression(ExpressionType.LEXER_RULE, "NAME", new ExpressionValue(RULE_REFERENCE, "FNAME"));
-        Expression expectedOutputExpr = new Expression(ExpressionType.LEXER_RULE, "NAME", new ExpressionValue(STRING, "John Doe"));
+        Expression expr = new Expression(ExpressionType.LEXER_RULE, "NAME", new ExpressionValue(RULE_REFERENCE, "#FNAME"));
 
         List<Expression> macros = new ArrayList<>();
         List<Expression> expressions = new ArrayList<>();
-        expressions.add(expr2);
+        expressions.add(expr);
 
         List<Expression> outputExpressions = MacroExpressionProcessor.process(expressions, macros);
     }

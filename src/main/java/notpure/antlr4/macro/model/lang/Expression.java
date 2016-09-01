@@ -1,6 +1,7 @@
 package notpure.antlr4.macro.model.lang;
 
 import notpure.antlr4.macro.util.CollectionHelper;
+import notpure.antlr4.macro.util.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Optional;
 /**
  * A parsed expression.
  */
-public final class Expression {
+public final class Expression implements Antlr4Serializable {
 
     private final String identifier;
     private final List<ExpressionValue> values;
@@ -63,5 +64,23 @@ public final class Expression {
                 .filter($ -> ExpressionValue.equals($.getValues(), values))
                 .filter($ -> Objects.equals($.getIdentifier(), identifier))
                 .isPresent();
+    }
+
+    @Override
+    public String toAntlr4String() {
+        switch (type) {
+            case GRAMMAR_NAME:
+                return String.format("grammar %s;", getValues().get(0).getValue());
+            case SINGLE_LINE_COMMENT:
+                return String.format("//%s", getValues().get(0).getValue());
+            case MULTI_LINE_COMMENT:
+                return String.format("/*%s*/", getValues().get(0).getValue());
+            case LEXER_RULE:
+            case PARSER_RULE:
+                return String.format("%s: %s;", getIdentifier(), CollectionHelper.toAntlr4String(getValues()));
+            case MACRO_RULE:
+            default:
+                throw new RuntimeException("toAntlr4String() is invalid for ExprType.MACRO_RULE");
+        }
     }
 }

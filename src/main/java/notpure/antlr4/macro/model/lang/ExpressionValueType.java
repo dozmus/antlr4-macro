@@ -28,7 +28,7 @@ public enum ExpressionValueType {
      * 'Redirect' in a grammar rule's value, i.e. `->`.
      */
     REDIRECT,
-    ExpressionValueType, /**
+    /**
      * The output to redirect input to, i.e. in `a -> skip` this would be `skip`.
      */
     OUTPUT_REDIRECT

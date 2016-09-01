@@ -19,11 +19,11 @@ public final class MacroExpressionProcessor {
 
         for (Expression expr : inputExpressions) {
             if (expr.getType() == ExpressionType.LEXER_RULE || expr.getType() == ExpressionType.PARSER_RULE) {
-                try {
-                    outputExpressions.add(applyMacros(expandedMacroExpressions, expr));
-                } catch (Exception ex) {
-                    throw ex;
-                }
+                outputExpressions.add(applyMacros(expandedMacroExpressions, expr));
+            } else if (expr.getType() == ExpressionType.MACRO_RULE) {
+                // Ignore
+            } else {
+                outputExpressions.add(expr);
             }
         }
         return outputExpressions;
@@ -38,8 +38,8 @@ public final class MacroExpressionProcessor {
             for (int i = 0; i < expr.getValues().size(); i++) {
                 ExpressionValue val = expr.getValues().get(i);
 
-                if (val.getType() == ExpressionValueType.RULE_REFERENCE) {
-                    String reference = val.getValue();
+                if (val.getType() == ExpressionValueType.RULE_REFERENCE && val.getValue().startsWith("#")) {
+                    String reference = val.getValue().substring(1);
                     Expression macroExpr = getMacroExpr(expandedMacroExpressions, reference);
 
                     if (macroExpr != null) {
