@@ -20,7 +20,6 @@ public final class Main {
             case "-i": // Process a single file
                 if (args.length != 2) {
                     printUsage();
-                    return;
                 } else {
                     // Get file name
                     String inFileName = args[1];
@@ -40,7 +39,7 @@ public final class Main {
      */
     private static void printUsage() {
         System.out.println("Invalid usage, try:");
-        System.out.println("antlr4-macros.jar -i <in> | to process the target file");
-        System.out.println("antlr4-macros.jar -r | to process the current directory recursively");
+        System.out.println("antlr4-macros.jar -i <input-file> | to process the target file");
+        System.out.println("antlr4-macros.jar -r | to process all .mg4 files in the current directory recursively");
     }
 }

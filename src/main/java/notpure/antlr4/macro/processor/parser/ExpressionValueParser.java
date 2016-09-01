@@ -56,7 +56,7 @@ public final class ExpressionValueParser {
                     values.add(expr);
                     LOGGER.info("Parsed ExpressionValue: {}", expr);
 
-                    if (expr.getType() == ExpressionValueType.REDIRECT)
+                    if (expr.getType() == ExpressionValueType.PIPELINE)
                         afterRedirectSymbol = true;
                 } catch (ParserException e) {
                     // TODO throw ex
@@ -70,7 +70,7 @@ public final class ExpressionValueParser {
 
     private static void initParsers() {
         parsers.add(new AlternatorParser());
-        parsers.add(new RedirectParser());
+        parsers.add(new PipelineParser());
         parsers.add(new StringParser());
         parsers.add(new RuleReferenceParser());
         parsers.add(new RegexGroupParser());

@@ -70,7 +70,7 @@ public final class ExpressionValue implements Antlr4Serializable {
             case RAW:
             case RULE_REFERENCE:
             case REGEX_GROUP:
-            case REDIRECT:
+            case PIPELINE:
             case OUTPUT_REDIRECT:
             case ALTERNATOR:
                 return getValue();

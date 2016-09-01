@@ -16,8 +16,7 @@ public class TokenIterator implements Iterator<Token> {
     }
 
     public TokenIterator(List<Token> tokens) {
-        this.tokens = new Token[tokens.size()];
-        this.tokens = tokens.toArray(this.tokens);
+        this.tokens = tokens.toArray(new Token[0]);
     }
 
     public int getCurrentIdx() {

@@ -7,14 +7,14 @@ import notpure.antlr4.macro.model.parser.ExpressionParser;
 import notpure.antlr4.macro.model.parser.ParserException;
 import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 /**
- * Parses {@link ExpressionValueType#REDIRECT}.
+ * Parses {@link ExpressionValueType#PIPELINE}.
  */
-public final class RedirectParser implements ExpressionParser<ExpressionValue> {
+public final class PipelineParser implements ExpressionParser<ExpressionValue> {
 
     @Override
     public ExpressionValue parse(TokenParserIterator it) throws ParserException {
         it.skip(2); // skip '->'
-        return new ExpressionValue(ExpressionValueType.REDIRECT, "->");
+        return new ExpressionValue(ExpressionValueType.PIPELINE, "->");
     }
 
     @Override

@@ -7,9 +7,8 @@ public final class StringHelper {
 
     /**
      * Formats the given char for printing by escaping escape sequences, i.e. '\n' -> "\\n".
-     * @return
      */
-    public static String toPretty(char c) {
+    public static String escape(char c) {
         switch (c) {
             case '\n':
                 return "\\n";

@@ -25,9 +25,9 @@ public enum ExpressionValueType {
      */
     ALTERNATOR,
     /**
-     * 'Redirect' in a grammar rule's value, i.e. `->`.
+     * 'Pipeline' in a grammar rule's value, i.e. `->`.
      */
-    REDIRECT,
+    PIPELINE,
     /**
      * The output to redirect input to, i.e. in `a -> skip` this would be `skip`.
      */

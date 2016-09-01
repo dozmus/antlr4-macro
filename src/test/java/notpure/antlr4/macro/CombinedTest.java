@@ -13,8 +13,6 @@ import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.junit.Test;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +109,7 @@ public final class CombinedTest {
 
         List<ExpressionValue> expressionValues2 = new ArrayList<>();
         expressionValues2.add(new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[ \\t\\r\\n]+"));
-        expressionValues2.add(new ExpressionValue(ExpressionValueType.REDIRECT, "->"));
+        expressionValues2.add(new ExpressionValue(ExpressionValueType.PIPELINE, "->"));
         expressionValues2.add(new ExpressionValue(ExpressionValueType.OUTPUT_REDIRECT, "skip"));
 
         List<Expression> expectedExpressions = new ArrayList<>();
@@ -219,7 +217,7 @@ public final class CombinedTest {
         // Store expected statements
         List<ExpressionValue> expressionValues1 = new ArrayList<>();
         expressionValues1.add(new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[ \\t\\r\\n]+"));
-        expressionValues1.add(new ExpressionValue(ExpressionValueType.REDIRECT, "->"));
+        expressionValues1.add(new ExpressionValue(ExpressionValueType.PIPELINE, "->"));
         expressionValues1.add(new ExpressionValue(ExpressionValueType.OUTPUT_REDIRECT, "skip"));
 
         List<Expression> expectedExpressions = new ArrayList<>();

@@ -75,7 +75,7 @@ public final class SimpleLexer extends Lexer {
         TokenDefinition def = possibleDef.isPresent() ? possibleDef.get() : TokenDefinition.UNKNOWN;
 
         // Add token
-        LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.toPretty(value), def.name());
+        LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.escape(value), def.name());
         getTokens().add(new Token(def.name(), val, currentLineNo, currentColNo));
 
         // Update lineNo/colNo

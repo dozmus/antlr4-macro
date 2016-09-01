@@ -1,7 +1,6 @@
 package notpure.antlr4.macro.model.lang;
 
 import notpure.antlr4.macro.util.CollectionHelper;
-import notpure.antlr4.macro.util.StringHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +79,7 @@ public final class Expression implements Antlr4Serializable {
                 return String.format("/*%s*/", getValues().get(0).getValue());
             case LEXER_RULE:
             case PARSER_RULE:
-                return String.format("%s: %s;", getIdentifier(), CollectionHelper.toAntlr4String(getValues()));
+                return String.format("%s: %s;", getIdentifier(), Antlr4Serializable.toAntlr4String(getValues()));
             case MACRO_RULE:
             default:
                 throw new RuntimeException("toAntlr4String() is invalid for ExprType.MACRO_RULE");

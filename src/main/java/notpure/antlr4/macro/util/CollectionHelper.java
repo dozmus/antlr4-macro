@@ -34,6 +34,8 @@ public final class CollectionHelper {
     public static <T> String toString(String arrayName, T[] targets) {
         final int n = targets.length;
         StringBuilder sb = new StringBuilder();
+
+        // Generate value
         sb.append(arrayName).append(" { ");
 
         for (int i = 0; i < n; i++) {
@@ -67,15 +69,4 @@ public final class CollectionHelper {
         return toString(arrayName, values.toArray());
     }
 
-    public static String toAntlr4String(List<ExpressionValue> values) {
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < values.size(); i++) {
-            sb.append(values.get(i).toAntlr4String());
-
-            if (i + 1 < values.size())
-                sb.append(" ");
-        }
-        return sb.toString();
-    }
 }

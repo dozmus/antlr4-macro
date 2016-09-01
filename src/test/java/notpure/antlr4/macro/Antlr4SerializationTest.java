@@ -14,7 +14,7 @@ import static notpure.antlr4.macro.model.lang.ExpressionValueType.*;
 /**
  * Created by pure on 29/08/2016.
  */
-public final class AntlrSerializationTest {
+public final class Antlr4SerializationTest {
 
     private static void assertEquals(String antlr4, Expression expr) {
         Assert.assertEquals(antlr4, expr.toAntlr4String());

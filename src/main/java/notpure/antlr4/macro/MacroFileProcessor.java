@@ -1,5 +1,6 @@
 package notpure.antlr4.macro;
 
+import notpure.antlr4.macro.model.lang.Antlr4Serializable;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lexer.token.Token;
@@ -51,6 +52,8 @@ public final class MacroFileProcessor {
      * Processes the given macro file, into one with the specified name.
      */
     public static void processFile(String inFileName, String outFileName) {
+        MacroFileProcessor mfp = new MacroFileProcessor();
+
         // Tokenize
         final List<Token> tokens;
 
@@ -87,15 +90,21 @@ public final class MacroFileProcessor {
             return;
         }
 
-        // Create output string
-        StringBuilder sb = new StringBuilder();
-
-        expressions.forEach(expr -> {
-            sb.append(expr.toAntlr4String());
-            sb.append("\r\n");
-        });
+        // Generate output antlr4 string
+        String antlr4Code = Antlr4Serializable.serializeAll(expressions);
 
         // Write to output file
+        mfp.writeOutput(inFileName, outFileName, antlr4Code);
+    }
+
+    /**
+     * Attempts to overwrite the content of the input file.
+     * @param inFileName
+     * @param outFileName
+     * @param antlr4Code The content to write.
+     * @return True if successful, false otherwise.
+     */
+    private boolean writeOutput(String inFileName, String outFileName, String antlr4Code) {
         File file = new File(outFileName);
 
         if (!file.exists()) {
@@ -103,16 +112,18 @@ public final class MacroFileProcessor {
                 file.createNewFile();
             } catch (IOException e) {
                 LOGGER.error("Error occurred while creating file: '{}'", inFileName);
-                return;
+                return false;
             }
         }
 
         try (Writer writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(sb.toString());
+            writer.write(antlr4Code);
             writer.flush();
         } catch (IOException e) {
             LOGGER.error("IOException occurred while processing file: '{}'", inFileName);
+            return false;
         }
         LOGGER.info("Processed '{}'", inFileName);
+        return true;
     }
 }
