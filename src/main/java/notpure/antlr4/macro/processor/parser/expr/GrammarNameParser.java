@@ -28,6 +28,21 @@ public final class GrammarNameParser implements ExpressionParser<Expression> {
             throw new ParserException(getClass(), "Expected whitespace between 'grammar' and its name.");
         }
 
+        // Parse type
+        String grammarType = null;
+
+        if (it.hasNext("lexer")) {
+            grammarType = "lexer";
+            it.skip(5);
+        } else if (it.hasNext("parser")) {
+            grammarType = "parser";
+            it.skip(6);
+        }
+
+        if (grammarType != null && it.skipAllWhitespace() == 0) {
+            throw new ParserException(getClass(), "Expected whitespace between 'lexer' or 'parser' and its name.");
+        }
+
         // Parse value
         String value;
 
@@ -41,7 +56,7 @@ public final class GrammarNameParser implements ExpressionParser<Expression> {
             throw new ParserException(getClass(), "Expected value after grammar name.");
         }
         it.skip(TokenDefinition.SEMICOLON);
-        return new Expression(ExpressionType.GRAMMAR_NAME, new ExpressionValue(ExpressionValueType.RAW, value));
+        return new Expression(ExpressionType.GRAMMAR_NAME, grammarType, new ExpressionValue(ExpressionValueType.RAW, value));
     }
 
     @Override

@@ -60,6 +60,25 @@ public final class SimpleParserTest {
     }
 
     /**
+     * Asserts a combined grammar name definition.
+     * @param input
+     * @param name
+     */
+    private static void assertGrammarNameDef(String input, String name) {
+        assertGrammarNameDef(input, null, name);
+    }
+
+    /**
+     * Asserts a specific grammar name definition.
+     * @param input The raw string input to parse.
+     * @param grammarType Empty string if combined, or 'parser' or 'lexer'.
+     * @param name The grammar name.
+     */
+    private static void assertGrammarNameDef(String input, String grammarType, String name) {
+        assertSingleStatement(input, new Expression(ExpressionType.GRAMMAR_NAME, grammarType, new ExpressionValue(RAW, name)));
+    }
+
+    /**
      * Generates a list of {@link Expression} from the given input.
      */
     private static List<Expression> statements(String input) {
@@ -174,16 +193,34 @@ public final class SimpleParserTest {
     }
 
     @Test
-    public void parserTestOfFileHeaderDefinitions() {
-        final ExpressionType type = ExpressionType.GRAMMAR_NAME;
-        assertSingleStatement("grammar myGrammar;", new Expression(type, new ExpressionValue(RAW, "myGrammar")));
-        assertSingleStatement("grammar myGrammar2;", new Expression(type, new ExpressionValue(RAW, "myGrammar2")));
-        assertSingleStatement("grammar 2;", new Expression(type, new ExpressionValue(RAW, "2")));
-        assertSingleStatement("grammar m;", new Expression(type, new ExpressionValue(RAW, "m")));
-        assertSingleStatement("grammar\r\nmyGrammar;", new Expression(type, new ExpressionValue(RAW, "myGrammar")));
-        assertSingleStatement("grammar\nmyGrammar;", new Expression(type, new ExpressionValue(RAW, "myGrammar")));
-        assertSingleStatement("grammar  \r\n  m;", new Expression(type, new ExpressionValue(RAW, "m")));
-        assertSingleStatement("grammar  \n  m;", new Expression(type, new ExpressionValue(RAW, "m")));
+    public void parserTestOfGrammarNameDefinitions() {
+        // Combined grammars
+        assertGrammarNameDef("grammar myGrammar;", "myGrammar");
+        assertGrammarNameDef("grammar myGrammar2;", "myGrammar2");
+        assertGrammarNameDef("grammar 2;", "2");
+        assertGrammarNameDef("grammar m;", "m");
+        assertGrammarNameDef("grammar\r\nmyGrammar;", "myGrammar");
+        assertGrammarNameDef("grammar\nmyGrammar;", "myGrammar");
+        assertGrammarNameDef("grammar  \r\n  m;", "m");
+        assertGrammarNameDef("grammar  \n  m;", "m");
+
+        // Lexer/parser grammars
+        String[] types = {"lexer", "parser"};
+
+        for (String t : types) {
+            assertGrammarNameDef("grammar " + t + " myGrammar;", t, "myGrammar");
+            assertGrammarNameDef("grammar " + t + " myGrammar2;", t, "myGrammar2");
+            assertGrammarNameDef("grammar " + t + " 2;", t, "2");
+            assertGrammarNameDef("grammar " + t + " m;", t, "m");
+            assertGrammarNameDef("grammar " + t + "\r\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef("grammar " + t + "\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef("grammar\r\n" + t + "\r\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef("grammar\n" + t + "\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef("grammar " + t + "  \r\n  m;", t, "m");
+            assertGrammarNameDef("grammar " + t + "  \n  m;", t, "m");
+            assertGrammarNameDef("grammar  \r\n " + t + "  \r\n  m;", t, "m");
+            assertGrammarNameDef("grammar  \n " + t + "  \n  m;", t, "m");
+        }
     }
 
     @Test
