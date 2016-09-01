@@ -55,7 +55,7 @@ public final class SimpleParserTest {
      */
     private static void assertParsingError(String input) {
         SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
-                .parse(tokens("grammar myGrammar"));
+                .parse(tokens(input));
         assertTrue(sp.isErrorOccurred());
     }
 
