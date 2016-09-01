@@ -20,7 +20,7 @@ public final class SimpleLexer extends Lexer {
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
+//    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
     /**
      * Null character.
      */
@@ -62,7 +62,7 @@ public final class SimpleLexer extends Lexer {
         // Attempt to tokenize EOF
         if (value == NULL_CHAR) {
             getTokens().add(new Token(TokenDefinition.EOF));
-            LOGGER.info("Current value: '{}' has been mapped to '{}'", "null", TokenDefinition.EOF.name());
+//            LOGGER.info("Current value: '{}' has been mapped to '{}'", "null", TokenDefinition.EOF.name());
             return;
         }
 
@@ -75,7 +75,7 @@ public final class SimpleLexer extends Lexer {
         TokenDefinition def = possibleDef.isPresent() ? possibleDef.get() : TokenDefinition.UNKNOWN;
 
         // Add token
-        LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.escape(value), def.name());
+//        LOGGER.info("Current value: '{}' has been mapped to '{}'", StringHelper.escape(value), def.name());
         getTokens().add(new Token(def.name(), val, currentLineNo, currentColNo));
 
         // Update lineNo/colNo

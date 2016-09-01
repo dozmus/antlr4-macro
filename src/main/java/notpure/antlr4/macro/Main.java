@@ -28,6 +28,8 @@ public final class Main {
                     MacroFileProcessor.processFile(inFileName);
                 }
                 break;
+            case "-help":
+            case "-usage":
             default:
                 printUsage();
                 break;
@@ -41,5 +43,6 @@ public final class Main {
         System.out.println("Invalid usage, try:");
         System.out.println("antlr4-macros.jar -i <input-file> | to process the target file");
         System.out.println("antlr4-macros.jar -r | to process all .mg4 files in the current directory recursively");
+        System.out.println("antlr4-macros.jar -usage | to display this message");
     }
 }

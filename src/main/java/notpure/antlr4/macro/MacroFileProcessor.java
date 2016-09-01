@@ -44,6 +44,12 @@ public final class MacroFileProcessor {
      * Processes the given macro file.
      */
     public static void processFile(String inFileName) {
+        // Resolve directory of input if necessary
+        if (!new File(inFileName).exists()) {
+            File baseDir = new File(System.getProperty("user.dir"));
+            inFileName = new File(baseDir, inFileName).getPath();
+        }
+
         String outFileName = FileHelper.parseFileName(inFileName) + ".g4";
         processFile(inFileName, outFileName);
     }
