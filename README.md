@@ -4,6 +4,9 @@ antlr4-macro
 A macro pre-processor for ANTLR4. **This project is not yet ready for
 production-level consumption.**
 
+## License
+This project is licensed under the [MIT license](LICENSE).
+
 ## Usage
 You should add a pre-build event in your IDE of choice to run the
 antlr4-macro artifact.
