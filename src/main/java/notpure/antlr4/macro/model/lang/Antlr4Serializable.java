@@ -1,5 +1,7 @@
 package notpure.antlr4.macro.model.lang;
 
+import notpure.antlr4.macro.Main;
+
 import java.util.List;
 
 /**
@@ -29,7 +31,14 @@ public interface Antlr4Serializable {
     static String serializeAll(List<Expression> expressions) {
         StringBuilder sb = new StringBuilder();
 
-        expressions.forEach(expr -> {
+        expressions.stream()
+                .filter(expr -> {
+                    // filter comments if optimizing
+                    return !Main.CommandLineFlags.optimize
+                            || expr.getType() != ExpressionType.SINGLE_LINE_COMMENT
+                            && expr.getType() != ExpressionType.MULTI_LINE_COMMENT;
+                })
+                .forEach(expr -> {
             sb.append(expr.toAntlr4String());
             sb.append("\r\n");
         });

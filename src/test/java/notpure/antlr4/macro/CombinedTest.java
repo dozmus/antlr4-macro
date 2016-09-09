@@ -136,6 +136,8 @@ public final class CombinedTest {
             Expression actualExpression = actualExpressions.get(i);
             assertEquals(expectedExpression, actualExpression);
         }
+
+        // TODO test optimized antlr output
     }
 
     @Test
@@ -269,7 +271,7 @@ public final class CombinedTest {
             outputAntlr.append("\r\n");
         });
 
-        // Generate antlr file and compare to expected input
+        // Generate antlr file contents and compare to expected input
         String expected = "grammar Hello;\r\n"
                 + "// macro rules\r\n"
                 + "// parser rules\r\n"
@@ -278,5 +280,7 @@ public final class CombinedTest {
                 + "ID: [a-z]+;\r\n"
                 + "WS: [ \\t\\r\\n]+ -> skip;\r\n";
         assertEquals(expected, outputAntlr.toString());
+
+        // TODO test optimized antlr output
     }
 }
