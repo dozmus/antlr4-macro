@@ -208,18 +208,18 @@ public final class SimpleParserTest {
         String[] types = {"lexer", "parser"};
 
         for (String t : types) {
-            assertGrammarNameDef("grammar " + t + " myGrammar;", t, "myGrammar");
-            assertGrammarNameDef("grammar " + t + " myGrammar2;", t, "myGrammar2");
-            assertGrammarNameDef("grammar " + t + " 2;", t, "2");
-            assertGrammarNameDef("grammar " + t + " m;", t, "m");
-            assertGrammarNameDef("grammar " + t + "\r\nmyGrammar;", t, "myGrammar");
-            assertGrammarNameDef("grammar " + t + "\nmyGrammar;", t, "myGrammar");
-            assertGrammarNameDef("grammar\r\n" + t + "\r\nmyGrammar;", t, "myGrammar");
-            assertGrammarNameDef("grammar\n" + t + "\nmyGrammar;", t, "myGrammar");
-            assertGrammarNameDef("grammar " + t + "  \r\n  m;", t, "m");
-            assertGrammarNameDef("grammar " + t + "  \n  m;", t, "m");
-            assertGrammarNameDef("grammar  \r\n " + t + "  \r\n  m;", t, "m");
-            assertGrammarNameDef("grammar  \n " + t + "  \n  m;", t, "m");
+            assertGrammarNameDef(t + " grammar myGrammar;", t, "myGrammar");
+            assertGrammarNameDef(t + " grammar myGrammar2;", t, "myGrammar2");
+            assertGrammarNameDef(t + " grammar 2;", t, "2");
+            assertGrammarNameDef(t + " grammar m;", t, "m");
+            assertGrammarNameDef(t + " grammar\r\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef(t + " grammar\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef(t + "\r\ngrammar\r\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef(t + "\n\ngrammar\nmyGrammar;", t, "myGrammar");
+            assertGrammarNameDef(t + "  \r\n  grammar  m;", t, "m");
+            assertGrammarNameDef(t + " \n grammar \n  m;", t, "m");
+            assertGrammarNameDef(t + " \r\n \r\n grammar  \r\n  m;", t, "m");
+            assertGrammarNameDef(t + "   \n   \n   grammar  \n  \n  m;", t, "m");
         }
     }
 

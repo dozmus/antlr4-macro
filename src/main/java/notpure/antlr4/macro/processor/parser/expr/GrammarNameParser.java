@@ -16,31 +16,47 @@ import notpure.antlr4.macro.processor.parser.TokenParserIterator;
 public final class GrammarNameParser implements ExpressionParser<Expression> {
 
     private static final String GRAMMAR_TEXT = "grammar";
+    private static final String PARSER_TEXT = "parser";
+    private static final String LEXER_TEXT = "lexer";
     private static final TokenParserIterator.TokenTarget TARGET_TOKEN = new TokenParserIterator.TokenTarget(
             new Token[]{new Token(TokenDefinition.SEMICOLON)}, false);
 
     @Override
     public Expression parse(TokenParserIterator it) throws ParserException {
-        it.skip(GRAMMAR_TEXT.length()); // skip 'grammar'
-
-        // Skip white space in between identifier and value, need at least one
-        if (it.skipAllWhitespace() == 0) {
-            throw new ParserException(getClass(), "Expected whitespace between 'grammar' and its name.");
-        }
-
-        // Parse type
+        // Deduce grammar type
         String grammarType = null;
 
-        if (it.hasNext("lexer")) {
-            grammarType = "lexer";
-            it.skip(5);
-        } else if (it.hasNext("parser")) {
-            grammarType = "parser";
-            it.skip(6);
+        if (it.hasNext(GRAMMAR_TEXT)) {
+            it.skip(GRAMMAR_TEXT.length()); // skip 'grammar'
+        }
+        else if (it.hasNext(PARSER_TEXT)) {
+            grammarType = PARSER_TEXT;
+            it.skip(PARSER_TEXT.length()); // skip 'parser'
+        }
+        else if (it.hasNext(LEXER_TEXT)) {
+            grammarType = LEXER_TEXT;
+            it.skip(LEXER_TEXT.length()); // skip 'lexer'
+        }
+        else
+            throw new RuntimeException("GrammarNameParser failed parsing header.");
+
+        // Skip initial space
+        if (it.skipAllWhitespace() == 0) {
+            String gname = "'" + grammarType + "'";
+            throw new ParserException(getClass(), "Expected whitespace between "
+                    + (grammarType == null ? "'grammar'" : gname) + " and "
+                    + (grammarType == null ? "its name" : gname) + ".");
         }
 
-        if (grammarType != null && it.skipAllWhitespace() == 0) {
-            throw new ParserException(getClass(), "Expected whitespace between 'lexer' or 'parser' and its name.");
+        // Handle grammar name part, for parser/lexer grammar types
+        if (grammarType != null) {
+            if (it.hasNext(GRAMMAR_TEXT)) {
+                it.skip(GRAMMAR_TEXT.length()); // skip 'grammar'
+            }
+
+            if (it.skipAllWhitespace() == 0) {
+                throw new ParserException(getClass(), "Expected whitespace between 'grammar' and its name.");
+            }
         }
 
         // Parse value
@@ -61,6 +77,6 @@ public final class GrammarNameParser implements ExpressionParser<Expression> {
 
     @Override
     public boolean validate(TokenParserIterator it) {
-        return it.hasNext(GRAMMAR_TEXT);
+        return it.hasNext(GRAMMAR_TEXT) || it.hasNext(PARSER_TEXT) || it.hasNext(LEXER_TEXT);
     }
 }
