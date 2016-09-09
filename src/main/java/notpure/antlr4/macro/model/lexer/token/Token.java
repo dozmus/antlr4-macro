@@ -1,5 +1,10 @@
 package notpure.antlr4.macro.model.lexer.token;
 
+import notpure.antlr4.macro.model.lang.ExpressionValue;
+
+import java.util.Objects;
+import java.util.Optional;
+
 /**
  * A token.
  */
@@ -46,15 +51,17 @@ public final class Token {
         return colNo;
     }
 
+    /**
+     * Checks Token equality based on name and value only.
+     */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Token) {
-            Token other = (Token) obj;
-            return other.getName().equals(name)
-                    && (value == null && other.getValue() == null
-                    || value != null && other.getValue() != null && other.getValue().equals(value));
-        }
-        return false;
+        return Optional.ofNullable(obj)
+                .filter($ -> $ instanceof Token)
+                .map($ -> (Token)$)
+                .filter($ -> $.getName().equals(name))
+                .filter($ -> Objects.equals($.getValue(), value))
+                .isPresent();
     }
 
     public boolean nameEquals(TokenDefinition def) {
