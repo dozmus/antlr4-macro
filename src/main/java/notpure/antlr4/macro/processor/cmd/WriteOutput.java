@@ -41,7 +41,6 @@ public final class WriteOutput implements Command {
             LOGGER.error("IOException occurred while processing file: '{}'", inFileName);
             return false;
         }
-        LOGGER.info("Finished processing '{}'", inFileName);
         return true;
     }
 
