@@ -1,48 +1,94 @@
 package notpure.antlr4.macro;
 
+import org.apache.commons.cli.*;
+
 /**
  * Application entry-point.
  */
 public final class Main {
 
+    /**
+     * Project URL.
+     */
+    private static final String PROJECT_URL = "https://github.com/PureCS/antlr4-macro";
+    /**
+     * Project version.
+     */
+    private static final String PROJECT_VERSION = "v1.0.0-beta.1";
+
     public static void main(String[] args) {
-        // Check argument count
-        if (args.length == 0) {
-            printUsage();
-            return;
-        }
+        try {
+            Options options = commandLineOptions();
+            CommandLine line = new DefaultParser().parse(options, args);
 
-        // Execute command
-        switch (args[0]) {
-            case "-r": // Recursively process all files in the working directory
-                MacroFileProcessor.processDirectory(System.getProperty("user.dir"));
-                break;
-            case "-i": // Process a single file
-                if (args.length != 2) {
-                    printUsage();
+            if (line.hasOption("url")) {
+                System.out.println("Project url: " + PROJECT_URL);
+            }
+
+            if (line.hasOption("version")) {
+                System.out.println("Project version: " + PROJECT_VERSION);
+            }
+
+            if (line.hasOption("debug")) {
+                CommandLineFlags.debug = true; // TODO impl functionality
+            }
+
+            if (line.hasOption("optimize")) {
+                CommandLineFlags.optimize = true; // TODO impl functionality
+            }
+
+            if (line.hasOption("help")) {
+                new HelpFormatter().printHelp("antlr4-macro", options);
+            }
+
+            if (line.hasOption("i")) {
+                String targetInput = line.getOptionValue("i");
+
+                if (targetInput == null) {
+                    System.out.println("Missing target input argument for: -i,--input <arg>");
                 } else {
-                    // Get file name
-                    String inFileName = args[1];
+                    if (targetInput.equals("*")) { // Recursively process all files in the working directory
+                        MacroFileProcessor.processDirectory(System.getProperty("user.dir"));
+                    } else { // Process single file
+                        // Get file name
+                        String inFileName = args[1];
 
-                    // Process files
-                    MacroFileProcessor.processFile(inFileName);
+                        // Process files
+                        MacroFileProcessor.processFile(inFileName);
+                    }
                 }
-                break;
-            case "-help":
-            case "-usage":
-            default:
-                printUsage();
-                break;
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
     /**
-     * Prints program usage.
+     * Command-line options.
      */
-    private static void printUsage() {
-        System.out.println("Invalid usage, try:");
-        System.out.println("antlr4-macros.jar -i <input-file> | to process the target file");
-        System.out.println("antlr4-macros.jar -r | to process all .mg4 files in the current directory recursively");
-        System.out.println("antlr4-macros.jar -usage | to display this message");
+    private static Options commandLineOptions() {
+        Options options = new Options();
+        options.addOption("help", false, "prints this message");
+        options.addOption("url", false, "prints the project url");
+        options.addOption("version", false, "prints the version information");
+        options.addOption("debug", false, "print debugging information");
+        options.addOption("optimize", false, "optimize output grammar");
+        options.addOption("i", "input", true, "processes the given file(s)");
+        return options;
+    }
+
+    /**
+     * Command-line parsed flags.
+     */
+    public static class CommandLineFlags {
+
+        /**
+         * If debugging information should be printed.
+         */
+        public static boolean debug;
+        /**
+         * If output grammars should be optimized.
+         */
+        public static boolean optimize;
     }
 }
