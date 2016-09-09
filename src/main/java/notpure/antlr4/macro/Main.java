@@ -1,6 +1,10 @@
 package notpure.antlr4.macro;
 
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
 /**
  * Application entry-point.
@@ -29,12 +33,8 @@ public final class Main {
                 System.out.println("Project version: " + PROJECT_VERSION);
             }
 
-            if (line.hasOption("debug")) {
-                CommandLineFlags.debug = true; // TODO impl functionality
-            }
-
             if (line.hasOption("optimize")) {
-                CommandLineFlags.optimize = true; // TODO impl functionality
+                CommandLineFlags.optimize = true;
             }
 
             if (line.hasOption("help")) {
@@ -71,21 +71,17 @@ public final class Main {
         options.addOption("help", false, "prints this message");
         options.addOption("url", false, "prints the project url");
         options.addOption("version", false, "prints the version information");
-        options.addOption("debug", false, "print debugging information");
         options.addOption("optimize", false, "optimize output grammar");
         options.addOption("i", "input", true, "processes the given file(s)");
         return options;
     }
+
 
     /**
      * Command-line parsed flags.
      */
     public static class CommandLineFlags {
 
-        /**
-         * If debugging information should be printed.
-         */
-        public static boolean debug;
         /**
          * If output grammars should be optimized.
          */

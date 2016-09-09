@@ -1,22 +1,15 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.model.lang.Antlr4Serializable;
-import notpure.antlr4.macro.model.lang.Expression;
-import notpure.antlr4.macro.model.lang.ExpressionType;
-import notpure.antlr4.macro.model.lexer.token.Token;
-import notpure.antlr4.macro.processor.lexer.SimpleLexer;
-import notpure.antlr4.macro.processor.macro.MacroExpressionProcessor;
-import notpure.antlr4.macro.processor.macro.MacroExpressionResolver;
-import notpure.antlr4.macro.processor.parser.SimpleParser;
+import notpure.antlr4.macro.processor.cmd.*;
 import notpure.antlr4.macro.util.FileHelper;
+import org.apache.commons.chain.Context;
+import org.apache.commons.chain.impl.ContextBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * The master processor for macro files.
@@ -58,78 +51,25 @@ public final class MacroFileProcessor {
      * Processes the given macro file, into one with the specified name.
      */
     public static void processFile(String inFileName, String outFileName) {
-        MacroFileProcessor mfp = new MacroFileProcessor();
+        Context context = new ContextBase();
 
-        // Tokenize
-        final List<Token> tokens;
+        // Put initial values
+        context.put("input-file-name", inFileName);
+        context.put("output-file-name", outFileName);
 
-        try (InputStream inputStream = new FileInputStream(inFileName)) {
-            tokens = new SimpleLexer().tokenize(inputStream).getTokens();
-        } catch (FileNotFoundException e) {
-            LOGGER.warn("File not found: '{}'", inFileName);
-            return;
-        } catch (IOException e) {
-            LOGGER.warn("IOException occurred while processing file: '{}'", inFileName);
-            return;
-        }
-
-        // Parser
-        List<Expression> expressions = new SimpleParser().parse(tokens).getExpressions();
-
-        // Resolve macro definitions
-        List<Expression> macroExpressions = expressions.stream()
-                .filter(expr -> expr.getType() == ExpressionType.MACRO_RULE)
-                .collect(Collectors.toList());
+        // Execute commands
+        System.out.println("Processing file: " + inFileName);
 
         try {
-            macroExpressions = MacroExpressionResolver.resolve(macroExpressions);
-        } catch (Exception ex) {
-            LOGGER.warn("Error resolving macro definition: '{}'", ex.getMessage());
-            return;
+            new Tokenize().execute(context);
+            new Parse().execute(context);
+            new ResolveMacroExpressions().execute(context);
+            new ApplyMacroDefinitions().execute(context);
+            new GenerateAntlrCode().execute(context);
+            new WriteOutput().execute(context);
+        } catch (Exception e) {
+            System.out.println("Error processing file: " + e.getMessage());
+            LOGGER.error("Failed to process file '{}' because '{}'", inFileName, e.getMessage());
         }
-
-        // Update expressions, with macro definitions applied
-        try {
-            expressions = MacroExpressionProcessor.process(expressions, macroExpressions);
-        } catch (Exception ex) {
-            LOGGER.warn("Error applying macro definitions: '{}'", ex.getMessage());
-            return;
-        }
-
-        // Generate output antlr4 string
-        String antlr4Code = Antlr4Serializable.serializeAll(expressions);
-
-        // Write to output file
-        mfp.writeOutput(inFileName, outFileName, antlr4Code);
-    }
-
-    /**
-     * Attempts to overwrite the content of the input file.
-     * @param inFileName
-     * @param outFileName
-     * @param antlr4Code The content to write.
-     * @return True if successful, false otherwise.
-     */
-    private boolean writeOutput(String inFileName, String outFileName, String antlr4Code) {
-        File file = new File(outFileName);
-
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                LOGGER.error("Error occurred while creating file: '{}'", inFileName);
-                return false;
-            }
-        }
-
-        try (Writer writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write(antlr4Code);
-            writer.flush();
-        } catch (IOException e) {
-            LOGGER.error("IOException occurred while processing file: '{}'", inFileName);
-            return false;
-        }
-        LOGGER.info("Processed '{}'", inFileName);
-        return true;
     }
 }

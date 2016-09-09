@@ -61,7 +61,10 @@ public abstract class GrammarRuleParser implements ExpressionParser<Expression> 
 
         // Construct expression
         Expression expr = new Expression(type, identifier, values);
-        LOGGER.info("Parsed {}", expr);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Parsed: {}", expr);
+        }
         return expr;
     }
 

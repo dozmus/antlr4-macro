@@ -54,7 +54,10 @@ public final class ExpressionValueParser {
                     }
 
                     values.add(expr);
-                    LOGGER.info("Parsed ExpressionValue: {}", expr);
+
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Parsed ExpressionValue: {}", expr);
+                    }
 
                     if (expr.getType() == ExpressionValueType.PIPELINE)
                         afterRedirectSymbol = true;
