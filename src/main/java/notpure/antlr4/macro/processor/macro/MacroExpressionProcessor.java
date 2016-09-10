@@ -14,17 +14,20 @@ import java.util.List;
  */
 public final class MacroExpressionProcessor {
 
-    public static List<Expression> process(List<Expression> inputExpressions,
-                                           List<Expression> expandedMacroExpressions)
+    public static List<Expression> process(List<Expression> inputExpressions, List<Expression> expandedMacroExpressions)
             throws MissingMacroRuleException {
         List<Expression> outputExpressions = new ArrayList<>();
 
         for (Expression expr : inputExpressions) {
             if (expr.getType() == ExpressionType.LEXER_RULE || expr.getType() == ExpressionType.PARSER_RULE) {
                 outputExpressions.add(applyMacros(expandedMacroExpressions, expr));
-            } else if (expr.getType() == ExpressionType.MACRO_RULE) {
-                // Ignore
-            } else {
+            } else if (expr.getType() == ExpressionType.SINGLE_LINE_COMMENT) {
+                String val = expr.getValues().get(0).getValue();
+
+                if (!val.startsWith("/")) { // Ignore 'macro' comments
+                    outputExpressions.add(expr);
+                }
+            } else if (expr.getType() != ExpressionType.MACRO_RULE) { // Ignore macro rules
                 outputExpressions.add(expr);
             }
         }

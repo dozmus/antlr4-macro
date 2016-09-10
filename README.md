@@ -26,6 +26,7 @@ Input:
 ```
 grammar HelloWorld;
 
+/// my macro definitions, this comment will not appear in the output
 #HELLO: 'Hello';
 #WORLD: 'World';
 
