@@ -26,10 +26,10 @@ public final class Antlr4SerializationTest {
         String[] grammarTypes = {null, "parser", "lexer"};
 
         for (String type : grammarTypes) {
-            String grammarPart = type == null ? "" : " " + type;
-            assertEquals("grammar" + grammarPart + " Hello;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "Hello")));
-            assertEquals("grammar" + grammarPart + " ;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "")));
-            assertEquals("grammar" + grammarPart + " 332;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "332")));
+            String grammarPart = type == null ? "" : type + " ";
+            assertEquals(grammarPart + "grammar Hello;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "Hello")));
+            assertEquals(grammarPart + "grammar ;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "")));
+            assertEquals(grammarPart + "grammar 332;", new Expression(GRAMMAR_NAME, type, new ExpressionValue(RAW, "332")));
         }
 
         // Single-line comments
@@ -51,5 +51,11 @@ public final class Antlr4SerializationTest {
         values.add(new ExpressionValue(ALTERNATOR, "|"));
         values.add(new ExpressionValue(RULE_REFERENCE, "OTHER_RULE"));
         assertEquals("myRule: 'HELLO' | OTHER_RULE;", new Expression(PARSER_RULE, "myRule", values));
+
+        values = new ArrayList<>();
+        values.add(new ExpressionValue(STRING, "test", "HELLO"));
+        values.add(new ExpressionValue(ALTERNATOR, "|"));
+        values.add(new ExpressionValue(RULE_REFERENCE, "hey", "OTHER_RULE"));
+        assertEquals("myRule: test='HELLO' | hey=OTHER_RULE;", new Expression(PARSER_RULE, "myRule", values));
     }
 }

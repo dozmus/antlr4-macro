@@ -72,7 +72,7 @@ public final class Expression implements Antlr4Serializable {
                 if (identifier == null)
                     return String.format("grammar %s;", getValues().get(0).getValue());
                 else
-                    return String.format("grammar %s %s;", identifier, getValues().get(0).getValue());
+                    return String.format("%s grammar %s;", identifier, getValues().get(0).getValue());
             case SINGLE_LINE_COMMENT:
                 return String.format("//%s", getValues().get(0).getValue());
             case MULTI_LINE_COMMENT:

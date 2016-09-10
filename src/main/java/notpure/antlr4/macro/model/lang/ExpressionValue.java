@@ -70,12 +70,14 @@ public final class ExpressionValue implements Antlr4Serializable {
             case RAW:
             case RULE_REFERENCE:
             case REGEX_GROUP:
+                return identifier == null ? getValue() : identifier + "=" + getValue();
             case PIPELINE:
             case OUTPUT_REDIRECT:
             case ALTERNATOR:
                 return getValue();
             case STRING:
-                return String.format("'%s'", getValue());
+                return identifier == null ? String.format("'%s'", getValue())
+                        : String.format("%s='%s'", identifier, getValue());
             default:
                 return null;
         }
