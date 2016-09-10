@@ -6,10 +6,13 @@ import notpure.antlr4.macro.model.lang.ExpressionValue;
 import notpure.antlr4.macro.model.lang.ExpressionValueType;
 import notpure.antlr4.macro.model.lexer.token.Token;
 import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
+import notpure.antlr4.macro.processor.cmd.GenerateAntlrCode;
 import notpure.antlr4.macro.processor.lexer.SimpleLexer;
 import notpure.antlr4.macro.processor.macro.MacroExpressionProcessor;
 import notpure.antlr4.macro.processor.macro.MacroExpressionResolver;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
+import org.apache.commons.chain.Context;
+import org.apache.commons.chain.impl.ContextBase;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -22,6 +25,7 @@ import static notpure.antlr4.macro.model.lang.ExpressionValueType.RAW;
 import static notpure.antlr4.macro.model.lang.ExpressionValueType.STRING;
 import static notpure.antlr4.macro.util.TokenHelper.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * A set of tests targeting a mixture of {@link SimpleLexer}, {@link SimpleParser}, {@link MacroExpressionProcessor}
@@ -240,20 +244,20 @@ public final class CombinedTest {
         expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", expressionValues1));
 
         // Store actual statements
-        List<Expression> actualExpressions = new SimpleParser().parse(actualOutput).getExpressions();
+        List<Expression> outputExpressions = new SimpleParser().parse(actualOutput).getExpressions();
 
         // Compare outputs
-        assertEquals(expectedExpressions.size(), actualExpressions.size());
+        assertEquals(expectedExpressions.size(), outputExpressions.size());
 
         // Iterate over generated statements
         for (int i = 0; i < expectedExpressions.size(); i++) {
             Expression expectedExpression = expectedExpressions.get(i);
-            Expression actualExpression = actualExpressions.get(i);
+            Expression actualExpression = outputExpressions.get(i);
             assertEquals(expectedExpression, actualExpression);
         }
 
         // MacroExpressionResolver
-        List<Expression> macroExpressions = actualExpressions.stream()
+        List<Expression> macroExpressions = outputExpressions.stream()
                 .filter(expr -> expr.getType() == ExpressionType.MACRO_RULE)
                 .collect(Collectors.toList());
         List<Expression> resolvedMacroExpr = MacroExpressionResolver.resolve(macroExpressions);
@@ -263,13 +267,12 @@ public final class CombinedTest {
                 new ExpressionValue(ExpressionValueType.STRING, "Hello World")), resolvedMacroExpr.get(0));
 
         // MacroExpressionProcessor
-        actualExpressions = MacroExpressionProcessor.process(actualExpressions, resolvedMacroExpr);
-        StringBuilder outputAntlr = new StringBuilder();
+        outputExpressions = MacroExpressionProcessor.process(outputExpressions, resolvedMacroExpr);
 
-        actualExpressions.forEach(expr -> {
-            outputAntlr.append(expr.toAntlr4String());
-            outputAntlr.append("\r\n");
-        });
+        Context ctx = new ContextBase();
+        ctx.put("output-expressions", outputExpressions);
+        GenerateAntlrCode gac = new GenerateAntlrCode();
+        gac.execute(ctx);
 
         // Generate antlr file contents and compare to expected input
         String expected = "grammar Hello;\r\n"
@@ -279,8 +282,22 @@ public final class CombinedTest {
                 + "// lexer rules\r\n"
                 + "ID: [a-z]+;\r\n"
                 + "WS: [ \\t\\r\\n]+ -> skip;\r\n";
-        assertEquals(expected, outputAntlr.toString());
+        assertTrue(ctx.containsKey("antlr-code"));
+        assertEquals(expected, ctx.get("antlr-code"));
 
-        // TODO test optimized antlr output
+        // Testing optimized output
+        Main.CommandLineFlags.optimize = true;
+        ctx = new ContextBase();
+        ctx.put("output-expressions", outputExpressions);
+        gac = new GenerateAntlrCode();
+        gac.execute(ctx);
+
+        expected = "grammar Hello;"
+                + "r: 'Hello World';"
+                + "ID: [a-z]+;"
+                + "WS: [ \\t\\r\\n]+ -> skip;";
+        assertTrue(ctx.containsKey("antlr-code"));
+        assertEquals(expected, ctx.get("antlr-code"));
+        Main.CommandLineFlags.optimize = false;
     }
 }

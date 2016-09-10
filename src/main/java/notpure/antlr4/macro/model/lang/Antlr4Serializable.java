@@ -40,7 +40,10 @@ public interface Antlr4Serializable {
                 })
                 .forEach(expr -> {
             sb.append(expr.toAntlr4String());
-            sb.append("\r\n");
+
+            if (!Main.CommandLineFlags.optimize) {
+                sb.append("\r\n");
+            }
         });
         return sb.toString();
     }
