@@ -1,7 +1,7 @@
 package notpure.antlr4.macro.processor.cmd;
 
-import notpure.antlr4.macro.model.lexer.token.Token;
-import notpure.antlr4.macro.processor.lexer.SimpleLexer;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.processor.Lexer;
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
 import org.slf4j.Logger;
@@ -37,7 +37,9 @@ public final class Tokenize implements Command {
             final List<Token> tokens;
 
             try (InputStream inputStream = new FileInputStream(inputFileName)) {
-                tokens = new SimpleLexer().tokenize(inputStream).getTokens();
+                Lexer lexer = new Lexer();
+                lexer.tokenize(inputStream);
+                tokens = lexer.getTokens();
                 context.put("tokens", tokens);
             } catch (FileNotFoundException e) {
                 LOGGER.warn("File not found: '{}'", inputFileName);

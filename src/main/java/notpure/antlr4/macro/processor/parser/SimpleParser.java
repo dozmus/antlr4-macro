@@ -1,14 +1,12 @@
 package notpure.antlr4.macro.processor.parser;
 
 import notpure.antlr4.macro.model.parser.ExpressionParser;
-import notpure.antlr4.macro.model.parser.Parser;
 import notpure.antlr4.macro.model.parser.ParserException;
 import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
-import notpure.antlr4.macro.model.lexer.token.Token;
+import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.processor.parser.expr.*;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +14,7 @@ import java.util.Optional;
 /**
  * Parses tokens into statements.
  */
-public final class SimpleParser extends Parser {
+public final class SimpleParser {
 
     private final List<ExpressionParser> parsers = new ArrayList<>();
     private final ParserExceptionListener parserExceptionListener;
@@ -31,8 +29,13 @@ public final class SimpleParser extends Parser {
         initParsers();
     }
 
-    @Override
-    public Parser parse(List<Token> tokens) {
+    private final List<Expression> expressions = new ArrayList<>();
+
+    public List<Expression> getExpressions() {
+        return expressions;
+    }
+
+    public void parse(List<Token> tokens) {
         if (tokens == null)
             throw new IllegalArgumentException("Token list is null.");
 
@@ -49,7 +52,7 @@ public final class SimpleParser extends Parser {
                      expr = (Expression)parser.parse(it);
                 } catch (ParserException ex) {
                     parserExceptionListener.parserExceptionOccurred(this, ex);
-                    return this;
+                    return;
                 }
 
                 if (expr != null)
@@ -58,7 +61,6 @@ public final class SimpleParser extends Parser {
                 it.next(); // consume unhandled token
             }
         }
-        return this;
     }
 
     private void initParsers() {

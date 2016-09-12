@@ -1,11 +1,11 @@
 package notpure.antlr4.macro.model.macro;
 
 /**
- * Created by pure on 01/09/2016.
+ * Thrown if no macro rule is defined for the given macro identifier.
  */
 public final class MissingMacroRuleException extends Exception {
 
-    public MissingMacroRuleException(String reference) {
-        super("Unable to locate macro rule for macro identifier `" + reference + "`.");
+    public MissingMacroRuleException(String macroIdentifier) {
+        super("Unable to locate macro rule for macro identifier `" + macroIdentifier + "`.");
     }
 }

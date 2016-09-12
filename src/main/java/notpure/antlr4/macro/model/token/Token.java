@@ -1,6 +1,4 @@
-package notpure.antlr4.macro.model.lexer.token;
-
-import notpure.antlr4.macro.model.lang.ExpressionValue;
+package notpure.antlr4.macro.model.token;
 
 import java.util.Objects;
 import java.util.Optional;

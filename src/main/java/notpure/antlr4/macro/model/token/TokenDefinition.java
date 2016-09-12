@@ -1,11 +1,11 @@
-package notpure.antlr4.macro.model.lexer.token;
+package notpure.antlr4.macro.model.token;
 
-import notpure.antlr4.macro.processor.lexer.SimpleLexer;
+import notpure.antlr4.macro.processor.Lexer;
 
 import java.util.regex.Pattern;
 
 /**
- * Definitions for the {@link SimpleLexer}.
+ * Definitions for the {@link Lexer}.
  */
 public enum TokenDefinition {
     /* Letters / Digits */

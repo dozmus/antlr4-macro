@@ -1,7 +1,7 @@
 package notpure.antlr4.macro.processor.cmd;
 
 import notpure.antlr4.macro.model.lang.Expression;
-import notpure.antlr4.macro.processor.macro.MacroExpressionProcessor;
+import notpure.antlr4.macro.processor.ExpressionProcessor;
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
 import org.slf4j.Logger;
@@ -33,7 +33,7 @@ public final class ApplyMacroDefinitions implements Command {
 
             // Apply macro definitions
             try {
-                expressions = MacroExpressionProcessor.process(expressions, macroExpressions);
+                expressions = ExpressionProcessor.applyMacros(expressions, macroExpressions);
                 context.put("output-expressions", expressions);
             } catch (Exception ex) {
                 LOGGER.warn("Error applying macro definitions: '{}'", ex.getMessage());

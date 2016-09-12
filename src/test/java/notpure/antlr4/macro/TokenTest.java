@@ -1,7 +1,7 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.model.lexer.token.Token;
-import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.util.CollectionHelper;
 import org.junit.Test;
 

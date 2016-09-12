@@ -1,12 +1,11 @@
 package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.lang.ExpressionValue;
-import notpure.antlr4.macro.model.lang.ExpressionValueType;
 import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
-import notpure.antlr4.macro.model.lexer.token.Token;
-import notpure.antlr4.macro.processor.lexer.SimpleLexer;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.processor.Lexer;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.junit.Test;
 
@@ -18,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * A set of tests for {@link SimpleParser}. These tests rely on {@link SimpleLexerTest} passing.
+ * A set of tests for {@link SimpleParser}. These tests rely on {@link LexerTest} passing.
  */
 public final class SimpleParserTest {
 
@@ -54,9 +53,9 @@ public final class SimpleParserTest {
      * is true.
      */
     private static void assertParsingError(String input) {
-        SimpleParser sp = (SimpleParser)new SimpleParser(new ParserExceptionListener.ParserExceptionNop())
-                .parse(tokens(input));
-        assertTrue(sp.isErrorOccurred());
+        SimpleParser parser = new SimpleParser(new ParserExceptionListener.ParserExceptionSilent());
+        parser.parse(tokens(input));
+        assertTrue(parser.isErrorOccurred());
     }
 
     /**
@@ -83,14 +82,16 @@ public final class SimpleParserTest {
      */
     private static List<Expression> statements(String input) {
         List<Token> tokens = tokens(input);
-        return new SimpleParser().parse(tokens).getExpressions();
+        SimpleParser parser = new SimpleParser();
+        parser.parse(tokens);
+        return parser.getExpressions();
     }
 
     /**
      * Generates a list of {@link Token} from the given input.
      */
     private static List<Token> tokens(String input) {
-        return new SimpleLexer().tokenize(input).getTokens();
+        return Lexer.tokenize(input);
     }
 
     @Test

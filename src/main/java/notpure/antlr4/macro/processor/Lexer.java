@@ -1,41 +1,44 @@
-package notpure.antlr4.macro.processor.lexer;
+package notpure.antlr4.macro.processor;
 
-import notpure.antlr4.macro.model.lexer.Lexer;
-import notpure.antlr4.macro.model.lexer.token.Token;
-import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.util.CharStream;
+import notpure.antlr4.macro.util.FileHelper;
 import notpure.antlr4.macro.util.StringHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 /**
- * A simple lexer.
+ * A lexer.
  */
-public final class SimpleLexer extends Lexer {
+public final class Lexer {
 
     /**
      * Logger instance.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(SimpleLexer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Lexer.class);
     /**
      * Null character.
      */
     private static final char NULL_CHAR = Character.MIN_VALUE;
+    private final List<Token> tokens = new ArrayList<>();
     private int currentLineNo = 0;
     private int currentColNo = 0;
 
     /**
-     * Tokenizes the input stream into simple tokens.
+     * Tokenizes the input stream into tokens.
      */
-    @Override
-    public Lexer tokenize(InputStream inputStream) {
+    public static List<Token> tokenize(InputStream inputStream) {
         if (inputStream == null)
             throw new IllegalArgumentException("InputStream is null.");
 
+        Lexer lexer = new Lexer();
         CharStream in = new CharStream(inputStream);
 
         // Process input
@@ -44,21 +47,33 @@ public final class SimpleLexer extends Lexer {
             char value = in.next();
 
             // Try to map it to a definition
-            tryTokenize(value);
+            lexer.tokenize(value);
         }
 
         // Add end of file token
-        tryTokenize(NULL_CHAR);
-        return this;
+        lexer.tokenize(NULL_CHAR);
+        return lexer.getTokens();
+    }
+
+    /**
+     * Tokenizes the input String into tokens.
+     */
+    public static List<Token> tokenize(String input) {
+        return tokenize(FileHelper.stringStream(input));
+    }
+
+    public List<Token> getTokens() {
+        return tokens;
     }
 
     /**
      * Attempts to match the provided value with a {@link TokenDefinition}, if this is successful the new token
-     * is added to {@link SimpleLexer#tokens}. If the value is {@link SimpleLexer#NULL_CHAR} then
-     * {@link TokenDefinition#EOF} is added to {@link SimpleLexer#tokens} instead.
+     * is added to {@link Lexer#tokens}. If the value is {@link Lexer#NULL_CHAR} then
+     * {@link TokenDefinition#EOF} is added to {@link Lexer#tokens} instead.
+     *
      * @param value The character to try to parse.
      */
-    private void tryTokenize(char value) {
+    private void tokenize(char value) {
         // Attempt to tokenize EOF
         if (value == NULL_CHAR) {
             getTokens().add(new Token(TokenDefinition.EOF));
@@ -77,10 +92,11 @@ public final class SimpleLexer extends Lexer {
                 .findFirst();
         TokenDefinition def = possibleDef.isPresent() ? possibleDef.get() : TokenDefinition.UNKNOWN;
 
-        // Add token
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Current value: '{}' has been mapped to '{}'", StringHelper.escape(value), def.name());
         }
+
+        // Add token
         getTokens().add(new Token(def.name(), val, currentLineNo, currentColNo));
 
         // Update lineNo/colNo

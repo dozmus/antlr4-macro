@@ -2,7 +2,7 @@ package notpure.antlr4.macro.processor.cmd;
 
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
-import notpure.antlr4.macro.processor.macro.MacroExpressionResolver;
+import notpure.antlr4.macro.processor.ExpressionProcessor;
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
 import org.slf4j.Logger;
@@ -37,7 +37,7 @@ public final class ResolveMacroExpressions implements Command {
 
             // Resolve macro expressions
             try {
-                macroExpressions = MacroExpressionResolver.resolve(macroExpressions);
+                macroExpressions = ExpressionProcessor.resolveMacros(macroExpressions);
                 context.put("resolved-macro-expressions", macroExpressions);
             } catch (Exception ex) {
                 String msg = "Error resolving macro definition: " + ex.getMessage();

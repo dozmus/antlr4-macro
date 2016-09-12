@@ -1,7 +1,7 @@
 package notpure.antlr4.macro.model.macro;
 
 /**
- * Created by pure on 01/09/2016.
+ * Thrown if an issue occurs when resolving a macro expression.
  */
 public class MacroResolverException extends Exception {
 
@@ -9,6 +9,9 @@ public class MacroResolverException extends Exception {
         super(message);
     }
 
+    /**
+     * Thrown if a macro rule is cyclic.
+     */
     public static final class CyclicMacroRuleReferenceException extends MacroResolverException {
 
         public CyclicMacroRuleReferenceException(String identifier) {
@@ -16,10 +19,13 @@ public class MacroResolverException extends Exception {
         }
     }
 
+    /**
+     * Thrown if a macro rule contains an identifier which is missing.
+     */
     public static final class MissingMacroRuleReferenceException extends MacroResolverException {
 
-        public MissingMacroRuleReferenceException(String identifier, String reference) {
-            super("Reference `" + reference + "` not found in rule: " + identifier);
+        public MissingMacroRuleReferenceException(String parentRule, String identifier) {
+            super("Reference `" + identifier + "` not found in rule: " + parentRule);
         }
     }
 }

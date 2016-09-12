@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.model.lexer.token;
+package notpure.antlr4.macro.model.token;
 
 import java.util.Iterator;
 import java.util.List;

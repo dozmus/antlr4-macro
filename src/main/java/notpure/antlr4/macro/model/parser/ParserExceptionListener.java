@@ -13,9 +13,6 @@ public interface ParserExceptionListener {
 
     /**
      * An event called when {@link SimpleParser#parse(List)} catches an exception.
-     * @param source
-     * @param ex
-     * @throws ParserException
      */
     void parserExceptionOccurred(SimpleParser source, ParserException ex);
 
@@ -39,7 +36,7 @@ public interface ParserExceptionListener {
     /**
      * A {@link ParserExceptionListener} that does nothing except mark that an error has occurred.
      */
-    class ParserExceptionNop implements ParserExceptionListener {
+    class ParserExceptionSilent implements ParserExceptionListener {
 
         public void parserExceptionOccurred(SimpleParser source, ParserException ex) {
             source.setErrorOccurred(true);

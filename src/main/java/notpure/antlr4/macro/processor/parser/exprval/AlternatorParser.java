@@ -2,7 +2,7 @@ package notpure.antlr4.macro.processor.parser.exprval;
 
 import notpure.antlr4.macro.model.lang.ExpressionValue;
 import notpure.antlr4.macro.model.lang.ExpressionValueType;
-import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
+import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.model.parser.ExpressionParser;
 import notpure.antlr4.macro.model.parser.ParserException;
 import notpure.antlr4.macro.processor.parser.TokenParserIterator;

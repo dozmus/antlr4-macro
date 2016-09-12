@@ -4,12 +4,11 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lang.ExpressionValue;
 import notpure.antlr4.macro.model.lang.ExpressionValueType;
-import notpure.antlr4.macro.model.lexer.token.Token;
-import notpure.antlr4.macro.model.lexer.token.TokenDefinition;
+import notpure.antlr4.macro.model.token.Token;
+import notpure.antlr4.macro.model.token.TokenDefinition;
 import notpure.antlr4.macro.processor.cmd.GenerateAntlrCode;
-import notpure.antlr4.macro.processor.lexer.SimpleLexer;
-import notpure.antlr4.macro.processor.macro.MacroExpressionProcessor;
-import notpure.antlr4.macro.processor.macro.MacroExpressionResolver;
+import notpure.antlr4.macro.processor.Lexer;
+import notpure.antlr4.macro.processor.ExpressionProcessor;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.apache.commons.chain.Context;
 import org.apache.commons.chain.impl.ContextBase;
@@ -28,8 +27,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * A set of tests targeting a mixture of {@link SimpleLexer}, {@link SimpleParser}, {@link MacroExpressionProcessor}
- * and {@link MacroExpressionResolver}.
+ * A set of tests targeting a mixture of {@link Lexer}, {@link SimpleParser}, {@link MacroExpressionProcessor}
+ * and {@link ExpressionProcessor}.
  */
 public final class CombinedTest {
 
@@ -93,7 +92,7 @@ public final class CombinedTest {
         List<Token> actualOutput;
 
         try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\lexer-parser-input-1.mg4")) {
-            actualOutput = new SimpleLexer().tokenize(inputStream).getTokens();
+            actualOutput = Lexer.tokenize(inputStream);
         }
 
         // Compare outputs
@@ -129,7 +128,9 @@ public final class CombinedTest {
         expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", expressionValues2));
 
         // Store actual statements
-        List<Expression> actualExpressions = new SimpleParser().parse(actualOutput).getExpressions();
+        SimpleParser parser = new SimpleParser();
+        parser.parse(actualOutput);
+        List<Expression> actualExpressions = parser.getExpressions();
 
         // Compare outputs
         assertEquals(expectedExpressions.size(), actualExpressions.size());
@@ -141,7 +142,20 @@ public final class CombinedTest {
             assertEquals(expectedExpression, actualExpression);
         }
 
-        // TODO test optimized antlr output
+        // Testing optimized output
+        Main.CommandLineFlags.optimize = true;
+        Context ctx = new ContextBase();
+        ctx.put("output-expressions", actualExpressions);
+        GenerateAntlrCode gac = new GenerateAntlrCode();
+        gac.execute(ctx);
+
+        String expected = "grammar Hello;"
+                + "r: 'hello' ID;"
+                + "ID: [a-z]+;"
+                + "WS: [ \\t\\r\\n]+ -> skip;";
+        assertTrue(ctx.containsKey("antlr-code"));
+        assertEquals(expected, ctx.get("antlr-code"));
+        Main.CommandLineFlags.optimize = false;
     }
 
     @Test
@@ -217,7 +231,7 @@ public final class CombinedTest {
         List<Token> actualOutput;
 
         try (InputStream inputStream = new FileInputStream("src\\test\\resources\\notpure\\antlr4\\macro\\input-1.mg4")) {
-            actualOutput = new SimpleLexer().tokenize(inputStream).getTokens();
+            actualOutput = Lexer.tokenize(inputStream);
         }
 
         // Store expected statements
@@ -244,7 +258,9 @@ public final class CombinedTest {
         expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", expressionValues1));
 
         // Store actual statements
-        List<Expression> outputExpressions = new SimpleParser().parse(actualOutput).getExpressions();
+        SimpleParser parser = new SimpleParser();
+        parser.parse(actualOutput);
+        List<Expression> outputExpressions = parser.getExpressions();
 
         // Compare outputs
         assertEquals(expectedExpressions.size(), outputExpressions.size());
@@ -260,14 +276,14 @@ public final class CombinedTest {
         List<Expression> macroExpressions = outputExpressions.stream()
                 .filter(expr -> expr.getType() == ExpressionType.MACRO_RULE)
                 .collect(Collectors.toList());
-        List<Expression> resolvedMacroExpr = MacroExpressionResolver.resolve(macroExpressions);
+        List<Expression> resolvedMacroExpr = ExpressionProcessor.resolveMacros(macroExpressions);
 
         assertEquals(1, resolvedMacroExpr.size());
         assertEquals(new Expression(ExpressionType.MACRO_RULE, "HELLO_WORLD",
                 new ExpressionValue(ExpressionValueType.STRING, "Hello World")), resolvedMacroExpr.get(0));
 
         // MacroExpressionProcessor
-        outputExpressions = MacroExpressionProcessor.process(outputExpressions, resolvedMacroExpr);
+        outputExpressions = ExpressionProcessor.applyMacros(outputExpressions, resolvedMacroExpr);
 
         Context ctx = new ContextBase();
         ctx.put("output-expressions", outputExpressions);

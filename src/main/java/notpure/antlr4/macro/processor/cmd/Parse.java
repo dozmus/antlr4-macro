@@ -1,7 +1,7 @@
 package notpure.antlr4.macro.processor.cmd;
 
 import notpure.antlr4.macro.model.lang.Expression;
-import notpure.antlr4.macro.model.lexer.token.Token;
+import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
 import org.apache.commons.chain.Command;
 import org.apache.commons.chain.Context;
@@ -36,7 +36,9 @@ public final class Parse implements Command {
             }
 
             // Process tokens into expressions
-            List<Expression> expressions = new SimpleParser().parse(tokens).getExpressions();
+            SimpleParser parser = new SimpleParser();
+            parser.parse(tokens);
+            List<Expression> expressions = parser.getExpressions();
             context.put("expressions", expressions);
         }
         return false;
