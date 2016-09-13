@@ -16,10 +16,18 @@ public interface Antlr4Serializable {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < values.size(); i++) {
-            sb.append(values.get(i).toAntlr4String());
+            ExpressionValue val = values.get(i);
+            sb.append(val.toAntlr4String());
 
-            if (i + 1 < values.size())
-                sb.append(" ");
+            if (i + 1 < values.size()) {
+                ExpressionValue nextVal = values.get(i + 1);
+
+                if (val.getType() != ExpressionValueType.REGEX_GROUP
+                        || (nextVal.getType() != ExpressionValueType.PLUS
+                        && nextVal.getType() != ExpressionValueType.STAR)) {
+                    sb.append(" ");
+                }
+            }
         }
         return sb.toString();
     }
@@ -39,14 +47,17 @@ public interface Antlr4Serializable {
                             && expr.getType() != ExpressionType.MULTI_LINE_COMMENT;
                 })
                 .forEach(expr -> {
-            sb.append(expr.toAntlr4String());
+                    sb.append(expr.toAntlr4String());
 
-            if (!Main.CommandLineFlags.optimize) {
-                sb.append("\r\n");
-            }
-        });
+                    if (!Main.CommandLineFlags.optimize) {
+                        sb.append("\r\n");
+                    }
+                });
         return sb.toString();
     }
 
+    /**
+     * ANTLR4 code representation of this object.
+     */
     String toAntlr4String();
 }

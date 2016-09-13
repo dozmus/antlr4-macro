@@ -28,12 +28,6 @@ public final class RegexGroupParser implements ExpressionParser<ExpressionValue>
         }
         it.skip(1); // skip ']'
         value += "]";
-
-        // Add repetition symbol, if available
-        if (it.hasNext() && it.peek().nameEquals(TokenDefinition.ASTERISK) || it.peek().nameEquals(TokenDefinition.PLUS)) {
-            value += it.next().getValue();
-
-        }
         return new ExpressionValue(ExpressionValueType.REGEX_GROUP, value);
     }
 

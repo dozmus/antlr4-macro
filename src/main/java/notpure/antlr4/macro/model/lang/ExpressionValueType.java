@@ -28,6 +28,8 @@ public enum ExpressionValueType {
      * 'Pipeline' in a grammar rule's value, i.e. `->`.
      */
     PIPELINE,
+    PLUS,
+    STAR,
     /**
      * The output to redirect input to, i.e. in `a -> skip` this would be `skip`.
      */

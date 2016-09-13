@@ -27,7 +27,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * A set of tests targeting a mixture of {@link Lexer}, {@link SimpleParser}, {@link MacroExpressionProcessor}
+ * A set of tests targeting a mixture of modules.
  * and {@link ExpressionProcessor}.
  */
 public final class CombinedTest {
@@ -111,7 +111,8 @@ public final class CombinedTest {
         expressionValues1.add(new ExpressionValue(ExpressionValueType.RULE_REFERENCE, "ID"));
 
         List<ExpressionValue> expressionValues2 = new ArrayList<>();
-        expressionValues2.add(new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[ \\t\\r\\n]+"));
+        expressionValues2.add(new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[ \\t\\r\\n]"));
+        expressionValues2.add(new ExpressionValue(ExpressionValueType.PLUS, "+"));
         expressionValues2.add(new ExpressionValue(ExpressionValueType.PIPELINE, "->"));
         expressionValues2.add(new ExpressionValue(ExpressionValueType.OUTPUT_REDIRECT, "skip"));
 
@@ -124,7 +125,8 @@ public final class CombinedTest {
         expectedExpressions.add(new Expression(ExpressionType.SINGLE_LINE_COMMENT,
                 new ExpressionValue(RAW, " lexer rules")));
         expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "ID",
-                new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[a-z]+")));
+                new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[a-z]"),
+                new ExpressionValue(ExpressionValueType.PLUS, "+")));
         expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", expressionValues2));
 
         // Store actual statements
@@ -236,7 +238,8 @@ public final class CombinedTest {
 
         // Store expected statements
         List<ExpressionValue> expressionValues1 = new ArrayList<>();
-        expressionValues1.add(new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[ \\t\\r\\n]+"));
+        expressionValues1.add(new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[ \\t\\r\\n]"));
+        expressionValues1.add(new ExpressionValue(ExpressionValueType.PLUS, "+"));
         expressionValues1.add(new ExpressionValue(ExpressionValueType.PIPELINE, "->"));
         expressionValues1.add(new ExpressionValue(ExpressionValueType.OUTPUT_REDIRECT, "skip"));
 
@@ -254,7 +257,8 @@ public final class CombinedTest {
         expectedExpressions.add(new Expression(ExpressionType.SINGLE_LINE_COMMENT,
                 new ExpressionValue(RAW, " lexer rules")));
         expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "ID",
-                new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[a-z]+")));
+                new ExpressionValue(ExpressionValueType.REGEX_GROUP, "[a-z]"),
+                new ExpressionValue(ExpressionValueType.PLUS, "+")));
         expectedExpressions.add(new Expression(ExpressionType.LEXER_RULE, "WS", expressionValues1));
 
         // Store actual statements

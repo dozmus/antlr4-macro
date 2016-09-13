@@ -2,10 +2,7 @@ package notpure.antlr4.macro.model.lang;
 
 import notpure.antlr4.macro.util.CollectionHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * A parsed expression.
@@ -25,6 +22,11 @@ public final class Expression implements Antlr4Serializable {
     public Expression(ExpressionType type, String identifier, ExpressionValue value) {
         this(type, identifier, new ArrayList<>());
         values.add(value);
+    }
+
+    public Expression(ExpressionType type, String identifier, ExpressionValue... value) {
+        this(type, identifier, new ArrayList<>());
+        Collections.addAll(values, value);
     }
 
     public Expression(ExpressionType type, List<ExpressionValue> values) {

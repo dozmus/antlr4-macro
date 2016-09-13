@@ -1,6 +1,7 @@
 package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.lang.ExpressionValue;
+import notpure.antlr4.macro.model.lang.ExpressionValueType;
 import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static notpure.antlr4.macro.model.lang.ExpressionType.*;
 import static notpure.antlr4.macro.model.lang.ExpressionValueType.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -74,7 +76,7 @@ public final class SimpleParserTest {
      * @param name The grammar name.
      */
     private static void assertGrammarNameDef(String input, String grammarType, String name) {
-        assertSingleStatement(input, new Expression(ExpressionType.GRAMMAR_NAME, grammarType, new ExpressionValue(RAW, name)));
+        assertSingleStatement(input, new Expression(GRAMMAR_NAME, grammarType, new ExpressionValue(RAW, name)));
     }
 
     /**
@@ -96,7 +98,7 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMacroRuleDefinitions() {
-        final ExpressionType type = ExpressionType.MACRO_RULE;
+        final ExpressionType type = MACRO_RULE;
         final ExpressionValue helloString = new ExpressionValue(STRING, "HELLO");
         final Expression expr1 = new Expression(type, "HELLO_WORLD", helloString);
         final Expression expr2 = new Expression(type, "hELLO290woRld", helloString);
@@ -132,7 +134,7 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfParserRuleDefinitions() {
-        final ExpressionType type = ExpressionType.PARSER_RULE;
+        final ExpressionType type = PARSER_RULE;
         final ExpressionValue helloString = new ExpressionValue(STRING, "HELLO");
         final Expression expr1 = new Expression(type, "helloWorld", new ExpressionValue(STRING, "HELLO"));
 
@@ -163,7 +165,7 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfLexerRuleDefinitions() {
-        final ExpressionType type = ExpressionType.LEXER_RULE;
+        final ExpressionType type = LEXER_RULE;
         final ExpressionValue helloString = new ExpressionValue(STRING, "HELLO");
         final Expression expr1 = new Expression(type, "HELLOWORLD", helloString);
 
@@ -226,7 +228,7 @@ public final class SimpleParserTest {
 
     @Test
     public void parserTestOfMultiLineComment() {
-        final ExpressionType type = ExpressionType.MULTI_LINE_COMMENT;
+        final ExpressionType type = MULTI_LINE_COMMENT;
         assertSingleStatement("/*my comment*/", new Expression(type, new ExpressionValue(RAW, "my comment")));
         assertSingleStatement("/* my comment */", new Expression(type, new ExpressionValue(RAW, " my comment ")));
         assertSingleStatement("/*/* my comment */", new Expression(type, new ExpressionValue(RAW, "/* my comment ")));
@@ -235,19 +237,46 @@ public final class SimpleParserTest {
     }
 
     @Test
+    public void parserTestOfRepetitionOperators() {
+        List<ExpressionValue> values = new ArrayList<>();
+        values.add(new ExpressionValue(STRING, "hello"));
+        values.add(new ExpressionValue(PLUS, "+"));
+        Expression expectedExpression = new Expression(PARSER_RULE, "myRule", values);
+        assertSingleStatement("myRule: 'hello'+;", expectedExpression);
+
+        values.clear();
+        values.add(new ExpressionValue(STRING, "hello"));
+        values.add(new ExpressionValue(STAR, "*"));
+        expectedExpression = new Expression(PARSER_RULE, "myRule", values);
+        assertSingleStatement("myRule: 'hello'*;", expectedExpression);
+
+        values.clear();
+        values.add(new ExpressionValue(REGEX_GROUP, "[A-Z]"));
+        values.add(new ExpressionValue(PLUS, "+"));
+        expectedExpression = new Expression(PARSER_RULE, "myRule", values);
+        assertSingleStatement("myRule: [A-Z]+;", expectedExpression);
+
+        values.clear();
+        values.add(new ExpressionValue(REGEX_GROUP, "[A-Z]"));
+        values.add(new ExpressionValue(STAR, "*"));
+        expectedExpression = new Expression(PARSER_RULE, "myRule", values);
+        assertSingleStatement("myRule: [A-Z]*;", expectedExpression);
+    }
+
+    @Test
     public void parserTestOfInlineElements() {
         // Statements
-        final Expression slComExpr1 = new Expression(ExpressionType.SINGLE_LINE_COMMENT, new ExpressionValue(RAW, "comment"));
-        final Expression slComExpr2 = new Expression(ExpressionType.SINGLE_LINE_COMMENT, new ExpressionValue(RAW, " comment"));
+        final Expression slComExpr1 = new Expression(SINGLE_LINE_COMMENT, new ExpressionValue(RAW, "comment"));
+        final Expression slComExpr2 = new Expression(SINGLE_LINE_COMMENT, new ExpressionValue(RAW, " comment"));
 
-        final Expression mlComExpr1 = new Expression(ExpressionType.MULTI_LINE_COMMENT, new ExpressionValue(RAW, "comment"));
-        final Expression mlComExpr2 = new Expression(ExpressionType.MULTI_LINE_COMMENT, new ExpressionValue(RAW, " comment"));
-        final Expression mlComExpr3 = new Expression(ExpressionType.MULTI_LINE_COMMENT, new ExpressionValue(RAW, "comment "));
-        final Expression mlComExpr4 = new Expression(ExpressionType.MULTI_LINE_COMMENT, new ExpressionValue(RAW, " comment "));
+        final Expression mlComExpr1 = new Expression(MULTI_LINE_COMMENT, new ExpressionValue(RAW, "comment"));
+        final Expression mlComExpr2 = new Expression(MULTI_LINE_COMMENT, new ExpressionValue(RAW, " comment"));
+        final Expression mlComExpr3 = new Expression(MULTI_LINE_COMMENT, new ExpressionValue(RAW, "comment "));
+        final Expression mlComExpr4 = new Expression(MULTI_LINE_COMMENT, new ExpressionValue(RAW, " comment "));
 
-        final Expression grmExpr = new Expression(ExpressionType.GRAMMAR_NAME, new ExpressionValue(RAW, "HelloWorld"));
-        final Expression prsrExpr = new Expression(ExpressionType.PARSER_RULE, "hello", new ExpressionValue(RULE_REFERENCE, "WORLD"));
-        final Expression lxrExpr = new Expression(ExpressionType.LEXER_RULE, "HELLO", new ExpressionValue(RULE_REFERENCE, "WORLD"));
+        final Expression grmExpr = new Expression(GRAMMAR_NAME, new ExpressionValue(RAW, "HelloWorld"));
+        final Expression prsrExpr = new Expression(PARSER_RULE, "hello", new ExpressionValue(RULE_REFERENCE, "WORLD"));
+        final Expression lxrExpr = new Expression(LEXER_RULE, "HELLO", new ExpressionValue(RULE_REFERENCE, "WORLD"));
 
         // Tests
         assertDoubleStatement("grammar HelloWorld;//comment", grmExpr, slComExpr1);

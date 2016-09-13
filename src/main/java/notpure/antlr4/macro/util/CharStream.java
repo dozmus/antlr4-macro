@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 
 /**
- * A stream of characters, at its core a {@link Scanner} wrapper. The values are returned as {@link String} of length 1.
+ * A stream of characters, at its core a {@link Scanner} wrapper. The values are returned as {@link Character}.
  */
 public final class CharStream implements Iterator<Character> {
 

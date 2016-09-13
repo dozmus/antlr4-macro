@@ -74,6 +74,8 @@ public final class ExpressionValue implements Antlr4Serializable {
             case PIPELINE:
             case OUTPUT_REDIRECT:
             case ALTERNATOR:
+            case PLUS:
+            case STAR:
                 return getValue();
             case STRING:
                 return identifier == null ? String.format("'%s'", getValue())
