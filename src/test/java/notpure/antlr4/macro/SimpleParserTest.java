@@ -1,10 +1,9 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.model.lang.ExpressionValue;
-import notpure.antlr4.macro.model.lang.ExpressionValueType;
-import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
+import notpure.antlr4.macro.model.lang.ExpressionValue;
+import notpure.antlr4.macro.model.parser.ParserExceptionListener;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.processor.Lexer;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
@@ -251,6 +250,12 @@ public final class SimpleParserTest {
         assertSingleStatement("myRule: 'hello'*;", expectedExpression);
 
         values.clear();
+        values.add(new ExpressionValue(STRING, "hello"));
+        values.add(new ExpressionValue(QUESTION_MARK, "?"));
+        expectedExpression = new Expression(PARSER_RULE, "myRule", values);
+        assertSingleStatement("myRule: 'hello'?;", expectedExpression);
+
+        values.clear();
         values.add(new ExpressionValue(REGEX_GROUP, "[A-Z]"));
         values.add(new ExpressionValue(PLUS, "+"));
         expectedExpression = new Expression(PARSER_RULE, "myRule", values);
@@ -261,6 +266,12 @@ public final class SimpleParserTest {
         values.add(new ExpressionValue(STAR, "*"));
         expectedExpression = new Expression(PARSER_RULE, "myRule", values);
         assertSingleStatement("myRule: [A-Z]*;", expectedExpression);
+
+        values.clear();
+        values.add(new ExpressionValue(REGEX_GROUP, "[A-Z]"));
+        values.add(new ExpressionValue(QUESTION_MARK, "?"));
+        expectedExpression = new Expression(PARSER_RULE, "myRule", values);
+        assertSingleStatement("myRule: [A-Z]?;", expectedExpression);
     }
 
     @Test

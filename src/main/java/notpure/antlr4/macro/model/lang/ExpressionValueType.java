@@ -30,6 +30,7 @@ public enum ExpressionValueType {
     PIPELINE,
     PLUS,
     STAR,
+    QUESTION_MARK,
     /**
      * The output to redirect input to, i.e. in `a -> skip` this would be `skip`.
      */

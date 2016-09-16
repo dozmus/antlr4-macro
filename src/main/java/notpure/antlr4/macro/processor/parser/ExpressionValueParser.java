@@ -75,6 +75,7 @@ public final class ExpressionValueParser {
         parsers.add(new AlternatorParser());
         parsers.add(new PlusParser());
         parsers.add(new StarParser());
+        parsers.add(new QuestionMarkParser());
         parsers.add(new PipelineParser());
         parsers.add(new StringParser());
         parsers.add(new RuleReferenceParser());
