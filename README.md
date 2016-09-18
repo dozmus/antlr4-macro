@@ -12,8 +12,11 @@ You should add pre-build event(s) in your IDE of choice to run the
 antlr4-macro artifact.  
 
 You can specify either target file, i.e. `-i my-grammar.mg4` or the
-entire working directory, i.e. `-i .`. You may also enable recursive
+entire working directory, i.e. `-i .`.  
+You may also enable recursive
 traversal of the working directory, i.e. `-i . -r`.  
+When traversing the directory, only files with extension `mg4` will be
+picked up.  
 
 More usage information available at `java -jar antlr4-macro.jar -help`
 
