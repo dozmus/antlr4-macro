@@ -8,8 +8,9 @@ production-level consumption.**
 This project is licensed under the [MIT license](LICENSE).
 
 ## Usage
-You should add a pre-build event in your IDE of choice to run the
-antlr4-macro artifact.
+You should add pre-build event(s) in your IDE of choice to run the
+antlr4-macro artifact.  
+More usage information available at `java -jar antlr4-macro.jar -help`
 
 ## How it works
 You write your grammars in ANTLR4 syntax, however now you can also add
