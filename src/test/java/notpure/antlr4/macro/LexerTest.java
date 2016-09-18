@@ -16,6 +16,14 @@ import static org.junit.Assert.assertEquals;
 public final class LexerTest {
 
     /**
+     * Asserts that the given token's line number and column number matches the provided ones.
+     */
+    private static void assertTokenLineAndColEquals(Token token, int lineNo, int colNo) {
+        assertEquals(lineNo, token.getLineNo());
+        assertEquals(colNo, token.getColNo());
+    }
+
+    /**
      * Tests each lexer token definition once.
      */
     @Test
@@ -26,15 +34,15 @@ public final class LexerTest {
         String inputString = "";
 
         for (TokenDefinition def : TokenDefinition.values()) {
-            if (def == TokenDefinition.DIGIT) {
+            if (def == TokenDefinition.DIGIT) { // Digit definition
                 inputString += "0";
                 expectedOutput.add(new Token(def.name(), "0"));
-            } else if (def == TokenDefinition.LETTER) {
+            } else if (def == TokenDefinition.LETTER) { // Letter definition
                 inputString += "a";
                 inputString += "B";
                 expectedOutput.add(new Token(def.name(), "a"));
                 expectedOutput.add(new Token(def.name(), "B"));
-            } else if (def.getValueType() == TokenDefinition.ValueType.LITERAL) { // literal definitions
+            } else if (def.getValueType() == TokenDefinition.ValueType.LITERAL) { // general literal definitions
                 String letter = def.getValue();
                 inputString += letter;
                 expectedOutput.add(new Token(def.name(), letter));
@@ -59,7 +67,7 @@ public final class LexerTest {
      * Tests the line and col numbers given to each token in the input.
      */
     @Test
-    public void lexerTestOfLineAndColNo() {
+    public void lexerTestOfLineAndColNoAssignments() {
         // Tokenize input
         List<Token> actualOutput = Lexer.tokenize("my friend\r\nhello!");
 
@@ -67,17 +75,12 @@ public final class LexerTest {
         assertEquals(17 + 1, actualOutput.size());
 
         for (int i = 0; i < 9; i++)
-            assertTokenLineAndColEquals(0, i, actualOutput.get(i));
+            assertTokenLineAndColEquals(actualOutput.get(i), 0, i);
 
-        assertTokenLineAndColEquals(0, 9, actualOutput.get(9));
-        assertTokenLineAndColEquals(0, 10, actualOutput.get(10));
+        assertTokenLineAndColEquals(actualOutput.get(9), 0, 9);
+        assertTokenLineAndColEquals(actualOutput.get(10), 0, 10);
 
         for (int i = 11; i < 17; i++)
-            assertTokenLineAndColEquals(1, i - 11, actualOutput.get(i));
-    }
-
-    private static void assertTokenLineAndColEquals(int lineNo, int colNo, Token actualToken) {
-        assertEquals(lineNo, actualToken.getLineNo());
-        assertEquals(colNo, actualToken.getColNo());
+            assertTokenLineAndColEquals(actualOutput.get(i), 1, i - 11);
     }
 }

@@ -12,7 +12,10 @@ import static org.junit.Assert.*;
  */
 public final class TokenTest {
 
-    private static void assertToken(TokenDefinition def) {
+    /**
+     * Constructs a new {@link Token} using the provided definition, and then compares its name and values.
+     */
+    private static void assertConstructedTokenEquals(TokenDefinition def) {
         Token token = new Token(def);
         assertEquals(token.getName(), def.name());
         assertEquals(token.getValue(), def.getValue());
@@ -26,11 +29,11 @@ public final class TokenTest {
     @Test
     public void testTokenConstructorForTokenDefinitionParameters() {
         // Literal type
-        assertToken(TokenDefinition.ASTERISK);
-        assertToken(TokenDefinition.NEW_LINE);
+        assertConstructedTokenEquals(TokenDefinition.ASTERISK);
+        assertConstructedTokenEquals(TokenDefinition.NEW_LINE);
 
         // Special type
-        assertToken(TokenDefinition.EOF);
+        assertConstructedTokenEquals(TokenDefinition.EOF);
     }
 
     @Test
@@ -45,12 +48,12 @@ public final class TokenTest {
                 new Token(TokenDefinition.COLON)
         };
 
-        // Test valid values
+        // Test contained values
         for (Token token : tokens) {
             assertTrue(CollectionHelper.arrayContains(tokens, token));
         }
 
-        // Test invalid values
+        // Test un-contained values
         assertFalse(CollectionHelper.arrayContains(tokens, new Token(TokenDefinition.SEMICOLON)));
         assertFalse(CollectionHelper.arrayContains(tokens, new Token(TokenDefinition.NEW_LINE)));
         assertFalse(CollectionHelper.arrayContains(tokens, new Token(TokenDefinition.EOF)));
@@ -71,6 +74,7 @@ public final class TokenTest {
 
         String expectedValue = "Token[] { Token(ASTERISK='*'), Token(BACK_SLASH='\\'), Token(AMPERSAND='&'),"
         + " Token(COMMERCIAL_AT='@'), Token(CARET='^'), Token(CARRIAGE_RETURN=''), Token(COLON=':') }";
-        assertEquals(expectedValue, CollectionHelper.toString(tokens));
+        String actualValue = CollectionHelper.toString(tokens);
+        assertEquals(expectedValue, actualValue);
     }
 }

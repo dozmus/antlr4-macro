@@ -4,10 +4,12 @@ import notpure.antlr4.macro.model.lang.Expression;
 import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lang.ExpressionValue;
 import notpure.antlr4.macro.model.lang.ExpressionValueType;
+import notpure.antlr4.macro.model.macro.MissingMacroRuleException;
 import notpure.antlr4.macro.processor.ExpressionProcessor;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +25,7 @@ import static org.junit.Assert.fail;
 public final class ExpressionProcessorTest {
 
     /**
-     * Tests resolving a macro which requires none.
+     * Tests resolving an expression for which no resolving is required.
      */
     private static void assertResolveOfNoOperation(Expression input) {
         List<Expression> expressionList = new ArrayList<>();
@@ -35,21 +37,19 @@ public final class ExpressionProcessorTest {
             outputExpressions = ExpressionProcessor.resolveMacros(expressionList);
         } catch (Exception ignored) {
             fail("Exception occurred while resolving valid macro expression.");
-            return; // to suppress compile error
+            return;
         }
 
         assertEquals(1, outputExpressions.size());
         assertEquals(input, outputExpressions.get(0));
     }
 
-    private static void assertResolveOfCyclicReference(Expression input) throws Exception {
+    private static void assertResolveOfCyclicReference(Expression... inputExpressions) throws Exception {
+        // Create list of expressions
         List<Expression> expressionList = new ArrayList<>();
-        expressionList.add(input);
-        ExpressionProcessor.resolveMacros(expressionList);
-    }
+        Collections.addAll(expressionList, inputExpressions);
 
-    private static void assertResolveOfCyclicReference(List<Expression> input) throws Exception {
-        List<Expression> expressionList = input.stream().collect(Collectors.toList());
+        // Attempt to resolve macro definitions
         ExpressionProcessor.resolveMacros(expressionList);
     }
 
@@ -93,12 +93,11 @@ public final class ExpressionProcessorTest {
 
     @Test(expected = Exception.class)
     public void testCyclicMacroExpressionResolving3() throws Exception {
-        List<Expression> values = new ArrayList<>();
-        values.add(new Expression(ExpressionType.MACRO_RULE, "HELLO_WORLD",
-                new ExpressionValue(RULE_REFERENCE, "#BYE_WORLD")));
-        values.add(new Expression(ExpressionType.MACRO_RULE, "BYE_WORLD",
-                new ExpressionValue(RULE_REFERENCE, "#HELLO_WORLD")));
-        assertResolveOfCyclicReference(values);
+        Expression expr1 = new Expression(ExpressionType.MACRO_RULE, "HELLO_WORLD",
+                new ExpressionValue(RULE_REFERENCE, "#BYE_WORLD"));
+        Expression expr2 = new Expression(ExpressionType.MACRO_RULE, "BYE_WORLD",
+                new ExpressionValue(RULE_REFERENCE, "#HELLO_WORLD"));
+        assertResolveOfCyclicReference(expr1, expr2);
     }
 
     @Test
@@ -144,7 +143,7 @@ public final class ExpressionProcessorTest {
         assertEquals(expectedOutputExpr, outputExpressions.get(0));
     }
 
-    @Test(expected = Exception.class)
+    @Test(expected = MissingMacroRuleException.class)
     public void testMissingMacroRuleApplication() throws Exception {
         Expression expr = new Expression(ExpressionType.LEXER_RULE, "NAME", new ExpressionValue(RULE_REFERENCE, "#FNAME"));
 
@@ -152,6 +151,6 @@ public final class ExpressionProcessorTest {
         List<Expression> expressions = new ArrayList<>();
         expressions.add(expr);
 
-        List<Expression> outputExpressions = ExpressionProcessor.applyMacros(expressions, macros);
+        ExpressionProcessor.applyMacros(expressions, macros);
     }
 }

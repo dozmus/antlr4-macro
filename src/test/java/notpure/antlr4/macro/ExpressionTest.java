@@ -1,14 +1,13 @@
 package notpure.antlr4.macro;
 
 import notpure.antlr4.macro.model.lang.Expression;
-import notpure.antlr4.macro.model.lang.ExpressionType;
 import notpure.antlr4.macro.model.lang.ExpressionValue;
-import notpure.antlr4.macro.model.lang.ExpressionValueType;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static notpure.antlr4.macro.model.lang.ExpressionType.*;
 import static notpure.antlr4.macro.model.lang.ExpressionValueType.*;
 import static org.junit.Assert.*;
 
@@ -17,64 +16,83 @@ import static org.junit.Assert.*;
  */
 public final class ExpressionTest {
 
-    @Test
-    public void statementEqualsTest() {
-        final Expression expression1 = new Expression(ExpressionType.GRAMMAR_NAME, new ExpressionValue(RAW, "hello"));
-        final Expression expression2 = new Expression(ExpressionType.GRAMMAR_NAME, "raw", new ExpressionValue(RAW, "hello"));
-        final Expression expression3 = new Expression(ExpressionType.LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R"));
-
-        // Statement with identifier=null
-        assertTrue(expression1.equals(new Expression(ExpressionType.GRAMMAR_NAME, new ExpressionValue(RAW, "hello"))));
-        assertFalse(expression1.equals(expression2));
-        assertFalse(expression2.equals(expression1));
-        assertFalse(expression1.equals(null));
-
-        // Statement with identifier!=null
-        assertTrue(expression3.equals(new Expression(ExpressionType.LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R"))));
-        assertFalse(new Expression(ExpressionType.LEXER_RULE, new ExpressionValue(RULE_REFERENCE, "H")).equals(expression2));
-        assertFalse(expression3.equals(new Expression(ExpressionType.LEXER_RULE, new ExpressionValue(RULE_REFERENCE, "R"))));
-        assertFalse(expression3.equals(new Expression(ExpressionType.LEXER_RULE, new ExpressionValue(RULE_REFERENCE, "H=RR"))));
-        assertFalse(expression3.equals(null));
+    /**
+     * Calls {@link Expression#toAntlr4String()} on the given expression and compares the output to expected.
+     */
+    private static void assertToAntlr4String(String expected, Expression expr) {
+        assertEquals(expected, expr.toAntlr4String());
     }
 
+    /**
+     * Tests {@link Expression#equals(Object)}.
+     */
     @Test
-    public void statementToStringTest() {
-        final Expression expression1 = new Expression(ExpressionType.GRAMMAR_NAME, new ExpressionValue(RAW, "hello"));
-        final Expression expression2 = new Expression(ExpressionType.LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R"));
+    public void equalsTest() {
+        final Expression expr1 = new Expression(GRAMMAR_NAME, new ExpressionValue(RAW, "hello"));
+        final Expression expr2 = new Expression(GRAMMAR_NAME, "raw", new ExpressionValue(RAW, "hello"));
+        final Expression expr3 = new Expression(LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R"));
 
-        assertEquals("GRAMMAR_NAME(ExpressionValue[] { RAW(hello) })", expression1.toString());
-        assertEquals("LEXER_RULE(H=ExpressionValue[] { RULE_REFERENCE(R) })", expression2.toString());
+        // Expressions with identifier=null
+        assertTrue(expr1.equals(new Expression(GRAMMAR_NAME, new ExpressionValue(RAW, "hello"))));
+        assertFalse(expr1.equals(expr2));
+        assertFalse(expr2.equals(expr1));
+        assertFalse(expr1.equals(null));
+
+        // Expressions with identifier!=null
+        assertTrue(expr3.equals(new Expression(LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R"))));
+        assertFalse(new Expression(LEXER_RULE, new ExpressionValue(RULE_REFERENCE, "H")).equals(expr2));
+        assertFalse(expr3.equals(new Expression(LEXER_RULE, new ExpressionValue(RULE_REFERENCE, "R"))));
+        assertFalse(expr3.equals(new Expression(LEXER_RULE, new ExpressionValue(RULE_REFERENCE, "H=RR"))));
+        assertFalse(expr3.equals(null));
     }
 
+    /**
+     * Tests {@link Expression#toString()}.
+     */
     @Test
-    public void statementToAntlr4StringTest() {
-        final Expression expression1 = new Expression(ExpressionType.GRAMMAR_NAME, new ExpressionValue(RAW, "hello"));
-        final Expression expression2 = new Expression(ExpressionType.LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R"));
-        final Expression expression3 = new Expression(ExpressionType.LEXER_RULE, "X", new ExpressionValue(STRING, "Hello"));
-        final Expression expression4 = new Expression(ExpressionType.PARSER_RULE, "h", new ExpressionValue(RULE_REFERENCE, "R"));
-        final Expression expression5 = new Expression(ExpressionType.PARSER_RULE, "x", new ExpressionValue(STRING, "Hello"));
-        final Expression expression6 = new Expression(ExpressionType.SINGLE_LINE_COMMENT, new ExpressionValue(STRING, "Hello"));
-        final Expression expression7 = new Expression(ExpressionType.SINGLE_LINE_COMMENT, new ExpressionValue(STRING, " Hello"));
-        final Expression expression8 = new Expression(ExpressionType.MULTI_LINE_COMMENT, new ExpressionValue(STRING, "Hello"));
-        final Expression expression9 = new Expression(ExpressionType.MULTI_LINE_COMMENT, new ExpressionValue(STRING, " Hello "));
+    public void toStringTest() {
+        final Expression expr1 = new Expression(GRAMMAR_NAME, new ExpressionValue(RAW, "hello"));
+        final Expression expr2 = new Expression(LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R"));
 
+        assertEquals("GRAMMAR_NAME(ExpressionValue[] { RAW(hello) })", expr1.toString());
+        assertEquals("LEXER_RULE(H=ExpressionValue[] { RULE_REFERENCE(R) })", expr2.toString());
+    }
+
+    /**
+     * Tests {@link Expression#toAntlr4String()}.
+     */
+    @Test
+    public void toAntlr4StringTest() {
+        // Simple expressions (1 expression value)
+        assertToAntlr4String("grammar hello;", new Expression(GRAMMAR_NAME, new ExpressionValue(RAW, "hello")));
+
+        // Rules
+        assertToAntlr4String("H: R;", new Expression(LEXER_RULE, "H", new ExpressionValue(RULE_REFERENCE, "R")));
+        assertToAntlr4String("X: 'Hello';", new Expression(LEXER_RULE, "X", new ExpressionValue(STRING, "Hello")));
+        assertToAntlr4String("h: R;", new Expression(PARSER_RULE, "h", new ExpressionValue(RULE_REFERENCE, "R")));
+        assertToAntlr4String("x: 'Hello';", new Expression(PARSER_RULE, "x", new ExpressionValue(STRING, "Hello")));
+
+        // Comments
+        assertToAntlr4String("//Hello", new Expression(SINGLE_LINE_COMMENT, new ExpressionValue(RAW, "Hello")));
+        assertToAntlr4String("// Hello", new Expression(SINGLE_LINE_COMMENT, new ExpressionValue(RAW, " Hello")));
+        assertToAntlr4String("/*Hello*/", new Expression(MULTI_LINE_COMMENT, new ExpressionValue(RAW, "Hello")));
+        assertToAntlr4String("/* Hello */", new Expression(MULTI_LINE_COMMENT, new ExpressionValue(RAW, " Hello ")));
+
+        // Complex expressions (>1 expression value)
         List<ExpressionValue> valueList = new ArrayList<>();
         valueList.add(new ExpressionValue(STRING, "Hello"));
         valueList.add(new ExpressionValue(ALTERNATOR, "|"));
         valueList.add(new ExpressionValue(RULE_REFERENCE, "WORLD"));
-        final Expression expression10 = new Expression(ExpressionType.LEXER_RULE, "X", valueList);
-        final Expression expression11 = new Expression(ExpressionType.PARSER_RULE, "myRule", valueList);
 
-        assertEquals("grammar hello;", expression1.toAntlr4String());
-        assertEquals("H: R;", expression2.toAntlr4String());
-        assertEquals("X: 'Hello';", expression3.toAntlr4String());
-        assertEquals("h: R;", expression4.toAntlr4String());
-        assertEquals("x: 'Hello';", expression5.toAntlr4String());
-        assertEquals("//Hello", expression6.toAntlr4String());
-        assertEquals("// Hello", expression7.toAntlr4String());
-        assertEquals("/*Hello*/", expression8.toAntlr4String());
-        assertEquals("/* Hello */", expression9.toAntlr4String());
-        assertEquals("X: 'Hello' | WORLD;", expression10.toAntlr4String());
-        assertEquals("myRule: 'Hello' | WORLD;", expression11.toAntlr4String());
+        assertToAntlr4String("X: 'Hello' | WORLD;", new Expression(LEXER_RULE, "X", valueList));
+        assertToAntlr4String("myRule: 'Hello' | WORLD;", new Expression(PARSER_RULE, "myRule", valueList));
+    }
+
+    /**
+     * Tests {@link Expression#toAntlr4String()} with invalid input that should cause a {@link RuntimeException}.
+     */
+    @Test(expected = RuntimeException.class)
+    public void toAntlr4StringTestForMacroRule() {
+        assertToAntlr4String("---", new Expression(MACRO_RULE, "HI", new ExpressionValue(STRING, "Hello")));
     }
 }

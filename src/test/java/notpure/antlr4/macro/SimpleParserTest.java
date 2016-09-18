@@ -61,8 +61,6 @@ public final class SimpleParserTest {
 
     /**
      * Asserts a combined grammar name definition.
-     * @param input
-     * @param name
      */
     private static void assertGrammarNameDef(String input, String name) {
         assertGrammarNameDef(input, null, name);

@@ -13,17 +13,45 @@ import static org.junit.Assert.assertEquals;
 public final class FileHelperTest {
 
     /**
+     * Creates a Scanner using {@link FileHelper#stringStream(String)} and ensures that the input matches the output.
+     */
+    private static void assertStringStreamOutput(String input) {
+        // Generate output
+        StringBuilder actualOutput = new StringBuilder();
+
+        try (Scanner in = new Scanner(FileHelper.stringStream(input))) {
+            in.useDelimiter("");
+
+            // Read all
+            while (in.hasNext()) {
+                actualOutput.append(in.next());
+            }
+        }
+
+        // Compare results
+        assertEquals(input, actualOutput.toString());
+    }
+
+    /**
+     * Parses file name using {@link FileHelper#parseFileName(String)} and then compares this value to the expected
+     * output.
+     */
+    private static void assertParseFileName(String expectedOutput, String input) {
+        assertEquals(expectedOutput, FileHelper.parseFileName(input));
+    }
+
+    /**
      * Tests {@link FileHelper#parseFileName(String)}.
      */
     @Test
     public void testParseFileName() {
-        assertEquals("C:/ANTLR4/antlr4-macro", FileHelper.parseFileName("C:/ANTLR4/antlr4-macro.jar"));
-        assertEquals("/ANTLR4/antlr4-macro", FileHelper.parseFileName("/ANTLR4/antlr4-macro.jar"));
-        assertEquals("ANTLR4/antlr4-macro", FileHelper.parseFileName("ANTLR4/antlr4-macro.jar"));
-        assertEquals("C:/ANTLR4/antlr4.macro", FileHelper.parseFileName("C:/ANTLR4/antlr4.macro.jar"));
-        assertEquals("/ANTLR4/antlr4.macro", FileHelper.parseFileName("/ANTLR4/antlr4.macro.jar"));
-        assertEquals("ANTLR4/antlr4.macro", FileHelper.parseFileName("ANTLR4/antlr4.macro.jar"));
-        assertEquals("antlr4macro", FileHelper.parseFileName("antlr4macro"));
+        assertParseFileName("C:/ANTLR4/antlr4-macro", "C:/ANTLR4/antlr4-macro.jar");
+        assertParseFileName("/ANTLR4/antlr4-macro", "/ANTLR4/antlr4-macro.jar");
+        assertParseFileName("ANTLR4/antlr4-macro", "ANTLR4/antlr4-macro.jar");
+        assertParseFileName("C:/ANTLR4/antlr4.macro", "C:/ANTLR4/antlr4.macro.jar");
+        assertParseFileName("/ANTLR4/antlr4.macro", "/ANTLR4/antlr4.macro.jar");
+        assertParseFileName("ANTLR4/antlr4.macro", "ANTLR4/antlr4.macro.jar");
+        assertParseFileName("antlr4macro", "antlr4macro");
     }
 
     /**
@@ -31,11 +59,11 @@ public final class FileHelperTest {
      */
     @Test
     public void testStringStream() {
-        Scanner in = new Scanner(FileHelper.stringStream("hello100world"));
-        assertEquals("hello100world", in.next());
-
-        in = new Scanner(FileHelper.stringStream("hello100world;!!093"));
-        assertEquals("hello100world;!!093", in.next());
+        assertStringStreamOutput("hello world");
+        assertStringStreamOutput("hello100world");
+        assertStringStreamOutput("hello\r\nworld");
+        assertStringStreamOutput("hello100world;!!093");
+        assertStringStreamOutput("");
     }
 
     @Test(expected = IllegalArgumentException.class)
