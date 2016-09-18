@@ -144,8 +144,8 @@ public final class CombinedTest {
             assertEquals(expectedExpression, actualExpression);
         }
 
-        // Testing optimized output
-        Main.CommandLineFlags.optimize = true;
+        // Testing minified output
+        Main.CommandLineFlags.minify = true;
         Context ctx = new ContextBase();
         ctx.put("output-expressions", actualExpressions);
         GenerateAntlrCode gac = new GenerateAntlrCode();
@@ -157,7 +157,7 @@ public final class CombinedTest {
                 + "WS: [ \\t\\r\\n]+ -> skip;";
         assertTrue(ctx.containsKey("antlr-code"));
         assertEquals(expected, ctx.get("antlr-code"));
-        Main.CommandLineFlags.optimize = false;
+        Main.CommandLineFlags.minify = false;
     }
 
     @Test
@@ -305,8 +305,8 @@ public final class CombinedTest {
         assertTrue(ctx.containsKey("antlr-code"));
         assertEquals(expected, ctx.get("antlr-code"));
 
-        // Testing optimized output
-        Main.CommandLineFlags.optimize = true;
+        // Testing minified output
+        Main.CommandLineFlags.minify = true;
         ctx = new ContextBase();
         ctx.put("output-expressions", outputExpressions);
         gac = new GenerateAntlrCode();
@@ -318,6 +318,6 @@ public final class CombinedTest {
                 + "WS: [ \\t\\r\\n]+ -> skip;";
         assertTrue(ctx.containsKey("antlr-code"));
         assertEquals(expected, ctx.get("antlr-code"));
-        Main.CommandLineFlags.optimize = false;
+        Main.CommandLineFlags.minify = false;
     }
 }

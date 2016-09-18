@@ -42,14 +42,14 @@ public interface Antlr4Serializable {
         expressions.stream()
                 .filter(expr -> {
                     // filter comments if optimizing
-                    return !Main.CommandLineFlags.optimize
+                    return !Main.CommandLineFlags.minify
                             || expr.getType() != ExpressionType.SINGLE_LINE_COMMENT
                             && expr.getType() != ExpressionType.MULTI_LINE_COMMENT;
                 })
                 .forEach(expr -> {
                     sb.append(expr.toAntlr4String());
 
-                    if (!Main.CommandLineFlags.optimize) {
+                    if (!Main.CommandLineFlags.minify) {
                         sb.append("\r\n");
                     }
                 });

@@ -33,8 +33,8 @@ public final class Main {
                 System.out.println("Project version: " + PROJECT_VERSION);
             }
 
-            if (line.hasOption("optimize")) {
-                CommandLineFlags.optimize = true;
+            if (line.hasOption("minify")) {
+                CommandLineFlags.minify = true;
             }
 
             if (line.hasOption("help")) {
@@ -71,7 +71,7 @@ public final class Main {
         options.addOption("help", false, "prints this message");
         options.addOption("url", false, "prints the project url");
         options.addOption("version", false, "prints the version information");
-        options.addOption("optimize", false, "optimize output grammar");
+        options.addOption("minify", false, "minify output grammar");
         options.addOption("i", "input", true, "processes the given file(s)");
         return options;
     }
@@ -83,8 +83,8 @@ public final class Main {
     public static class CommandLineFlags {
 
         /**
-         * If output grammars should be optimized.
+         * If output grammars should be minified.
          */
-        public static boolean optimize;
+        public static boolean minify;
     }
 }
