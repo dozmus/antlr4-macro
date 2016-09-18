@@ -37,6 +37,10 @@ public final class Main {
                 CommandLineFlags.minify = true;
             }
 
+            if (line.hasOption("recursive")) {
+                CommandLineFlags.recursive = true;
+            }
+
             if (line.hasOption("help")) {
                 new HelpFormatter().printHelp("antlr4-macro", options);
             }
@@ -44,16 +48,17 @@ public final class Main {
             if (line.hasOption("i")) {
                 String targetInput = line.getOptionValue("i");
 
+                // Process input
                 if (targetInput == null) {
                     System.out.println("Missing target input argument for: -i,--input <arg>");
                 } else {
-                    if (targetInput.equals("*")) { // Recursively process all files in the working directory
+                    if (targetInput.equals(".")) { // Process working directory
                         MacroFileProcessor.processDirectory(System.getProperty("user.dir"));
                     } else { // Process single file
                         // Get file name
                         String inFileName = args[1];
 
-                        // Process files
+                        // Process file
                         MacroFileProcessor.processFile(inFileName);
                     }
                 }
@@ -73,6 +78,7 @@ public final class Main {
         options.addOption("version", false, "prints the version information");
         options.addOption("minify", false, "minify output grammar");
         options.addOption("i", "input", true, "processes the given file(s)");
+        options.addOption("r", "recursive", false, "processes the given directory recursively");
         return options;
     }
 
@@ -80,11 +86,15 @@ public final class Main {
     /**
      * Command-line parsed flags.
      */
-    public static class CommandLineFlags {
+    public static final class CommandLineFlags {
 
         /**
          * If output grammars should be minified.
          */
         public static boolean minify;
+        /**
+         * If the target directory is to be processed recursively.
+         */
+        public static boolean recursive;
     }
 }

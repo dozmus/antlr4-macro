@@ -22,12 +22,13 @@ public final class MacroFileProcessor {
     private final static Logger LOGGER = LoggerFactory.getLogger(MacroFileProcessor.class);
 
     /**
-     * Processes all macro files in the given directory.
+     * Processes all macro files in the given directory. Recursive traversal can be toggled using
+     * {@link notpure.antlr4.macro.Main.CommandLineFlags#recursive}.
      */
     public static void processDirectory(String directory) {
         // Aggregate target files
         ArrayList<String> fileNames = new ArrayList<>();
-        FileHelper.getFileNames(fileNames, Paths.get(directory), ".mg4");
+        FileHelper.getFileNames(fileNames, Paths.get(directory), ".mg4", Main.CommandLineFlags.recursive);
 
         // Process all files
         fileNames.forEach(MacroFileProcessor::processFile);
@@ -37,12 +38,13 @@ public final class MacroFileProcessor {
      * Processes the given macro file.
      */
     public static void processFile(String inFileName) {
-        // Resolve directory of input if necessary
+        // Attempt to resolve directory of input if necessary
         if (!new File(inFileName).exists()) {
             File baseDir = new File(System.getProperty("user.dir"));
             inFileName = new File(baseDir, inFileName).getPath();
         }
 
+        // Process input file
         String outFileName = FileHelper.parseFileName(inFileName) + ".g4";
         processFile(inFileName, outFileName);
     }

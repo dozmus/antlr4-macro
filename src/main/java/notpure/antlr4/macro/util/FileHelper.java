@@ -16,22 +16,24 @@ import java.util.List;
 public final class FileHelper {
 
     /**
-     * Gets all files recursively in target directory, with given file extension.
+     * Gets all files in target directory, with the given file extension. Returns an empty array list if nothing is
+     * found or if an {@link IOException} occurs.
      *
      * @param ext The file extension to look for, e.g. '.g4'.
+     * @param recursive If the folder should be recursively traversed.
      * @return List of full file names.
      */
-    public static List<String> getFileNames(List<String> fileNames, Path dir, String ext) {
+    public static List<String> getFileNames(List<String> fileNames, Path dir, String ext, boolean recursive) {
         try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
             // Iterate over paths
             stream.forEach(p -> {
-                if (p.toFile().isDirectory()) {
-                    getFileNames(fileNames, p, ext);
-                } else {
+                if (p.toFile().isDirectory() && recursive) { // Directory
+                    getFileNames(fileNames, p, ext, true);
+                } else { // File
                     String fileName = p.toAbsolutePath().toString();
 
                     if (fileName.endsWith(ext))
-                        fileNames.add(p.toAbsolutePath().toString());
+                        fileNames.add(fileName);
                 }
             });
         } catch (IOException e) {
