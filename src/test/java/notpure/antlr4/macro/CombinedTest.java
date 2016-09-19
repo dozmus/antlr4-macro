@@ -1,17 +1,11 @@
 package notpure.antlr4.macro;
 
-import notpure.antlr4.macro.model.lang.Expression;
-import notpure.antlr4.macro.model.lang.ExpressionType;
-import notpure.antlr4.macro.model.lang.ExpressionValue;
-import notpure.antlr4.macro.model.lang.ExpressionValueType;
+import notpure.antlr4.macro.model.lang.*;
 import notpure.antlr4.macro.model.token.Token;
 import notpure.antlr4.macro.model.token.TokenDefinition;
-import notpure.antlr4.macro.processor.cmd.GenerateAntlrCode;
 import notpure.antlr4.macro.processor.Lexer;
 import notpure.antlr4.macro.processor.ExpressionProcessor;
 import notpure.antlr4.macro.processor.parser.SimpleParser;
-import org.apache.commons.chain.Context;
-import org.apache.commons.chain.impl.ContextBase;
 import org.junit.Test;
 
 import java.io.FileInputStream;
@@ -24,7 +18,6 @@ import static notpure.antlr4.macro.model.lang.ExpressionValueType.RAW;
 import static notpure.antlr4.macro.model.lang.ExpressionValueType.STRING;
 import static notpure.antlr4.macro.util.TokenHelper.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * A set of tests targeting a mixture of modules.
@@ -145,18 +138,13 @@ public final class CombinedTest {
         }
 
         // Testing minified output
-        Main.CommandLineFlags.minify = true;
-        Context ctx = new ContextBase();
-        ctx.put("output-expressions", actualExpressions);
-        GenerateAntlrCode gac = new GenerateAntlrCode();
-        gac.execute(ctx);
-
         String expected = "grammar Hello;"
                 + "r: 'hello' ID;"
                 + "ID: [a-z]+;"
                 + "WS: [ \\t\\r\\n]+ -> skip;";
-        assertTrue(ctx.containsKey("antlr-code"));
-        assertEquals(expected, ctx.get("antlr-code"));
+
+        Main.CommandLineFlags.minify = true;
+        Antlr4SerializationTest.assertEquals(expected, actualExpressions);
         Main.CommandLineFlags.minify = false;
     }
 
@@ -264,20 +252,20 @@ public final class CombinedTest {
         // Store actual statements
         SimpleParser parser = new SimpleParser();
         parser.parse(actualOutput);
-        List<Expression> outputExpressions = parser.getExpressions();
+        List<Expression> actualExpressions = parser.getExpressions();
 
         // Compare outputs
-        assertEquals(expectedExpressions.size(), outputExpressions.size());
+        assertEquals(expectedExpressions.size(), actualExpressions.size());
 
         // Iterate over generated statements
         for (int i = 0; i < expectedExpressions.size(); i++) {
             Expression expectedExpression = expectedExpressions.get(i);
-            Expression actualExpression = outputExpressions.get(i);
+            Expression actualExpression = actualExpressions.get(i);
             assertEquals(expectedExpression, actualExpression);
         }
 
         // MacroExpressionResolver
-        List<Expression> macroExpressions = outputExpressions.stream()
+        List<Expression> macroExpressions = actualExpressions.stream()
                 .filter(expr -> expr.getType() == ExpressionType.MACRO_RULE)
                 .collect(Collectors.toList());
         List<Expression> resolvedMacroExpr = ExpressionProcessor.resolveMacros(macroExpressions);
@@ -287,12 +275,7 @@ public final class CombinedTest {
                 new ExpressionValue(ExpressionValueType.STRING, "Hello World")), resolvedMacroExpr.get(0));
 
         // MacroExpressionProcessor
-        outputExpressions = ExpressionProcessor.applyMacros(outputExpressions, resolvedMacroExpr);
-
-        Context ctx = new ContextBase();
-        ctx.put("output-expressions", outputExpressions);
-        GenerateAntlrCode gac = new GenerateAntlrCode();
-        gac.execute(ctx);
+        actualExpressions = ExpressionProcessor.applyMacros(actualExpressions, resolvedMacroExpr);
 
         // Generate antlr file contents and compare to expected input
         String expected = "grammar Hello;\r\n"
@@ -302,22 +285,16 @@ public final class CombinedTest {
                 + "// lexer rules\r\n"
                 + "ID: [a-z]+;\r\n"
                 + "WS: [ \\t\\r\\n]+ -> skip;\r\n";
-        assertTrue(ctx.containsKey("antlr-code"));
-        assertEquals(expected, ctx.get("antlr-code"));
+        Antlr4SerializationTest.assertEquals(expected, actualExpressions);
 
         // Testing minified output
-        Main.CommandLineFlags.minify = true;
-        ctx = new ContextBase();
-        ctx.put("output-expressions", outputExpressions);
-        gac = new GenerateAntlrCode();
-        gac.execute(ctx);
-
         expected = "grammar Hello;"
                 + "r: 'Hello World';"
                 + "ID: [a-z]+;"
                 + "WS: [ \\t\\r\\n]+ -> skip;";
-        assertTrue(ctx.containsKey("antlr-code"));
-        assertEquals(expected, ctx.get("antlr-code"));
+
+        Main.CommandLineFlags.minify = true;
+        Antlr4SerializationTest.assertEquals(expected, actualExpressions);
         Main.CommandLineFlags.minify = false;
     }
 }

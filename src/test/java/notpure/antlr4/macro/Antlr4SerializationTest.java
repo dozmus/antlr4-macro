@@ -16,6 +16,13 @@ import static notpure.antlr4.macro.model.lang.ExpressionValueType.*;
  */
 public final class Antlr4SerializationTest {
 
+    public static void assertEquals(String expectedAntlr4, List<Expression> outputExpressions) {
+        MacroFileProcessor mfp = new MacroFileProcessor(null, null);
+        mfp.setOutputExpressions(outputExpressions);
+        mfp.generateAntlrCode();
+        Assert.assertEquals(expectedAntlr4, mfp.getAntlrCode());
+    }
+
     private static void assertEquals(String antlr4, Expression expr) {
         Assert.assertEquals(antlr4, expr.toAntlr4String());
     }

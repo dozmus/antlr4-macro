@@ -41,7 +41,7 @@ public interface Antlr4Serializable {
 
         expressions.stream()
                 .filter(expr -> {
-                    // filter comments if optimizing
+                    // filter comments if minifying
                     return !Main.CommandLineFlags.minify
                             || expr.getType() != ExpressionType.SINGLE_LINE_COMMENT
                             && expr.getType() != ExpressionType.MULTI_LINE_COMMENT;
