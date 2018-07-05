@@ -1,0 +1,6 @@
+# Project files
+antlr4-macro.iml
+.idea
+build
+META-INF
+.gradle
