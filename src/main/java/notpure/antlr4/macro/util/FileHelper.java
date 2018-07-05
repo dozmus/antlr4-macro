@@ -1,8 +1,6 @@
 package notpure.antlr4.macro.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -64,5 +62,21 @@ public final class FileHelper {
         if (input == null)
             throw new IllegalArgumentException("stringStream method invoked with null input.");
         return new ByteArrayInputStream(input.getBytes(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * Attempts to overwrite the content of the argument file.
+     *
+     * @param code The content to write.
+     */
+    public static void writeOutput(Path file, String code) throws IOException {
+        if (!Files.exists(file)) {
+            Files.createFile(file);
+        }
+
+        try (Writer writer = new BufferedWriter(new FileWriter(file.toFile()))) {
+            writer.write(code);
+            writer.flush();
+        }
     }
 }

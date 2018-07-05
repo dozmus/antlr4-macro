@@ -1,0 +1,27 @@
+grammar Hello;
+
+// macro rules
+#HELLO_WORLD: 'Hello World';
+#DUMMY(A): A;
+#DUMMY(A, B): A B;
+
+// parser rules
+r1: 'Hello';
+r2: #HELLO_WORLD;
+r3: #HELLO_WORLD '!';
+r4: #DUMMY('hello');
+r5: #DUMMY(r1, r2);
+r6: #DUMMY(r2 'hello');
+r7: 'Hello' #DUMMY(r1 'World');
+
+// lexer rules
+L1: 'Hello';
+L2: #HELLO_WORLD;
+L3: #HELLO_WORLD '!';
+L4: #DUMMY('hello');
+L5: #DUMMY(L1, L2);
+L6: #DUMMY(L2 'hello');
+L7: 'Hello' #DUMMY(L1 'World');
+
+ID: [a-z]+;
+WS: [ \t\r\n]+ -> skip;
