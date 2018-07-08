@@ -38,8 +38,13 @@ public final class Main {
                 context.setRecursive(true);
             }
 
+            if (line.hasOption("threads")) {
+                context.setThreadCount(Integer.parseInt(line.getOptionValue("threads")));
+            }
+
             if (line.hasOption("help")) {
                 new HelpFormatter().printHelp("antlr4-macro", options);
+
             }
 
             if (line.hasOption("i")) {
@@ -74,8 +79,9 @@ public final class Main {
         options.addOption("help", false, "prints this message");
         options.addOption("url", false, "prints the project url");
         options.addOption("version", false, "prints the version information");
-        options.addOption("i", "input", true, "processes the given file(s)");
-        options.addOption("r", "recursive", false, "processes the given directory recursively");
+        options.addOption("t", "threads", true, "number of threads");
+        options.addOption("i", "input", true, "processes the argument file");
+        options.addOption("r", "recursive", false, "processes the argument directory recursively");
         return options;
     }
 
@@ -88,7 +94,11 @@ public final class Main {
         /**
          * If the target directory is to be processed recursively.
          */
-        private boolean recursive;
+        private boolean recursive = false;
+        /**
+         * Number of threads to use.
+         */
+        private int threadCount = 1;
 
         public boolean isRecursive() {
             return recursive;
@@ -96,6 +106,14 @@ public final class Main {
 
         public void setRecursive(boolean recursive) {
             this.recursive = recursive;
+        }
+
+        public int getThreadCount() {
+            return threadCount;
+        }
+
+        public void setThreadCount(int threadCount) {
+            this.threadCount = threadCount;
         }
     }
 }

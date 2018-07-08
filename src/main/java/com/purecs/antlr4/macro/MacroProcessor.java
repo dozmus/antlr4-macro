@@ -5,6 +5,8 @@ import com.purecs.antlr4.macro.util.FileHelper;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ForkJoinPool;
 
 public class MacroProcessor {
 
@@ -24,7 +26,13 @@ public class MacroProcessor {
         FileHelper.getFileNames(fileNames, Paths.get(directory), ".mg4", context.isRecursive());
 
         // Process all files
-        fileNames.forEach(this::processFile);
+        ForkJoinPool pool = new ForkJoinPool(context.getThreadCount());
+
+        try {
+            pool.submit(() -> fileNames.parallelStream().forEach(this::processFile)).get();
+        } catch (InterruptedException | ExecutionException e) {
+            System.err.println("Error processing files: " + e.getMessage());
+        }
     }
 
     /**
