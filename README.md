@@ -1,11 +1,7 @@
 antlr4-macro
 ============
 
-A macro pre-processor for ANTLR4. **This project is not yet ready for
-production-level consumption.**
-
-## License
-This project is licensed under the [MIT license](LICENSE).
+A macro pre-processor for ANTLR4.
 
 ## Usage
 You should add pre-build event(s) in your IDE of choice to run the
@@ -22,9 +18,10 @@ More usage information available at `java -jar antlr4-macro.jar -help`
 
 ## How it works
 You write your grammars in ANTLR4 syntax, however now you can also add
-C-like macros to your code, such as `#MY_MACRO: 'my macro';` and then
-use `#MY_MACRO` elsewhere in your code as an identifier. The scope
-of the macro rules is the entire current file.
+C-like macros to your code, such as `#MY_MACRO: 'my macro';` and
+`#MACRO2(A, B): A ' ' B;`.
+
+The scope of the macro rules is the entire current file.
 
 A user-configured pre-build event should then call the executable
 and thus parse your macro grammar files and outputs valid ANTLR4 grammar
@@ -35,15 +32,17 @@ Input:
 ```
 grammar HelloWorld;
 
-/// my macro definitions, this comment will not appear in the output
+// my macro definitions
 #HELLO: 'Hello';
 #WORLD: 'World';
 
 // parser rules
-mySingleRule: HELLOWORLD;
+helloWorldList1: list(HELLOWORLD1);
+helloWorldList2: list(HELLOWORLD2, ' ');
 
 // lexer rules
-HELLOWORLD: #HELLO #WORLD;
+HELLOWORLD1: #HELLO #WORLD;
+HELLOWORLD2: lower('Hello') upper('World');
 ```
 
 Rough output:
@@ -51,8 +50,13 @@ Rough output:
 grammar HelloWorld;
 
 // parser rules
-mySingleRule: HELLOWORLD;
+helloWorldList1: HELLOWORLD1 (',' HELLOWORLD1)*;
+helloWorldList2: HELLOWORLD2 (' ' HELLOWORLD2)*;
 
 // lexer rules
-HELLOWORLD: 'Hello' 'World';
+HELLOWORLD1: 'Hello' 'World';
+HELLOWORLD2: 'hello' 'WORLD';
 ```
+
+## License
+This project is licensed under the [MIT license](LICENSE).
