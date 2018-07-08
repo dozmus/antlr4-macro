@@ -5,6 +5,7 @@ import antlr4.ANTLRv4Parser;
 import antlr4.ANTLRv4ParserBaseListener;
 import com.purecs.antlr4.macro.lang.MacroRule;
 import com.purecs.antlr4.macro.lang.MacroUse;
+import com.purecs.antlr4.macro.lang.RedefinedMacroRuleException;
 import com.purecs.antlr4.macro.util.FilePosition;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -137,7 +138,17 @@ public class Antlr4Parser extends ANTLRv4ParserBaseListener implements Parser {
                 .map(Token::getText)
                 .collect(Collectors.joining())
                 .trim();
-        return new MacroRule(identifier, content, filePosition, parameters);
+
+        MacroRule rule = new MacroRule(identifier, content, filePosition, parameters);
+
+        // Check if it already exists
+        for (MacroRule r : macros) {
+            if (r.getIdentifier().equals(rule.getIdentifier())
+                    && r.getParameters().size() == rule.getParameters().size()) {
+                throw new RedefinedMacroRuleException("MacroRule called " + r.getIdentifier() + " was redefined.");
+            }
+        }
+        return rule;
     }
 
     private static int identifierEndIndex(ANTLRv4Parser.IdentifierContext ctx) {

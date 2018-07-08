@@ -1,0 +1,4 @@
+grammar RedefineMacroRule1;
+
+#A(A, B): '';
+#A(A, B): '';

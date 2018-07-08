@@ -1,6 +1,7 @@
 package com.purecs.antlr4.macro.refactor;
 
 import com.purecs.antlr4.macro.lang.MacroUse;
+import com.purecs.antlr4.macro.lang.RedefinedMacroRuleException;
 import com.purecs.antlr4.macro.util.FilePosition;
 import com.purecs.antlr4.macro.parse.Parser;
 import com.purecs.antlr4.macro.parse.ParserFactory;
@@ -21,6 +22,7 @@ import static org.junit.Assert.fail;
 public class MacroRefactorerTest {
 
     private static final Path SAMPLES_DIRECTORY = Paths.get("src/test/resources/grammars/");
+    private static final Path BAD_SAMPLES_DIRECTORY = Paths.get("src/test/resources/badgrammars/");
 
     @Test
     public void testRemoveMacroRules() throws IOException {
@@ -178,9 +180,23 @@ public class MacroRefactorerTest {
         assertRefactorResult(expected, "InbuiltFunctions.mg4");
     }
 
+    @Test(expected = RedefinedMacroRuleException.class)
+    public void testRedefineMacroRule1() {
+        assertRefactorResult(null, "RedefineMacroRule1.mg4", BAD_SAMPLES_DIRECTORY);
+    }
+
+    @Test(expected = RedefinedMacroRuleException.class)
+    public void testRedefineMacroRule2() {
+        assertRefactorResult(null, "RedefineMacroRule2.mg4", BAD_SAMPLES_DIRECTORY);
+    }
+
     private static void assertRefactorResult(String expected, String fileName) {
+        assertRefactorResult(expected, fileName, SAMPLES_DIRECTORY);
+    }
+
+    private static void assertRefactorResult(String expected, String fileName, Path directory) {
         try {
-            Path file = Paths.get(SAMPLES_DIRECTORY.toString(), fileName);
+            Path file = Paths.get(directory.toString(), fileName);
 
             // Read file
             String content = new String(Files.readAllBytes(file));

@@ -58,5 +58,11 @@ HELLOWORLD1: 'Hello' 'World';
 HELLOWORLD2: 'hello' 'WORLD';
 ```
 
+## Run-time details
+There are four in-built macros: lower, upper, arbitrary-delimited list, and comma-delimited list.
+
+You can redefine an in-built macro, however you cannot redefine your own macros.
+This will result in the `RedefinedMacroRuleException` being thrown.
+
 ## License
 This project is licensed under the [MIT license](LICENSE).
