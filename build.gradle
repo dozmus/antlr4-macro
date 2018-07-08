@@ -20,7 +20,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
     compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
-    testCompile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
+    compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.25'
     // https://mvnrepository.com/artifact/org.antlr/antlr4-runtime
     compile group: 'org.antlr', name: 'antlr4-runtime', version: '4.7'
     // https://mvnrepository.com/artifact/org.antlr/antlr4
@@ -35,4 +35,15 @@ generateGrammarSource {
     arguments << "-lib" << "src/main/antlr/"
     maxHeapSize = '64m'
     arguments += ['-visitor', '-long-messages']
+}
+
+// Fat jar
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    group = 'build'
+    baseName = 'antlr4-macro-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
 }
