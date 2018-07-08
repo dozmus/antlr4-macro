@@ -137,8 +137,6 @@ public class Antlr4Parser extends ANTLRv4ParserBaseListener implements Parser {
                 .map(Token::getText)
                 .collect(Collectors.joining())
                 .trim();
-
-        System.out.println("enterStandAloneMacroRule=" + content);
         return new MacroRule(identifier, content, filePosition, parameters);
     }
 

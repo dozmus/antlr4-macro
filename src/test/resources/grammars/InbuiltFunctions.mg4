@@ -1,0 +1,19 @@
+grammar InbuiltFunctions;
+
+// parser rules
+r1: #lower('hello');
+r2: #lower('Hello' 'World!');
+r3: #upper('hello');
+r4: #upper('Hello' 'World!');
+r5: #list('Player' NUMBER);
+r6: #list('Player' NUMBER, '|');
+
+// lexer rules
+L1: #lower('hello');
+L2: #lower('Hello' 'World!');
+L3: #upper('hello');
+L4: #upper('Hello' 'World!');
+L5: #list('Player' [0-9]+);
+L6: #list('Player' [0-9]+, '|');
+
+NUMBER: [0-9]+;

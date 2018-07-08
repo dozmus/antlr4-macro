@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 public class MacroRefactorerTest {
 
@@ -116,18 +117,7 @@ public class MacroRefactorerTest {
     }
 
     @Test
-    public void applyRefactors() throws IOException {
-        Path file = Paths.get(SAMPLES_DIRECTORY.toString(), "Hello.mg4");
-
-        // Read file
-        String content = new String(Files.readAllBytes(file));
-
-        // Parse file
-        Parser parser = ParserFactory.parse(file);
-
-        // Generate output
-        String actual = new MacroRefactorer().refactor(content, parser.getMacros(), parser.getMacroUses());
-
+    public void applyRefactorsHelloGrammar() {
         // Expected output
         String expected = "grammar Hello;\r\n"
                 + "\r\n"
@@ -158,6 +148,53 @@ public class MacroRefactorerTest {
                 + "WS: [ \\t\\r\\n]+ -> skip;\r\n";
 
         // Assert output
-        assertEquals(expected, actual);
+        assertRefactorResult(expected, "Hello.mg4");
+    }
+
+    @Test
+    public void applyRefactorsInbuiltFunctions() {
+        // Expected output
+        String expected = "grammar InbuiltFunctions;\r\n"
+                + "\r\n"
+                + "// parser rules\r\n"
+                + "r1: 'hello';\r\n"
+                + "r2: 'hello' 'world!';\r\n"
+                + "r3: 'HELLO';\r\n"
+                + "r4: 'HELLO' 'WORLD!';\r\n"
+                + "r5: 'Player' NUMBER (',' 'Player' NUMBER)*;\r\n"
+                + "r6: 'Player' NUMBER ('|' 'Player' NUMBER)*;\r\n"
+                + "\r\n"
+                + "// lexer rules\r\n"
+                + "L1: 'hello';\r\n"
+                + "L2: 'hello' 'world!';\r\n"
+                + "L3: 'HELLO';\r\n"
+                + "L4: 'HELLO' 'WORLD!';\r\n"
+                + "L5: 'Player' [0-9]+ (',' 'Player' [0-9]+)*;\r\n"
+                + "L6: 'Player' [0-9]+ ('|' 'Player' [0-9]+)*;\r\n"
+                + "\r\n"
+                + "NUMBER: [0-9]+;\r\n";
+
+        // Assert output
+        assertRefactorResult(expected, "InbuiltFunctions.mg4");
+    }
+
+    private static void assertRefactorResult(String expected, String fileName) {
+        try {
+            Path file = Paths.get(SAMPLES_DIRECTORY.toString(), fileName);
+
+            // Read file
+            String content = new String(Files.readAllBytes(file));
+
+            // Parse file
+            Parser parser = ParserFactory.parse(file);
+
+            // Generate output
+            String actual = new MacroRefactorer().refactor(content, parser.getMacros(), parser.getMacroUses());
+
+            // Assert output
+            assertEquals(expected, actual);
+        } catch (IOException ex) {
+            fail(ex.getMessage());
+        }
     }
 }

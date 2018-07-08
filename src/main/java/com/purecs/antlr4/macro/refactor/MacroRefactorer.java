@@ -1,20 +1,36 @@
 package com.purecs.antlr4.macro.refactor;
 
+import com.purecs.antlr4.macro.lang.AbstractMacroRule;
 import com.purecs.antlr4.macro.lang.MacroUse;
+import com.purecs.antlr4.macro.lang.inbuilt.*;
 import com.purecs.antlr4.macro.util.FilePosition;
 import com.purecs.antlr4.macro.lang.MacroRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class MacroRefactorer {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MacroRefactorer.class);
+    private static final List<AbstractMacroRule> inbuiltRules = Arrays.asList(new Upper(), new Lower(),
+            new List1(), new List2());
+
     /**
      * Returns the first rule to accept the argument use in the order of rules.
+     * Rules defined in the current file are prioritized over the in-built ones.
      */
-    private static MacroRule rule(MacroUse use, List<MacroRule> rules) {
-        for (MacroRule rule : rules) {
+    private static AbstractMacroRule rule(MacroUse use, List<? extends AbstractMacroRule> rules) {
+        for (AbstractMacroRule rule : rules) {
+            if (rule.accepts(use)) {
+                return rule;
+            }
+        }
+
+        for (AbstractMacroRule rule : inbuiltRules) {
             if (rule.accepts(use)) {
                 return rule;
             }
@@ -42,7 +58,7 @@ public class MacroRefactorer {
 
         for (MacroUse use : uses) {
             // Find corresponding rule
-            MacroRule rule = rule(use, rules);
+            AbstractMacroRule rule = rule(use, rules);
 
             // Find argument values
             List<String> args = use.getArgumentFilePositions()
@@ -54,10 +70,7 @@ public class MacroRefactorer {
             String s = rule.apply(args);
             out = out.substring(0, use.getFilePosition().getStartIdx()) + s + out.substring(use.getEndIndex() + 1);
 
-            System.out.println(rule + "(" + args + ") => " + s);
-            System.out.println("content=" + rule.getContent());
-
-            // TODO test
+            LOGGER.debug("{} args={} => {}", rule, args, s);
         }
         return out;
     }
@@ -67,7 +80,10 @@ public class MacroRefactorer {
      * It also adjusts the indices of the macro uses, so that they remain consistent.
      */
     public String removeMacroRules(String content, List<MacroRule> rules, List<MacroUse> uses) {
-        // TODO make it work for files w no macro rules + add test
+        // Check if no macro rule
+        if (rules.size() == 0)
+            return content;
+
         // Sort rules in reverse order => smaller scope of updating indices
         rules.sort(Comparator.comparingInt(r -> -r.getFilePosition().getStartIdx()));
 
