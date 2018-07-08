@@ -1,9 +1,9 @@
-package notpure.antlr4.macro;
+package com.purecs.antlr4.macro;
 
-import notpure.antlr4.macro.parse.Parser;
-import notpure.antlr4.macro.parse.ParserFactory;
-import notpure.antlr4.macro.refactor.MacroRefactorer;
-import notpure.antlr4.macro.util.FileHelper;
+import com.purecs.antlr4.macro.parse.Parser;
+import com.purecs.antlr4.macro.parse.ParserFactory;
+import com.purecs.antlr4.macro.refactor.MacroRefactorer;
+import com.purecs.antlr4.macro.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +33,7 @@ public final class MacroFileProcessor {
 
     /**
      * Processes all macro files in the given directory. Recursive traversal can be toggled using
-     * {@link notpure.antlr4.macro.Main.CommandLineFlags#recursive}.
+     * {@link Main.CommandLineFlags#recursive}.
      */
     public static void processDirectory(String directory) {
         // Aggregate target files

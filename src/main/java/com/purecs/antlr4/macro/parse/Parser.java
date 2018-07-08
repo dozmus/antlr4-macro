@@ -1,7 +1,7 @@
-package notpure.antlr4.macro.parse;
+package com.purecs.antlr4.macro.parse;
 
-import notpure.antlr4.macro.lang.MacroRule;
-import notpure.antlr4.macro.lang.MacroUse;
+import com.purecs.antlr4.macro.lang.MacroRule;
+import com.purecs.antlr4.macro.lang.MacroUse;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -1,8 +1,8 @@
-package notpure.antlr4.macro.refactor;
+package com.purecs.antlr4.macro.refactor;
 
-import notpure.antlr4.macro.lang.MacroRule;
-import notpure.antlr4.macro.lang.MacroUse;
-import notpure.antlr4.macro.util.FilePosition;
+import com.purecs.antlr4.macro.lang.MacroUse;
+import com.purecs.antlr4.macro.util.FilePosition;
+import com.purecs.antlr4.macro.lang.MacroRule;
 
 import java.util.Comparator;
 import java.util.List;

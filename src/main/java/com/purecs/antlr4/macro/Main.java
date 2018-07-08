@@ -1,4 +1,4 @@
-package notpure.antlr4.macro;
+package com.purecs.antlr4.macro;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;

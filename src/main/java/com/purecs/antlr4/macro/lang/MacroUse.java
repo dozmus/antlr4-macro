@@ -1,6 +1,6 @@
-package notpure.antlr4.macro.lang;
+package com.purecs.antlr4.macro.lang;
 
-import notpure.antlr4.macro.util.FilePosition;
+import com.purecs.antlr4.macro.util.FilePosition;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,11 +1,11 @@
-package notpure.antlr4.macro.parse;
+package com.purecs.antlr4.macro.parse;
 
 import antlr4.ANTLRv4Lexer;
 import antlr4.ANTLRv4Parser;
 import antlr4.ANTLRv4ParserBaseListener;
-import notpure.antlr4.macro.lang.MacroRule;
-import notpure.antlr4.macro.lang.MacroUse;
-import notpure.antlr4.macro.util.FilePosition;
+import com.purecs.antlr4.macro.lang.MacroRule;
+import com.purecs.antlr4.macro.lang.MacroUse;
+import com.purecs.antlr4.macro.util.FilePosition;
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.antlr.v4.runtime.tree.TerminalNode;

@@ -5,10 +5,10 @@ apply plugin: 'antlr'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-group = 'notpure.antlr4.macro'
+group = 'com.purecs.antlr4.macro'
 version = '1.0.0-beta.2-SNAPSHOT'
 
-mainClassName = 'notpure.antlr4.macro.Main'
+mainClassName = 'com.purecs.antlr4.macro.Main'
 
 repositories {
     mavenCentral()

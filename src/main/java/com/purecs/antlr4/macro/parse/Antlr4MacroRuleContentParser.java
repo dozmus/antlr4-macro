@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.parse;
+package com.purecs.antlr4.macro.parse;
 
 public class Antlr4MacroRuleContentParser {
 

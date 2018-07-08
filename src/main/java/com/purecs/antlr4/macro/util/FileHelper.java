@@ -1,4 +1,4 @@
-package notpure.antlr4.macro.util;
+package com.purecs.antlr4.macro.util;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;

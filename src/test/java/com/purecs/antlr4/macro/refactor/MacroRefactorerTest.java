@@ -1,9 +1,10 @@
-package notpure.antlr4.macro.refactor;
+package com.purecs.antlr4.macro.refactor;
 
-import notpure.antlr4.macro.lang.MacroUse;
-import notpure.antlr4.macro.parse.Parser;
-import notpure.antlr4.macro.parse.ParserFactory;
-import notpure.antlr4.macro.util.FilePosition;
+import com.purecs.antlr4.macro.lang.MacroUse;
+import com.purecs.antlr4.macro.util.FilePosition;
+import com.purecs.antlr4.macro.parse.Parser;
+import com.purecs.antlr4.macro.parse.ParserFactory;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -98,7 +99,7 @@ public class MacroRefactorerTest {
             MacroUse use = macroUses.get(i);
 
             // Compare entire rule
-            assertEquals(initialFilePositions.get(i).subtract(deltaIdx), use.getFilePosition());
+            Assert.assertEquals(initialFilePositions.get(i).subtract(deltaIdx), use.getFilePosition());
 
             // Compare arguments
             List<FilePosition> argumentFilePositions = use.getArgumentFilePositions();
