@@ -18,7 +18,7 @@ public final class Main {
     /**
      * Project version.
      */
-    private static final String PROJECT_VERSION = "v1.0.0-beta.1";
+    private static final String PROJECT_VERSION = "v1.0.0-beta.4";
 
     public static void main(String[] args) {
         try {
