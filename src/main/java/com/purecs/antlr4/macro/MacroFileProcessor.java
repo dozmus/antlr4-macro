@@ -7,11 +7,9 @@ import com.purecs.antlr4.macro.util.FileHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public final class MacroFileProcessor {
@@ -32,43 +30,14 @@ public final class MacroFileProcessor {
     }
 
     /**
-     * Processes all macro files in the given directory. Recursive traversal can be toggled using
-     * {@link Main.CommandLineFlags#recursive}.
-     */
-    public static void processDirectory(String directory) {
-        // Aggregate target files
-        ArrayList<String> fileNames = new ArrayList<>();
-        FileHelper.getFileNames(fileNames, Paths.get(directory), ".mg4", Main.CommandLineFlags.recursive);
-
-        // Process all files
-        fileNames.forEach(MacroFileProcessor::processFile);
-    }
-
-    /**
-     * Processes the given macro file.
-     */
-    public static void processFile(String inFileName) {
-        // Attempt to resolve directory of input if necessary
-        if (!new File(inFileName).exists()) {
-            File baseDir = new File(System.getProperty("user.dir"));
-            inFileName = new File(baseDir, inFileName).getPath();
-        }
-
-        // Process input file
-        String outFileName = FileHelper.parseFileName(inFileName) + ".g4";
-        processFile(inFileName, outFileName);
-    }
-
-    /**
      * Processes the given macro file, into one with the specified name.
      */
-    public static void processFile(String inFileName, String outFileName) {
+    public void processFile() {
         try {
-            MacroFileProcessor mfp = new MacroFileProcessor(inFileName, outFileName);
-            System.out.println("Processing file: " + inFileName);
+            System.out.println("Processing file: " + inputFileName);
 
             // Read file
-            Path input = Paths.get(inFileName);
+            Path input = Paths.get(inputFileName);
             String content = new String(Files.readAllBytes(input));
 
             // Parse file
@@ -78,10 +47,10 @@ public final class MacroFileProcessor {
             String code = new MacroRefactorer().refactor(content, parser.getMacros(), parser.getMacroUses());
 
             // Write output
-            mfp.writeOutput(code);
+            writeOutput(code);
         } catch (Exception e) {
             System.out.println("Error occurred: " + e.getMessage());
-            LOGGER.error("Failed to process file '{}' because '{}'", inFileName, e.getMessage());
+            LOGGER.error("Failed to process file '{}' because '{}'", inputFileName, e.getMessage());
         }
     }
 

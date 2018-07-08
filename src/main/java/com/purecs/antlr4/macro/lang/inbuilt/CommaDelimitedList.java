@@ -7,9 +7,9 @@ import java.util.Collections;
 /**
  * A comma-delimited list, of at least one element.
  */
-public class List1 extends AbstractMacroRule {
+public class CommaDelimitedList extends AbstractMacroRule {
 
-    public List1() {
+    public CommaDelimitedList() {
         super("list", "A (',' A)*", Collections.singletonList("A"));
     }
 }

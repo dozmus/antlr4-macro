@@ -24,6 +24,7 @@ public final class Main {
         try {
             Options options = commandLineOptions();
             CommandLine line = new DefaultParser().parse(options, args);
+            CLIContext context = new CLIContext();
 
             if (line.hasOption("url")) {
                 System.out.println("Project url: " + PROJECT_URL);
@@ -33,12 +34,8 @@ public final class Main {
                 System.out.println("Project version: " + PROJECT_VERSION);
             }
 
-            if (line.hasOption("minify")) {
-                CommandLineFlags.minify = true;
-            }
-
             if (line.hasOption("recursive")) {
-                CommandLineFlags.recursive = true;
+                context.setRecursive(true);
             }
 
             if (line.hasOption("help")) {
@@ -46,6 +43,7 @@ public final class Main {
             }
 
             if (line.hasOption("i")) {
+                MacroProcessor processor = new MacroProcessor(context);
                 String targetInput = line.getOptionValue("i");
 
                 // Process input
@@ -53,13 +51,13 @@ public final class Main {
                     System.out.println("Missing target input argument for: -i,--input <arg>");
                 } else {
                     if (targetInput.equals(".")) { // Process working directory
-                        MacroFileProcessor.processDirectory(System.getProperty("user.dir"));
+                        processor.processDirectory(System.getProperty("user.dir"));
                     } else { // Process single file
                         // Get file name
                         String inFileName = args[1];
 
                         // Process file
-                        MacroFileProcessor.processFile(inFileName);
+                        processor.processFile(inFileName);
                     }
                 }
             }
@@ -76,7 +74,6 @@ public final class Main {
         options.addOption("help", false, "prints this message");
         options.addOption("url", false, "prints the project url");
         options.addOption("version", false, "prints the version information");
-        options.addOption("minify", false, "minify output grammar");
         options.addOption("i", "input", true, "processes the given file(s)");
         options.addOption("r", "recursive", false, "processes the given directory recursively");
         return options;
@@ -84,17 +81,21 @@ public final class Main {
 
 
     /**
-     * Command-line parsed flags.
+     * Command-line interface arguments.
      */
-    public static final class CommandLineFlags {
+    public static final class CLIContext {
 
-        /**
-         * If output grammars should be minified.
-         */
-        public static boolean minify;
         /**
          * If the target directory is to be processed recursively.
          */
-        public static boolean recursive;
+        private boolean recursive;
+
+        public boolean isRecursive() {
+            return recursive;
+        }
+
+        public void setRecursive(boolean recursive) {
+            this.recursive = recursive;
+        }
     }
 }

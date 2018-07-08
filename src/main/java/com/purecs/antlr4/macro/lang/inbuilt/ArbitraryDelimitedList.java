@@ -7,9 +7,9 @@ import java.util.Arrays;
 /**
  * An arbitrarily-delimited list, of at least one element.
  */
-public class List2 extends AbstractMacroRule {
+public class ArbitraryDelimitedList extends AbstractMacroRule {
 
-    public List2() {
+    public ArbitraryDelimitedList() {
         super("list", "A (B A)*", Arrays.asList("A", "B"));
     }
 }

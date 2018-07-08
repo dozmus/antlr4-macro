@@ -17,7 +17,7 @@ public class MacroRefactorer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MacroRefactorer.class);
     private static final List<AbstractMacroRule> inbuiltRules = Arrays.asList(new Upper(), new Lower(),
-            new List1(), new List2());
+            new CommaDelimitedList(), new ArbitraryDelimitedList());
 
     /**
      * Returns the first rule to accept the argument use in the order of rules.
